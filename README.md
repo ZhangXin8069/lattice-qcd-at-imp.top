@@ -1,80 +1,117 @@
-# Academic Project Page Template
+# 格点量子色动力学课题组网站 | Lattice QCD Group Website
 
-> **Update (September 2025)**: This template has been modernized with better design, SEO, and mobile support. For the original version, see the [original-version branch](https://github.com/eliahuhorwitz/Academic-project-page-template/tree/original-version).
+中国科学院近代物理研究所 (IMP, CAS) 格点量子色动力学（Lattice QCD）课题组介绍网站。
 
-A clean, responsive template for academic project pages.
+**Advisors:** 孙鹏 (Peng Sun), 刘柳明 (Liuming Liu)
 
+🌐 **Website:** https://lattice-qcd-at-imp.top
 
-Example project pages built using this template are:
-- https://horwitz.ai/probex
-- https://vision.huji.ac.il/probegen
-- https://horwitz.ai/mother
-- https://horwitz.ai/spectral_detuning
-- https://vision.huji.ac.il/ladeda
-- https://vision.huji.ac.il/dsire
-- https://horwitz.ai/podd
-- https://dreamix-video-editing.github.io
-- https://horwitz.ai/conffusion
-- https://horwitz.ai/3d_ads/
-- https://vision.huji.ac.il/ssrl_ad
-- https://vision.huji.ac.il/deepsim
+---
 
+## 功能 Features
 
+- 🌐 **中英文切换** — 完整的双语支持
+- 🌙 **深色模式** — 支持浅色/深色主题切换，跟随系统偏好
+- 📄 **论文列表** — 实时从 INSPIRE-HEP API 获取最新论文数据
+- 👨‍🏫 **导师介绍** — 孙鹏、刘柳明两位研究员的详细简介
+- 🔬 **研究方向** — 粲重子散射、部分子分布函数、核子自旋结构等
+- 👨‍🎓 **研究生** — 从论文作者中自动识别研究生
+- 📅 **学术会议** — 格点QCD相关会议信息
+- 🏫 **夏令营与讲习班** — 华大QCD讲习班等暑期学校信息
+- 🖼️ **图库** — 研究相关图片与视频展示
+- 🎵 **背景音乐** — 可控的背景音乐播放器
+- ✨ **动态效果** — Canvas粒子动画、滚动触发动画、视差效果等
 
-## Start using the template
-To start using the template click on `Use this Template`.
+---
 
-The template uses html for controlling the content and css for controlling the style. 
-To edit the websites contents edit the `index.html` file. It contains different HTML "building blocks", use whichever ones you need and comment out the rest.  
+## 技术栈 Tech Stack
 
-**IMPORTANT!** Make sure to replace the `favicon.ico` under `static/images/` with one of your own, otherwise your favicon is going to be a dreambooth image of me.
+- **HTML5 / CSS3 / JavaScript (Vanilla)**
+- **CSS Framework:** Bulma 0.9.x
+- **Icons:** Font Awesome 5 + Academicons
+- **Data:** INSPIRE-HEP REST API (CORS supported)
+- **Hosting:** GitHub Pages
 
-## What's New
+---
 
-- Modern, clean design with better mobile support
-- Improved SEO with proper meta tags and structured data
-- Performance improvements (lazy loading, optimized assets)
-- More Works dropdown
-- Copy button for BibTeX citations
-- Better accessibility
+## 项目结构 Structure
 
-## Components
+```
+lattice-qcd-at-imp.top/
+├── index.html                    # 主页面
+├── data/                         # 静态数据文件
+│   ├── translations.json        # 中英文翻译字典
+│   ├── papers.json              # 论文数据（INSPIRE-HEP不可用时的fallback）
+│   ├── conferences.json         # 会议数据
+│   └── summer-schools.json      # 夏令营数据
+├── static/
+│   ├── css/
+│   │   ├── index.css            # 主样式（含深色模式、动画）
+│   │   ├── bulma.min.css        # Bulma框架
+│   │   ├── bulma-carousel.min.css
+│   │   ├── bulma-slider.min.css
+│   │   └── fontawesome.all.min.css
+│   ├── js/
+│   │   ├── index.js             # 主控制器
+│   │   ├── i18n.js             # 国际化模块
+│   │   ├── theme.js            # 深色模式模块
+│   │   ├── papers.js           # 论文数据加载与展示
+│   │   ├── music.js            # 背景音乐播放器
+│   │   ├── animations.js       # 动画效果（粒子、滚动等）
+│   │   ├── bulma-carousel.min.js
+│   │   ├── bulma-slider.min.js
+│   │   └── fontawesome.all.min.js
+│   ├── images/                  # 图片资源
+│   └── videos/                  # 视频资源
+├── .claude/skills/
+│   └── update-website.md        # 网站更新Skill
+├── *.mp3                        # 背景音乐文件
+├── *.png                        # 图片资源
+└── *.mp4                        # 视频资源
+```
 
-- Teaser video
-- Image carousel
-- YouTube video embedding
-- Video carousel
-- PDF poster viewer
-- BibTeX citation
+---
 
-## Customization
+## 更新网站 Updating
 
-The HTML file has TODO comments showing what to replace:
+网站可通过 Claude Code Skill 进行全流程更新。使用以下命令：
 
-- Paper title, authors, institution, conference
-- Links (arXiv, GitHub, etc.)
-- Abstract and descriptions  
-- Videos, images, and PDFs
-- Related works in the dropdown
-- Meta tags for SEO and social sharing
+```
+/update-website papers        # 更新论文数据
+/update-website add-conference # 添加会议
+/update-website add-summer-school # 添加夏令营
+/update-website advisor       # 更新导师信息
+/update-website translations  # 更新翻译
+/update-website all           # 全量更新
+```
 
-### Meta Tags
-The template includes meta tags for better search engine visibility and social media sharing. These appear in the `<head>` section and help with:
-- Google Scholar indexing
-- Social media previews (Twitter, Facebook, LinkedIn)
-- Search engine optimization
+### 论文数据更新原理
 
-Create a 1200x630px social preview image at `static/images/social_preview.png`.
+1. 网站打开时，`papers.js` 会直接从 INSPIRE-HEP API 获取最新论文数据
+2. 数据缓存至 localStorage（24小时有效）
+3. 如果 INSPIRE-HEP 不可用，自动回退到 `data/papers.json`
 
-## Tips
+---
 
-- Compress images with [TinyPNG](https://tinypng.com)
-- Use YouTube for large videos (>10MB)  
-- Replace the favicon in `static/images/`
-- Works with GitHub Pages
+## 部署 Deploy
 
-## Acknowledgments
-Parts of this project page were adopted from the [Nerfies](https://nerfies.github.io/) page.
+网站通过 GitHub Pages 部署。推送到 `main` 分支即可自动更新。
 
-## Website License
-<a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-sa/4.0/88x31.png" /></a><br />This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/">Creative Commons Attribution-ShareAlike 4.0 International License</a>.
+```bash
+git add .
+git commit -m "Update website"
+git push origin main
+```
+
+---
+
+## 媒体资源 Media Credits
+
+- 背景音乐：菊次郎的夏天 (Summer of Kikujiro)
+- 模板基础：Academic Project Page Template (Nerfies-style)
+
+---
+
+## License
+
+MIT License. See [LICENSE](LICENSE) for details.

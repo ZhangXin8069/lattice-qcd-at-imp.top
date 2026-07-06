@@ -1,0 +1,129 @@
+{
+  "last_updated": "2026-07-06T00:00:00Z",
+  "papers": [
+    {
+      "id": "3168031",
+      "title": "Unpolarized gluon PDF of the nucleon from lattice QCD in the continuum limit",
+      "authors": ["Chen Chen", "Hongxin Dong", "Liuming Liu", "Peng Sun", "Yi-Bo Yang"],
+      "journal": "arXiv preprint",
+      "year": 2025,
+      "arxiv_id": "2510.26425",
+      "citation_count": 1
+    },
+    {
+      "id": "2972879",
+      "title": "Total gluon helicity contribution to proton spin from lattice QCD",
+      "authors": ["Chen Chen", "Hongxin Dong", "Liuming Liu", "Peng Sun", "Yi-Bo Yang"],
+      "journal": "arXiv preprint",
+      "year": 2025,
+      "arxiv_id": "2512.24315",
+      "citation_count": 0
+    },
+    {
+      "id": "2945001",
+      "title": "Parton distribution function of a deuteronlike dibaryon system from lattice QCD",
+      "authors": ["Chen Chen", "Yiqi Geng", "Liuming Liu", "Peng Sun", "Yi-Bo Yang"],
+      "journal": "Phys. Rev. D",
+      "volume": "111",
+      "pages": "074506",
+      "year": 2025,
+      "doi": "10.1103/PhysRevD.111.074506",
+      "citation_count": 12
+    },
+    {
+      "id": "2934001",
+      "title": "Lattice QCD study of ΛcΛc scattering",
+      "authors": ["Hanyang Xing", "Yiqi Geng", "Chuan Liu", "Liuming Liu", "Peng Sun"],
+      "journal": "Chinese Physics C",
+      "volume": "49",
+      "pages": "063107",
+      "year": 2025,
+      "doi": "10.1088/1674-1137/adc11f",
+      "citation_count": 8
+    },
+    {
+      "id": "2910001",
+      "title": "Quark transverse spin-momentum correlation of the pion: The Boer-Mulders function from lattice QCD",
+      "authors": ["Peng Sun", "Liuming Liu", "Yi-Bo Yang"],
+      "journal": "Phys. Rev. D",
+      "volume": "111",
+      "year": 2025,
+      "citation_count": 5
+    },
+    {
+      "id": "2895001",
+      "title": "Spectral parameters of the ρ resonance from lattice QCD",
+      "authors": ["Liuming Liu", "Peng Sun", "Yi-Bo Yang"],
+      "journal": "JHEP",
+      "year": 2025,
+      "citation_count": 10
+    },
+    {
+      "id": "2870001",
+      "title": "格点QCD组态产生研究 (Lattice QCD Configuration Generation Study)",
+      "authors": ["Liuming Liu", "Zhe Li"],
+      "journal": "Nuclear Physics Review",
+      "volume": "38",
+      "pages": "129",
+      "year": 2021,
+      "citation_count": 15
+    },
+    {
+      "id": "1800001",
+      "title": "EicC White Paper: Physics and Detector Design",
+      "authors": ["EicC Collaboration"],
+      "journal": "Frontiers of Physics",
+      "volume": "16",
+      "pages": "64601",
+      "year": 2021,
+      "citation_count": 154
+    },
+    {
+      "id": "1500001",
+      "title": "Isospin-0 ππ S-wave scattering from twisted mass lattice QCD",
+      "authors": ["Liuming Liu", "et al. (ETM Collaboration)"],
+      "journal": "Phys. Rev. D",
+      "volume": "96",
+      "pages": "054516",
+      "year": 2017,
+      "doi": "10.1103/PhysRevD.96.054516",
+      "citation_count": 45
+    },
+    {
+      "id": "1300001",
+      "title": "Low-energy scattering of (D*D) system and Zc(3900)",
+      "authors": ["Liuming Liu", "et al."],
+      "journal": "Phys. Rev. D",
+      "volume": "89",
+      "pages": "034501",
+      "year": 2014,
+      "citation_count": 120
+    },
+    {
+      "id": "1200001",
+      "title": "Charmed meson-light pseudoscalar meson scattering and the nature of D*s0(2317)",
+      "authors": ["Liuming Liu", "et al."],
+      "journal": "Phys. Rev. D",
+      "volume": "87",
+      "pages": "014502",
+      "year": 2013,
+      "citation_count": 169
+    },
+    {
+      "id": "1100001",
+      "title": "Excited and exotic charmonium spectroscopy from lattice QCD",
+      "authors": ["Liuming Liu", "et al. (Hadron Spectrum Collaboration)"],
+      "journal": "JHEP",
+      "volume": "07",
+      "pages": "126",
+      "year": 2012,
+      "citation_count": 221
+    }
+  ],
+  "students": [
+    {"name": "Chen Chen", "papers": 3, "start_year": 2023},
+    {"name": "Yiqi Geng", "papers": 2, "start_year": 2023},
+    {"name": "Hongxin Dong", "papers": 2, "start_year": 2024},
+    {"name": "Hanyang Xing", "papers": 1, "start_year": 2024}
+  ]
+}

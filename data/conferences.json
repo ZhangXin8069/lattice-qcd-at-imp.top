@@ -1,0 +1,74 @@
+[
+  {
+    "name_zh": "第43届国际格点场论研讨会 (Lattice 2026)",
+    "name_en": "43rd International Symposium on Lattice Field Theory (Lattice 2026)",
+    "date": "2026-07-26",
+    "endDate": "2026-08-01",
+    "location_zh": "美国马里兰大学",
+    "location_en": "University of Maryland, College Park, USA",
+    "url": "https://indico.global/event/16565/",
+    "tags_zh": ["国际会议", "格点QCD", "旗舰会议"],
+    "tags_en": ["International", "Lattice QCD", "Flagship"],
+    "status": "upcoming"
+  },
+  {
+    "name_zh": "第42届国际格点场论研讨会 (Lattice 2025)",
+    "name_en": "42nd International Symposium on Lattice Field Theory (Lattice 2025)",
+    "date": "2025-11-02",
+    "endDate": "2025-11-08",
+    "location_zh": "印度孟买",
+    "location_en": "Mumbai, India",
+    "url": "https://indico.cern.ch/event/1408080/",
+    "tags_zh": ["国际会议", "格点QCD", "旗舰会议"],
+    "tags_en": ["International", "Lattice QCD", "Flagship"],
+    "status": "past"
+  },
+  {
+    "name_zh": "第五届中国格点量子色动力学研讨会",
+    "name_en": "5th China Lattice QCD Symposium",
+    "date": "2025-10-09",
+    "endDate": "2025-10-12",
+    "location_zh": "中国科学院理论物理研究所，北京",
+    "location_en": "Institute of Theoretical Physics, CAS, Beijing",
+    "url": "https://indico.itp.ac.cn/event/324/",
+    "tags_zh": ["国内会议", "格点QCD", "CLQCD"],
+    "tags_en": ["National", "Lattice QCD", "CLQCD"],
+    "status": "past"
+  },
+  {
+    "name_zh": "核物理中的格点QCD应用研讨会",
+    "name_en": "Workshop on Lattice QCD Applications in Nuclear Physics",
+    "date": "2025-06-27",
+    "endDate": "2025-06-30",
+    "location_zh": "广东惠州",
+    "location_en": "Huizhou, Guangdong, China",
+    "url": "https://indico.itp.ac.cn/event/325/",
+    "tags_zh": ["专题研讨", "核物理", "格点QCD"],
+    "tags_en": ["Workshop", "Nuclear Physics", "Lattice QCD"],
+    "status": "past"
+  },
+  {
+    "name_zh": "夸克物质2025 — 第31届超高能核-核碰撞国际会议",
+    "name_en": "Quark Matter 2025 — 31st International Conference on Ultra-Relativistic Nucleus-Nucleus Collisions",
+    "date": "2025-04-06",
+    "endDate": "2025-04-12",
+    "location_zh": "德国法兰克福",
+    "location_en": "Frankfurt, Germany",
+    "url": "https://indico.cern.ch/event/1334113/",
+    "tags_zh": ["国际会议", "夸克物质", "重离子物理"],
+    "tags_en": ["International", "Quark Matter", "Heavy-Ion Physics"],
+    "status": "past"
+  },
+  {
+    "name_zh": "国际格点QCD进展研讨会",
+    "name_en": "International Workshop on Advances in Lattice QCD",
+    "date": "2025-05-12",
+    "endDate": "2025-05-16",
+    "location_zh": "中国科学院理论物理研究所，北京",
+    "location_en": "Institute of Theoretical Physics, CAS, Beijing",
+    "url": "https://indico.itp.ac.cn/event/323/",
+    "tags_zh": ["国际会议", "格点QCD"],
+    "tags_en": ["International", "Lattice QCD"],
+    "status": "past"
+  }
+]

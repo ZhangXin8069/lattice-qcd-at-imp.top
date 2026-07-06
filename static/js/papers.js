@@ -1,0 +1,347 @@
+/**
+ * papers.js — Publications module
+ * Primary: fetches live data from INSPIRE-HEP API (CORS supported)
+ * Fallback: loads from data/papers.json
+ */
+const Papers = (function() {
+  let allPapers = [];
+  let students = [];
+  let currentFilter = 'all';
+  let currentYear = 'all';
+  let displayCount = 10;
+  let isLoading = false;
+
+  // INSPIRE-HEP BAI identifiers for advisors
+  const ADVISOR_BAI = ['Peng.Sun.1', 'Liuming.Liu.1'];
+  const ADVISOR_RECIDS = [1659207, 1259106];
+  const INSTITUTION = 'Lanzhou, Inst. Modern Phys.';
+
+  async function init() {
+    await loadPapers();
+    renderFilters();
+    renderPapers();
+    setupSearch();
+  }
+
+  async function loadPapers() {
+    const container = document.getElementById('publications-list');
+    if (container) {
+      container.innerHTML = '<p style="text-align:center;padding:2rem;color:var(--text-light);"><i class="fas fa-spinner fa-spin"></i> Loading papers from INSPIRE-HEP...</p>';
+    }
+
+    try {
+      await fetchFromINSPIRE();
+    } catch (e) {
+      console.warn('INSPIRE-HEP fetch failed, falling back to static data:', e.message);
+      await loadFromStatic();
+    }
+    // Sort by year descending
+    allPapers.sort((a, b) => (b.year || 0) - (a.year || 0));
+  }
+
+  async function fetchFromINSPIRE() {
+    const papers = [];
+    const studentCount = {};
+
+    // Fetch papers for both advisors
+    for (const bai of ADVISOR_BAI) {
+      const query = `a ${bai} and af:"${INSTITUTION}"`;
+      const url = 'https://inspirehep.net/api/literature?' + new URLSearchParams({
+        q: query,
+        size: '100',
+        sort: 'mostrecent',
+        fields: 'titles,authors.full_name,authors.affiliations,authors.recid,citation_count,publication_info,arxiv_eprints,dois,earliest_date'
+      });
+
+      const resp = await fetch(url);
+      if (!resp.ok) throw new Error(`INSPIRE-HEP returned ${resp.status}`);
+      const data = await resp.json();
+
+      for (const hit of (data.hits?.hits || [])) {
+        const m = hit.metadata;
+        const title = (m.titles && m.titles[0]) ? m.titles[0].title : 'Untitled';
+
+        // Skip papers already added
+        if (papers.find(p => p.id === hit.id)) continue;
+
+        const authors = (m.authors || []).map(a => a.full_name);
+        const pub = (m.publication_info && m.publication_info[0]) || {};
+        const journal = pub.journal_title || '';
+        const year = pub.year || (m.earliest_date ? parseInt(m.earliest_date.substring(0, 4)) : null);
+        const arxiv = (m.arxiv_eprints && m.arxiv_eprints[0]) ? m.arxiv_eprints[0].value : '';
+        const doi = (m.dois && m.dois[0]) ? m.dois[0].value : '';
+
+        papers.push({
+          id: hit.id,
+          title: title,
+          authors: authors,
+          journal: journal,
+          volume: pub.journal_volume || '',
+          pages: pub.artid || '',
+          year: year,
+          arxiv_id: arxiv,
+          doi: doi,
+          citation_count: m.citation_count || 0
+        });
+
+        // Track student co-authors from IMP
+        for (const author of (m.authors || [])) {
+          if (ADVISOR_RECIDS.includes(author.recid)) continue;
+          const hasIMP = (author.affiliations || []).some(
+            a => a.value === INSTITUTION
+          );
+          if (hasIMP) {
+            const name = author.full_name;
+            studentCount[name] = (studentCount[name] || 0) + 1;
+          }
+        }
+      }
+    }
+
+    allPapers = papers;
+    // Students: authors with >= 2 co-authored papers at IMP
+    students = Object.entries(studentCount)
+      .filter(([, count]) => count >= 2)
+      .sort((a, b) => b[1] - a[1])
+      .map(([name, papers]) => ({ name, papers }));
+
+    // Cache in localStorage
+    try {
+      localStorage.setItem('papers_cache', JSON.stringify({
+        papers: allPapers,
+        students: students,
+        timestamp: Date.now()
+      }));
+    } catch(e) {}
+  }
+
+  async function loadFromStatic() {
+    try {
+      // Try localStorage cache first
+      const cached = localStorage.getItem('papers_cache');
+      if (cached) {
+        const data = JSON.parse(cached);
+        // Cache valid for 24 hours
+        if (Date.now() - data.timestamp < 24 * 60 * 60 * 1000) {
+          allPapers = data.papers || [];
+          students = data.students || [];
+          return;
+        }
+      }
+    } catch(e) {}
+
+    // Fall back to static JSON
+    try {
+      const resp = await fetch('data/papers.json');
+      const data = await resp.json();
+      allPapers = data.papers || [];
+      students = data.students || [];
+    } catch (e) {
+      console.error('Failed to load papers:', e);
+      allPapers = [];
+    }
+  }
+
+  function renderFilters() {
+    const filterContainer = document.getElementById('pub-filters');
+    if (!filterContainer) return;
+
+    const years = [...new Set(allPapers.map(p => p.year).filter(Boolean))].sort((a, b) => b - a);
+
+    filterContainer.innerHTML = `
+      <div class="pub-filter-buttons">
+        <button class="pub-filter-btn is-active" data-filter="all">${I18N.t('publications.filter.all')}</button>
+        <button class="pub-filter-btn" data-filter="sun">Peng Sun</button>
+        <button class="pub-filter-btn" data-filter="liu">Liuming Liu</button>
+      </div>
+      <div class="pub-year-filter">
+        <select id="pub-year-select" aria-label="${I18N.t('publications.filter.year')}">
+          <option value="all">${I18N.t('publications.filter.year')}</option>
+          ${years.map(y => `<option value="${y}">${y}</option>`).join('')}
+        </select>
+      </div>
+    `;
+
+    filterContainer.querySelectorAll('.pub-filter-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        filterContainer.querySelectorAll('.pub-filter-btn').forEach(b => b.classList.remove('is-active'));
+        btn.classList.add('is-active');
+        currentFilter = btn.getAttribute('data-filter');
+        displayCount = 10;
+        renderPapers();
+      });
+    });
+
+    const yearSelect = document.getElementById('pub-year-select');
+    if (yearSelect) {
+      yearSelect.addEventListener('change', () => {
+        currentYear = yearSelect.value;
+        displayCount = 10;
+        renderPapers();
+      });
+    }
+  }
+
+  function getFilteredPapers() {
+    return allPapers.filter(p => {
+      if (currentFilter === 'sun') {
+        if (!p.authors.some(a => a.toLowerCase().includes('sun') || a.toLowerCase().includes('peng'))) return false;
+      }
+      if (currentFilter === 'liu') {
+        if (!p.authors.some(a => a.toLowerCase().includes('liu') || a.toLowerCase().includes('liuming'))) return false;
+      }
+      if (currentYear !== 'all' && p.year !== parseInt(currentYear, 10)) return false;
+      return true;
+    });
+  }
+
+  function renderPapers() {
+    const container = document.getElementById('publications-list');
+    const noResults = document.getElementById('pub-no-results');
+    if (!container) return;
+
+    const filtered = getFilteredPapers();
+    const displayed = filtered.slice(0, displayCount);
+
+    if (filtered.length === 0) {
+      container.innerHTML = '';
+      if (noResults) noResults.style.display = 'block';
+      const loadMoreBtn = document.getElementById('pub-load-more');
+      if (loadMoreBtn) loadMoreBtn.style.display = 'none';
+      return;
+    }
+
+    if (noResults) noResults.style.display = 'none';
+
+    container.innerHTML = displayed.map((paper, index) => {
+      const authorStr = paper.authors.slice(0, 4).join(', ') + (paper.authors.length > 4 ? ' et al.' : '');
+      const journalStr = paper.journal
+        + (paper.volume ? ` ${paper.volume}` : '')
+        + (paper.pages ? `, ${paper.pages}` : '')
+        + (paper.year ? ` (${paper.year})` : '');
+
+      const links = [];
+      if (paper.arxiv_id) {
+        links.push(`<a href="https://arxiv.org/abs/${paper.arxiv_id}" target="_blank" class="paper-link" title="arXiv"><i class="ai ai-arxiv"></i> arXiv:${paper.arxiv_id}</a>`);
+      }
+      if (paper.doi) {
+        links.push(`<a href="https://doi.org/${paper.doi}" target="_blank" class="paper-link" title="DOI"><i class="fas fa-link"></i> DOI</a>`);
+      }
+      if (paper.id) {
+        links.push(`<a href="https://inspirehep.net/literature/${paper.id}" target="_blank" class="paper-link" title="INSPIRE-HEP"><i class="fas fa-external-link-alt"></i> INSPIRE</a>`);
+      }
+
+      return `
+        <div class="paper-card reveal-child" style="transition-delay: ${index * 0.05}s">
+          <div class="paper-year-badge">${paper.year || '—'}</div>
+          <h4 class="paper-title">${escapeHtml(paper.title)}</h4>
+          <p class="paper-authors">${escapeHtml(authorStr)}</p>
+          <p class="paper-journal">${escapeHtml(journalStr)}</p>
+          <div class="paper-meta">
+            <div class="paper-links">${links.join(' ')}</div>
+            <div class="paper-citations">
+              <span class="citation-badge">${paper.citation_count || 0}</span> ${I18N.t('publications.cited')}
+            </div>
+          </div>
+        </div>
+      `;
+    }).join('');
+
+    const loadMoreBtn = document.getElementById('pub-load-more');
+    if (loadMoreBtn) {
+      if (displayCount < filtered.length) {
+        loadMoreBtn.style.display = 'block';
+        loadMoreBtn.textContent = I18N.t('publications.loadMore');
+      } else {
+        loadMoreBtn.style.display = 'none';
+      }
+    }
+  }
+
+  function escapeHtml(text) {
+    const div = document.createElement('div');
+    div.textContent = text;
+    return div.innerHTML;
+  }
+
+  function loadMore() {
+    displayCount += 10;
+    renderPapers();
+    document.getElementById('publications').scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+
+  function setupSearch() {
+    const searchInput = document.getElementById('pub-search');
+    const loadMoreBtn = document.getElementById('pub-load-more');
+
+    if (searchInput) {
+      searchInput.addEventListener('input', (e) => {
+        const query = e.target.value.toLowerCase();
+        if (!query) {
+          displayCount = 10;
+          renderPapers();
+          return;
+        }
+
+        const filtered = getFilteredPapers().filter(p =>
+          (p.title && p.title.toLowerCase().includes(query)) ||
+          p.authors.some(a => a.toLowerCase().includes(query)) ||
+          (p.journal && p.journal.toLowerCase().includes(query))
+        );
+
+        const container = document.getElementById('publications-list');
+        const noResults = document.getElementById('pub-no-results');
+
+        if (filtered.length === 0) {
+          container.innerHTML = '';
+          if (noResults) noResults.style.display = 'block';
+          if (loadMoreBtn) loadMoreBtn.style.display = 'none';
+        } else {
+          if (noResults) noResults.style.display = 'none';
+          const displayed = filtered.slice(0, displayCount);
+          container.innerHTML = displayed.map((paper) => {
+            const authorStr = paper.authors.slice(0, 4).join(', ') + (paper.authors.length > 4 ? ' et al.' : '');
+            const links = [];
+            if (paper.arxiv_id) links.push(`<a href="https://arxiv.org/abs/${paper.arxiv_id}" target="_blank" class="paper-link">arXiv</a>`);
+            if (paper.doi) links.push(`<a href="https://doi.org/${paper.doi}" target="_blank" class="paper-link">DOI</a>`);
+
+            return `
+              <div class="paper-card">
+                <div class="paper-year-badge">${paper.year || '—'}</div>
+                <h4 class="paper-title">${escapeHtml(paper.title)}</h4>
+                <p class="paper-authors">${escapeHtml(authorStr)}</p>
+                <p class="paper-journal">${escapeHtml(paper.journal)} (${paper.year})</p>
+                <div class="paper-links">${links.join(' ')}</div>
+              </div>
+            `;
+          }).join('');
+
+          if (loadMoreBtn) {
+            if (displayCount < filtered.length) {
+              loadMoreBtn.style.display = 'block';
+            } else {
+              loadMoreBtn.style.display = 'none';
+            }
+          }
+        }
+      });
+    }
+
+    if (loadMoreBtn) {
+      loadMoreBtn.addEventListener('click', loadMore);
+    }
+  }
+
+  document.addEventListener('langChanged', () => {
+    renderFilters();
+    renderPapers();
+  });
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', init);
+  } else {
+    init();
+  }
+
+  return { init, loadMore, getStudents: () => students };
+})();
