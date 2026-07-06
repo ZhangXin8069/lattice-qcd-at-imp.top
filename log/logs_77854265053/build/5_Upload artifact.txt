@@ -1,0 +1,145 @@
+﻿2026-07-06T15:58:13.5387721Z ##[group]Run actions/upload-pages-artifact@v3
+2026-07-06T15:58:13.5388042Z with:
+2026-07-06T15:58:13.5388222Z   path: ./_site
+2026-07-06T15:58:13.5388418Z   name: github-pages
+2026-07-06T15:58:13.5388640Z   retention-days: 1
+2026-07-06T15:58:13.5388835Z ##[endgroup]
+2026-07-06T15:58:13.5493590Z ##[group]Run echo ::group::Archive artifact
+2026-07-06T15:58:13.5493948Z [36;1mecho ::group::Archive artifact[0m
+2026-07-06T15:58:13.5494208Z [36;1mtar \[0m
+2026-07-06T15:58:13.5494453Z [36;1m  --dereference --hard-dereference \[0m
+2026-07-06T15:58:13.5494757Z [36;1m  --directory "$INPUT_PATH" \[0m
+2026-07-06T15:58:13.5495046Z [36;1m  -cvf "$RUNNER_TEMP/artifact.tar" \[0m
+2026-07-06T15:58:13.5495334Z [36;1m  --exclude=.git \[0m
+2026-07-06T15:58:13.5495570Z [36;1m  --exclude=.github \[0m
+2026-07-06T15:58:13.5495794Z [36;1m  .[0m
+2026-07-06T15:58:13.5495980Z [36;1mecho ::endgroup::[0m
+2026-07-06T15:58:13.5653212Z shell: /usr/bin/sh -e {0}
+2026-07-06T15:58:13.5653471Z env:
+2026-07-06T15:58:13.5653656Z   INPUT_PATH: ./_site
+2026-07-06T15:58:13.5653905Z ##[endgroup]
+2026-07-06T15:58:13.5742146Z ##[group]Archive artifact
+2026-07-06T15:58:13.5760242Z ./
+2026-07-06T15:58:13.5760574Z ./README.md
+2026-07-06T15:58:13.5761125Z ./static/
+2026-07-06T15:58:13.5761431Z ./static/images/
+2026-07-06T15:58:13.5761791Z ./static/images/carousel4.jpg
+2026-07-06T15:58:13.5764138Z ./static/images/favicon.ico
+2026-07-06T15:58:13.5764573Z ./static/images/carousel3.jpg
+2026-07-06T15:58:13.5768990Z ./static/images/carousel2.jpg
+2026-07-06T15:58:13.5772715Z ./static/images/carousel1.jpg
+2026-07-06T15:58:13.5775273Z ./static/css/
+2026-07-06T15:58:13.5775636Z ./static/css/bulma.min.css
+2026-07-06T15:58:13.5777886Z ./static/css/bulma-slider.min.css
+2026-07-06T15:58:13.5778774Z ./static/css/fontawesome.all.min.css
+2026-07-06T15:58:13.5779291Z ./static/css/bulma.css.map.txt
+2026-07-06T15:58:13.5779974Z ./static/css/index.css
+2026-07-06T15:58:13.5780509Z ./static/css/bulma-carousel.min.css
+2026-07-06T15:58:13.5780992Z ./static/videos/
+2026-07-06T15:58:13.5781391Z ./static/videos/carousel3.mp4
+2026-07-06T15:58:13.5794374Z ./static/videos/banner_video.mp4
+2026-07-06T15:58:13.5814255Z ./static/videos/carousel2.mp4
+2026-07-06T15:58:13.5835629Z ./static/videos/carousel1.mp4
+2026-07-06T15:58:13.5846180Z ./static/pdfs/
+2026-07-06T15:58:13.5846552Z ./static/pdfs/sample.pdf
+2026-07-06T15:58:13.5846938Z ./static/js/
+2026-07-06T15:58:13.5847266Z ./static/js/theme.js
+2026-07-06T15:58:13.5847638Z ./static/js/animations.js
+2026-07-06T15:58:13.5848034Z ./static/js/music.js
+2026-07-06T15:58:13.5848409Z ./static/js/bulma-carousel.js
+2026-07-06T15:58:13.5848886Z ./static/js/bulma-carousel.min.js
+2026-07-06T15:58:13.5849328Z ./static/js/index.js
+2026-07-06T15:58:13.5849691Z ./static/js/i18n.js
+2026-07-06T15:58:13.5850085Z ./static/js/papers.js
+2026-07-06T15:58:13.5850484Z ./static/js/fontawesome.all.min.js
+2026-07-06T15:58:13.5860130Z ./static/js/bulma-slider.js
+2026-07-06T15:58:13.5860571Z ./static/js/bulma-slider.min.js
+2026-07-06T15:58:13.5860986Z ./LICENSE
+2026-07-06T15:58:13.5861335Z ./assets/
+2026-07-06T15:58:13.5861676Z ./assets/css/
+2026-07-06T15:58:13.5862217Z ./assets/css/style.css
+2026-07-06T15:58:13.5862898Z ./custom/
+2026-07-06T15:58:13.5863564Z ./custom/张鑫 20251227工作汇报_04.png
+2026-07-06T15:58:13.5884071Z ./custom/夏令营补充.html
+2026-07-06T15:58:13.5884519Z ./custom/李政道手写"格"图.png
+2026-07-06T15:58:13.5886824Z ./custom/张鑫 20251227工作汇报_05.png
+2026-07-06T15:58:13.5913135Z ./custom/近代物理研究所惠州分部办公楼.jpg
+2026-07-06T15:58:13.5915802Z ./custom/张鑫 508应用测试报告-PyQCU.pdf
+2026-07-06T15:58:13.5956383Z ./custom/张鑫 20251227工作汇报_02.png
+2026-07-06T15:58:13.5983201Z ./custom/inspirehep.net/
+2026-07-06T15:58:13.5983895Z ./custom/inspirehep.net/authors/
+2026-07-06T15:58:13.5984505Z ./custom/inspirehep.net/authors/1259106/
+2026-07-06T15:58:13.5985293Z ./custom/inspirehep.net/authors/1259106/INSPIRE-CiteAll.html
+2026-07-06T15:58:13.5986138Z ./custom/inspirehep.net/authors/1659207/
+2026-07-06T15:58:13.5986933Z ./custom/inspirehep.net/authors/1659207/INSPIRE-CiteAll.html
+2026-07-06T15:58:13.5988153Z ./custom/张鑫 20251227工作汇报_07.png
+2026-07-06T15:58:13.6007010Z ./custom/孙鹏讲习图.jpg
+2026-07-06T15:58:13.6008198Z ./custom/网站管理员.jpg
+2026-07-06T15:58:13.6010001Z ./custom/孙鹏头像.png
+2026-07-06T15:58:13.6012659Z ./custom/QCD涨落图.gif
+2026-07-06T15:58:13.6048612Z ./custom/张鑫 20251227工作汇报_06.png
+2026-07-06T15:58:13.6064891Z ./custom/课题组合照20260706.jpg
+2026-07-06T15:58:13.6067209Z ./custom/标准模型图.png
+2026-07-06T15:58:13.6068804Z ./custom/李政道先生与芯片上的格点量子色动力学.pdf
+2026-07-06T15:58:13.6086132Z ./custom/张鑫 20260531工作汇报_01.png
+2026-07-06T15:58:13.6196814Z ./custom/QCD涨落视频.mp4
+2026-07-06T15:58:13.6423572Z ./custom/张鑫 20251227工作汇报_03.png
+2026-07-06T15:58:13.6438752Z ./custom/刘柳明头像.png
+2026-07-06T15:58:13.6445342Z ./custom/张鑫 20260706gitee贡献度.png
+2026-07-06T15:58:13.6445882Z ./custom/李政道坐像.jpg
+2026-07-06T15:58:13.6446965Z ./custom/qcd_color_force.mp4
+2026-07-06T15:58:13.6485206Z ./custom/张鑫 20251227工作汇报_01.png
+2026-07-06T15:58:13.6603838Z ./custom/菊次郎的夏天(经典版).mp3
+2026-07-06T15:58:13.6656460Z ./custom/菊次郎的夏天(轻灵版).mp3
+2026-07-06T15:58:13.6696841Z ./custom/quantum_physics_higgs_mechanism_feynman_diagrams.mp4
+2026-07-06T15:58:13.6705951Z ./custom/张鑫 20251227工作汇报_08.png
+2026-07-06T15:58:13.6798719Z ./custom/菊次郎的夏天(治愈版).mp3
+2026-07-06T15:58:13.6828496Z ./data_summary.json
+2026-07-06T15:58:13.6828911Z ./index.html
+2026-07-06T15:58:13.6829275Z ./data/
+2026-07-06T15:58:13.6829628Z ./data/papers.json
+2026-07-06T15:58:13.6830053Z ./data/summer-schools.json
+2026-07-06T15:58:13.6830516Z ./data/conferences.json
+2026-07-06T15:58:13.6830961Z ./data/translations.json
+2026-07-06T15:58:13.6831497Z ./要求.json
+2026-07-06T15:58:13.6834621Z ##[endgroup]
+2026-07-06T15:58:13.6908817Z Node 20 is being deprecated. This workflow is running with Node 24 by default. If you need to temporarily use Node 20, you can set the ACTIONS_ALLOW_USE_UNSECURE_NODE_VERSION=true environment variable. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/
+2026-07-06T15:58:13.6910303Z ##[group]Run actions/upload-artifact@v4
+2026-07-06T15:58:13.6910578Z with:
+2026-07-06T15:58:13.6910760Z   name: github-pages
+2026-07-06T15:58:13.6910992Z   path: /home/runner/work/_temp/artifact.tar
+2026-07-06T15:58:13.6911271Z   retention-days: 1
+2026-07-06T15:58:13.6911474Z   if-no-files-found: error
+2026-07-06T15:58:13.6911695Z   compression-level: 6
+2026-07-06T15:58:13.6911896Z   overwrite: false
+2026-07-06T15:58:13.6912286Z   include-hidden-files: false
+2026-07-06T15:58:13.6912518Z ##[endgroup]
+2026-07-06T15:58:13.8512567Z (node:2649) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.
+2026-07-06T15:58:13.8513294Z (Use `node --trace-deprecation ...` to show where the warning was created)
+2026-07-06T15:58:13.8559515Z With the provided path, there will be 1 file uploaded
+2026-07-06T15:58:13.8566955Z Artifact name is valid!
+2026-07-06T15:58:13.8567650Z Root directory input is valid!
+2026-07-06T15:58:14.1805928Z Beginning upload of artifact content to blob storage
+2026-07-06T15:58:14.4681780Z (node:2649) [DEP0169] DeprecationWarning: `url.parse()` behavior is not standardized and prone to errors that have security implications. Use the WHATWG URL API instead. CVEs are not issued for `url.parse()` vulnerabilities.
+2026-07-06T15:58:15.3508287Z Uploaded bytes 8388608
+2026-07-06T15:58:15.6364765Z Uploaded bytes 16777216
+2026-07-06T15:58:15.6902670Z Uploaded bytes 25165824
+2026-07-06T15:58:15.9490974Z Uploaded bytes 33554432
+2026-07-06T15:58:16.0785963Z Uploaded bytes 41943040
+2026-07-06T15:58:16.2475583Z Uploaded bytes 50331648
+2026-07-06T15:58:16.6476921Z Uploaded bytes 58720256
+2026-07-06T15:58:16.7451596Z Uploaded bytes 67108864
+2026-07-06T15:58:16.9832521Z Uploaded bytes 75497472
+2026-07-06T15:58:17.2203916Z Uploaded bytes 83886080
+2026-07-06T15:58:17.4967359Z Uploaded bytes 92274688
+2026-07-06T15:58:17.8196751Z Uploaded bytes 100663296
+2026-07-06T15:58:18.1141182Z Uploaded bytes 109051904
+2026-07-06T15:58:18.3263066Z Uploaded bytes 117440512
+2026-07-06T15:58:18.5950715Z Uploaded bytes 125829120
+2026-07-06T15:58:18.7521421Z Uploaded bytes 129941783
+2026-07-06T15:58:18.8336130Z Finished uploading artifact content to blob storage!
+2026-07-06T15:58:18.8339528Z SHA256 digest of uploaded artifact zip is 574c81af7cec6bbf4dcb2d69797f958aee472c1a12e1b4e9c40e8b272b3477e1
+2026-07-06T15:58:18.8342524Z Finalizing artifact upload
+2026-07-06T15:58:19.1218171Z Artifact github-pages.zip successfully finalized. Artifact ID 8114484256
+2026-07-06T15:58:19.1219374Z Artifact github-pages has been successfully uploaded! Final size is 129941783 bytes. Artifact ID is 8114484256
+2026-07-06T15:58:19.1228676Z Artifact download URL: https://github.com/ZhangXin8069/lattice-qcd-at-imp.top/actions/runs/28804922120/artifacts/8114484256

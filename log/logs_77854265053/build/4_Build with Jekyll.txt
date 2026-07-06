@@ -1,0 +1,47 @@
+﻿2026-07-06T15:58:10.7279888Z ##[group]Run actions/jekyll-build-pages@v1
+2026-07-06T15:58:10.7280200Z with:
+2026-07-06T15:58:10.7280381Z   source: .
+2026-07-06T15:58:10.7280559Z   destination: ./_site
+2026-07-06T15:58:10.7280768Z   future: false
+2026-07-06T15:58:10.7281023Z   build_revision: bb18fc8cdeb31f64d0f12edfb2569a911992bc1f
+2026-07-06T15:58:10.7281334Z   verbose: true
+2026-07-06T15:58:10.7284220Z   token: ***
+2026-07-06T15:58:10.7284421Z ##[endgroup]
+2026-07-06T15:58:10.7377945Z ##[command]/usr/bin/docker run --name ghcrioactionsjekyllbuildpagesv1013_7373e5 --label af9726 --workdir /github/workspace --rm -e "INPUT_SOURCE" -e "INPUT_DESTINATION" -e "INPUT_FUTURE" -e "INPUT_BUILD_REVISION" -e "INPUT_VERBOSE" -e "INPUT_TOKEN" -e "HOME" -e "GITHUB_JOB" -e "GITHUB_REF" -e "GITHUB_SHA" -e "GITHUB_REPOSITORY" -e "GITHUB_REPOSITORY_OWNER" -e "GITHUB_REPOSITORY_OWNER_ID" -e "GITHUB_RUN_ID" -e "GITHUB_RUN_NUMBER" -e "GITHUB_RETENTION_DAYS" -e "GITHUB_RUN_ATTEMPT" -e "GITHUB_ACTOR_ID" -e "GITHUB_ACTOR" -e "GITHUB_WORKFLOW" -e "GITHUB_HEAD_REF" -e "GITHUB_BASE_REF" -e "GITHUB_EVENT_NAME" -e "GITHUB_SERVER_URL" -e "GITHUB_API_URL" -e "GITHUB_GRAPHQL_URL" -e "GITHUB_REF_NAME" -e "GITHUB_REF_PROTECTED" -e "GITHUB_REF_TYPE" -e "GITHUB_WORKFLOW_REF" -e "GITHUB_WORKFLOW_SHA" -e "GITHUB_REPOSITORY_ID" -e "GITHUB_TRIGGERING_ACTOR" -e "GITHUB_WORKSPACE" -e "GITHUB_ACTION" -e "GITHUB_EVENT_PATH" -e "GITHUB_ACTION_REPOSITORY" -e "GITHUB_ACTION_REF" -e "GITHUB_PATH" -e "GITHUB_ENV" -e "GITHUB_STEP_SUMMARY" -e "GITHUB_STATE" -e "GITHUB_OUTPUT" -e "RUNNER_OS" -e "RUNNER_ARCH" -e "RUNNER_NAME" -e "RUNNER_ENVIRONMENT" -e "RUNNER_TOOL_CACHE" -e "RUNNER_TEMP" -e "RUNNER_WORKSPACE" -e "ACTIONS_RUNTIME_URL" -e "ACTIONS_RUNTIME_TOKEN" -e "ACTIONS_CACHE_URL" -e "ACTIONS_ID_TOKEN_REQUEST_URL" -e "ACTIONS_ID_TOKEN_REQUEST_TOKEN" -e "ACTIONS_RESULTS_URL" -e "ACTIONS_ORCHESTRATION_ID" -e GITHUB_ACTIONS=true -e CI=true -v "/var/run/docker.sock":"/var/run/docker.sock" -v "/home/runner/work/_temp":"/github/runner_temp" -v "/home/runner/work/_temp/_github_home":"/github/home" -v "/home/runner/work/_temp/_github_workflow":"/github/workflow" -v "/home/runner/work/_temp/_runner_file_commands":"/github/file_commands" -v "/home/runner/work/lattice-qcd-at-imp.top/lattice-qcd-at-imp.top":"/github/workspace" ghcr.io/actions/jekyll-build-pages:v1.0.13
+2026-07-06T15:58:11.8989107Z [33mConfiguration file: none[0m
+2026-07-06T15:58:12.0080917Z To use retry middleware with Faraday v2.0+, install `faraday-retry` gem
+2026-07-06T15:58:13.3808139Z   Logging at level: debug
+2026-07-06T15:58:13.3808628Z       GitHub Pages: github-pages v232
+2026-07-06T15:58:13.3809059Z       GitHub Pages: jekyll v3.10.0
+2026-07-06T15:58:13.3809452Z              Theme: jekyll-theme-primer
+2026-07-06T15:58:13.3810019Z       Theme source: /usr/local/bundle/gems/jekyll-theme-primer-0.6.0
+2026-07-06T15:58:13.3810571Z          Requiring: jekyll-github-metadata
+2026-07-06T15:58:13.3810975Z          Requiring: jekyll-seo-tag
+2026-07-06T15:58:13.3811382Z          Requiring: jekyll-coffeescript
+2026-07-06T15:58:13.3811869Z          Requiring: jekyll-commonmark-ghpages
+2026-07-06T15:58:13.3812744Z          Requiring: jekyll-gist
+2026-07-06T15:58:13.3813170Z          Requiring: jekyll-github-metadata
+2026-07-06T15:58:13.3813632Z          Requiring: jekyll-paginate
+2026-07-06T15:58:13.3814084Z          Requiring: jekyll-relative-links
+2026-07-06T15:58:13.3814628Z          Requiring: jekyll-optional-front-matter
+2026-07-06T15:58:13.3815131Z          Requiring: jekyll-readme-index
+2026-07-06T15:58:13.3815590Z          Requiring: jekyll-default-layout
+2026-07-06T15:58:13.3816087Z          Requiring: jekyll-titles-from-headings
+2026-07-06T15:58:13.3816607Z    GitHub Metadata: Initializing...
+2026-07-06T15:58:13.3817066Z             Source: /github/workspace/.
+2026-07-06T15:58:13.3817550Z        Destination: /github/workspace/./_site
+2026-07-06T15:58:13.3818214Z  Incremental build: disabled. Enable with --incremental
+2026-07-06T15:58:13.3818745Z       Generating... 
+2026-07-06T15:58:13.3819103Z        EntryFilter: excluded /CNAME
+2026-07-06T15:58:13.3824791Z         Generating: JekyllOptionalFrontMatter::Generator finished in 0.00016075 seconds.
+2026-07-06T15:58:13.3825806Z         Generating: JekyllReadmeIndex::Generator finished in 0.001521785 seconds.
+2026-07-06T15:58:13.3826718Z         Generating: Jekyll::Paginate::Pagination finished in 3.847e-06 seconds.
+2026-07-06T15:58:13.3827604Z         Generating: JekyllRelativeLinks::Generator finished in 3.5325e-05 seconds.
+2026-07-06T15:58:13.3828518Z         Generating: JekyllDefaultLayout::Generator finished in 9.768e-06 seconds.
+2026-07-06T15:58:13.3829437Z         Generating: JekyllTitlesFromHeadings::Generator finished in 6.392e-06 seconds.
+2026-07-06T15:58:13.3830142Z          Rendering: assets/css/style.scss
+2026-07-06T15:58:13.3830497Z   Pre-Render Hooks: assets/css/style.scss
+2026-07-06T15:58:13.3830773Z   Rendering Markup: assets/css/style.scss
+2026-07-06T15:58:13.3831109Z            Writing: /github/workspace/_site/assets/css/style.css
+2026-07-06T15:58:13.3831428Z                     done in 1.11 seconds.
+2026-07-06T15:58:13.3831752Z  Auto-regeneration: disabled. Use --watch to enable.
