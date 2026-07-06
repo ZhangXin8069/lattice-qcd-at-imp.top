@@ -4,133 +4,236 @@
  */
 const Animations = (function() {
 
-  // ===== Canvas Particle System (Hero) =====
-  function initParticles() {
-    const canvas = document.getElementById('particle-canvas');
-    if (!canvas) return;
+  // ===== Hero Background: Starfield (Dark) + Sakura (Light) =====
+  function initHeroBackground() {
+    const starfieldCanvas = document.getElementById('starfield-canvas');
+    const sakuraCanvas = document.getElementById('sakura-canvas');
+    if (!starfieldCanvas && !sakuraCanvas) return;
 
-    const ctx = canvas.getContext('2d');
-    let particles = [];
-    let animationId;
-    let mouse = { x: -1000, y: -1000 };
+    const hero = document.getElementById('hero');
+    if (!hero) return;
 
-    function resize() {
-      const hero = canvas.parentElement;
-      canvas.width = hero.offsetWidth;
-      canvas.height = hero.offsetHeight;
-    }
+    let starfieldId, sakuraId;
 
-    function createParticles() {
-      const count = Math.min(Math.floor(canvas.width * canvas.height / 8000), 150);
-      particles = [];
-      for (let i = 0; i < count; i++) {
-        particles.push({
-          x: Math.random() * canvas.width,
-          y: Math.random() * canvas.height,
-          vx: (Math.random() - 0.5) * 0.5,
-          vy: (Math.random() - 0.5) * 0.5,
-          radius: Math.random() * 3 + 1,
-          opacity: Math.random() * 0.5 + 0.1,
-          connections: []
-        });
+    // ---- Starfield (Dark Mode) ----
+    if (starfieldCanvas) {
+      const ctx = starfieldCanvas.getContext('2d');
+      let stars = [];
+      let mouse = { x: -1000, y: -1000 };
+
+      function resizeStarfield() {
+        starfieldCanvas.width = hero.offsetWidth;
+        starfieldCanvas.height = hero.offsetHeight;
       }
-    }
 
-    function draw() {
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      function createStars() {
+        const count = Math.min(Math.floor(starfieldCanvas.width * starfieldCanvas.height / 3000), 300);
+        stars = [];
+        for (let i = 0; i < count; i++) {
+          stars.push({
+            x: Math.random() * starfieldCanvas.width,
+            y: Math.random() * starfieldCanvas.height,
+            radius: Math.random() * 2.2 + 0.5,
+            baseOpacity: Math.random() * 0.6 + 0.2,
+            twinkleSpeed: Math.random() * 0.02 + 0.005,
+            twinklePhase: Math.random() * Math.PI * 2,
+            driftX: (Math.random() - 0.5) * 0.15,
+            driftY: (Math.random() - 0.5) * 0.08,
+            hue: Math.random() < 0.1 ? Math.random() * 60 + 30 : Math.random() * 40 + 200
+          });
+        }
+      }
 
-      // Update and draw particles
-      for (let i = 0; i < particles.length; i++) {
-        const p = particles[i];
-
-        // Mouse interaction
-        const dx = mouse.x - p.x;
-        const dy = mouse.y - p.y;
-        const dist = Math.sqrt(dx * dx + dy * dy);
-        if (dist < 150) {
-          p.vx += (dx / dist) * 0.02;
-          p.vy += (dy / dist) * 0.02;
+      function drawStarfield(timestamp) {
+        if (document.documentElement.getAttribute('data-theme') !== 'dark') {
+          starfieldId = requestAnimationFrame(drawStarfield);
+          return;
         }
 
-        // Update position
-        p.x += p.vx;
-        p.y += p.vy;
+        ctx.clearRect(0, 0, starfieldCanvas.width, starfieldCanvas.height);
+        const t = timestamp * 0.001;
 
-        // Damping
-        p.vx *= 0.99;
-        p.vy *= 0.99;
+        // Draw stars
+        for (const s of stars) {
+          // Twinkling
+          const twinkle = Math.sin(t * s.twinkleSpeed * 60 + s.twinklePhase) * 0.3 + 0.7;
+          const opacity = s.baseOpacity * twinkle;
 
-        // Wrap around
-        if (p.x < -10) p.x = canvas.width + 10;
-        if (p.x > canvas.width + 10) p.x = -10;
-        if (p.y < -10) p.y = canvas.height + 10;
-        if (p.y > canvas.height + 10) p.y = -10;
+          // Slow drift
+          s.x += s.driftX;
+          s.y += s.driftY;
+          if (s.x < -10) s.x = starfieldCanvas.width + 10;
+          if (s.x > starfieldCanvas.width + 10) s.x = -10;
+          if (s.y < -10) s.y = starfieldCanvas.height + 10;
+          if (s.y > starfieldCanvas.height + 10) s.y = -10;
 
-        // Draw particle
-        ctx.beginPath();
-        ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
-        const theme = document.documentElement.getAttribute('data-theme');
-        ctx.fillStyle = theme === 'dark'
-          ? `rgba(96, 165, 250, ${p.opacity})`
-          : `rgba(37, 99, 235, ${p.opacity})`;
-        ctx.fill();
-      }
-
-      // Draw connections (lattice-like grid)
-      ctx.strokeStyle = document.documentElement.getAttribute('data-theme') === 'dark'
-        ? 'rgba(96, 165, 250, 0.08)'
-        : 'rgba(37, 99, 235, 0.06)';
-      ctx.lineWidth = 0.5;
-      for (let i = 0; i < particles.length; i++) {
-        for (let j = i + 1; j < particles.length; j++) {
-          const dx = particles[i].x - particles[j].x;
-          const dy = particles[i].y - particles[j].y;
+          // Mouse interaction (gentle attraction)
+          const dx = mouse.x - s.x;
+          const dy = mouse.y - s.y;
           const dist = Math.sqrt(dx * dx + dy * dy);
-          if (dist < 100) {
-            ctx.beginPath();
-            ctx.moveTo(particles[i].x, particles[i].y);
-            ctx.lineTo(particles[j].x, particles[j].y);
-            ctx.stroke();
+          if (dist < 120 && dist > 0) {
+            s.x += dx / dist * 0.08;
+            s.y += dy / dist * 0.08;
           }
+
+          // Draw star with glow
+          ctx.beginPath();
+          ctx.arc(s.x, s.y, s.radius, 0, Math.PI * 2);
+          const glow = ctx.createRadialGradient(s.x, s.y, 0, s.x, s.y, s.radius * 3);
+          glow.addColorStop(0, `rgba(147, 197, 253, ${opacity})`);
+          glow.addColorStop(1, 'rgba(147, 197, 253, 0)');
+          ctx.fillStyle = glow;
+          ctx.fill();
+          ctx.fillStyle = `rgba(191, 219, 254, ${Math.min(opacity + 0.2, 1)})`;
+          ctx.fill();
+        }
+
+        // Draw constellation-like lines between nearest bright stars
+        const brightStars = stars.filter(s => s.radius > 1.4);
+        ctx.strokeStyle = 'rgba(147, 197, 253, 0.04)';
+        ctx.lineWidth = 0.5;
+        for (let i = 0; i < brightStars.length; i++) {
+          for (let j = i + 1; j < brightStars.length; j++) {
+            const dx = brightStars[i].x - brightStars[j].x;
+            const dy = brightStars[i].y - brightStars[j].y;
+            const dist = Math.sqrt(dx * dx + dy * dy);
+            if (dist < 130) {
+              ctx.beginPath();
+              ctx.moveTo(brightStars[i].x, brightStars[i].y);
+              ctx.lineTo(brightStars[j].x, brightStars[j].y);
+              ctx.stroke();
+            }
+          }
+        }
+
+        starfieldId = requestAnimationFrame(drawStarfield);
+      }
+
+      function handleStarMouse(e) {
+        const rect = starfieldCanvas.getBoundingClientRect();
+        mouse.x = e.clientX - rect.left;
+        mouse.y = e.clientY - rect.top;
+      }
+
+      resizeStarfield();
+      createStars();
+      starfieldCanvas.addEventListener('mousemove', handleStarMouse);
+      window.addEventListener('resize', () => { resizeStarfield(); createStars(); });
+
+      // Visibility pause
+      const starObserver = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            if (!starfieldId) starfieldId = requestAnimationFrame(drawStarfield);
+          } else {
+            if (starfieldId) { cancelAnimationFrame(starfieldId); starfieldId = null; }
+          }
+        });
+      }, { threshold: 0.1 });
+      starObserver.observe(starfieldCanvas);
+
+      starfieldId = requestAnimationFrame(drawStarfield);
+    }
+
+    // ---- Cherry Blossom / Sakura (Light Mode) ----
+    if (sakuraCanvas) {
+      const ctx = sakuraCanvas.getContext('2d');
+      let petals = [];
+
+      function resizeSakura() {
+        sakuraCanvas.width = hero.offsetWidth;
+        sakuraCanvas.height = hero.offsetHeight;
+      }
+
+      function createPetals() {
+        const count = Math.min(Math.floor(sakuraCanvas.width * sakuraCanvas.height / 6000), 120);
+        petals = [];
+        for (let i = 0; i < count; i++) {
+          petals.push({
+            x: Math.random() * sakuraCanvas.width,
+            y: Math.random() * sakuraCanvas.height,
+            size: Math.random() * 8 + 4,
+            fallSpeed: Math.random() * 0.8 + 0.3,
+            swaySpeed: Math.random() * 0.02 + 0.008,
+            swayAmp: Math.random() * 30 + 10,
+            swayPhase: Math.random() * Math.PI * 2,
+            opacity: Math.random() * 0.4 + 0.15,
+            rotation: Math.random() * Math.PI * 2,
+            rotSpeed: (Math.random() - 0.5) * 0.02,
+            hue: Math.random() * 30 + 345, // pink hues around 345-15
+            saturation: Math.random() * 40 + 30
+          });
         }
       }
 
-      animationId = requestAnimationFrame(draw);
-    }
+      function drawPetal(ctx, x, y, size, rotation, color) {
+        ctx.save();
+        ctx.translate(x, y);
+        ctx.rotate(rotation);
+        // Draw petal shape (elongated ellipse)
+        ctx.beginPath();
+        ctx.ellipse(0, 0, size * 0.35, size * 0.7, 0, 0, Math.PI * 2);
+        ctx.fillStyle = color;
+        ctx.fill();
+        // Add a subtle line in the middle
+        ctx.beginPath();
+        ctx.moveTo(0, -size * 0.5);
+        ctx.lineTo(0, size * 0.3);
+        ctx.strokeStyle = 'rgba(255, 200, 200, 0.3)';
+        ctx.lineWidth = 0.5;
+        ctx.stroke();
+        ctx.restore();
+      }
 
-    function handleMouse(e) {
-      const rect = canvas.getBoundingClientRect();
-      mouse.x = e.clientX - rect.left;
-      mouse.y = e.clientY - rect.top;
-    }
-
-    resize();
-    createParticles();
-
-    canvas.addEventListener('mousemove', handleMouse);
-    window.addEventListener('resize', () => {
-      resize();
-      createParticles();
-    });
-
-    // Pause when not visible
-    const observer = new IntersectionObserver((entries) => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting) {
-          if (!animationId) {
-            draw();
-          }
-        } else {
-          if (animationId) {
-            cancelAnimationFrame(animationId);
-            animationId = null;
-          }
+      function drawSakura(timestamp) {
+        if (document.documentElement.getAttribute('data-theme') !== 'light') {
+          sakuraId = requestAnimationFrame(drawSakura);
+          return;
         }
-      });
-    }, { threshold: 0.1 });
-    observer.observe(canvas);
 
-    draw();
+        ctx.clearRect(0, 0, sakuraCanvas.width, sakuraCanvas.height);
+        const t = timestamp * 0.001;
+
+        for (const p of petals) {
+          // Diagonal fall (bottom-right direction)
+          p.y += p.fallSpeed;
+          p.x += p.fallSpeed * 0.55 + Math.sin(t * p.swaySpeed * 60 + p.swayPhase) * 0.2;
+
+          p.rotation += p.rotSpeed;
+
+          // Reset when out of bounds
+          if (p.y > sakuraCanvas.height + 20) {
+            p.y = -20;
+            p.x = Math.random() * sakuraCanvas.width;
+          }
+          if (p.x > sakuraCanvas.width + 20) p.x = -20;
+          if (p.x < -20) p.x = sakuraCanvas.width + 20;
+
+          // Draw petal
+          const color = `hsla(${p.hue}, ${p.saturation}%, 80%, ${p.opacity})`;
+          drawPetal(ctx, p.x, p.y, p.size, p.rotation, color);
+        }
+
+        sakuraId = requestAnimationFrame(drawSakura);
+      }
+
+      resizeSakura();
+      createPetals();
+      window.addEventListener('resize', () => { resizeSakura(); createPetals(); });
+
+      const sakuraObserver = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            if (!sakuraId) sakuraId = requestAnimationFrame(drawSakura);
+          } else {
+            if (sakuraId) { cancelAnimationFrame(sakuraId); sakuraId = null; }
+          }
+        });
+      }, { threshold: 0.1 });
+      sakuraObserver.observe(sakuraCanvas);
+
+      sakuraId = requestAnimationFrame(drawSakura);
+    }
   }
 
   // ===== Scroll-Triggered Reveal Animations =====
@@ -314,7 +417,7 @@ const Animations = (function() {
 
   // Initialize all
   function init() {
-    initParticles();
+    initHeroBackground();
     initScrollReveal();
     initCounters();
     initParallax();

@@ -62,6 +62,7 @@ const MusicPlayer = (function() {
           <button class="music-ctrl-btn" id="music-next" title="Next track">
             <i class="fas fa-step-forward"></i>
           </button>
+          <button class="music-ctrl-btn" id="music-shuffle" title="Shuffle">🔀</button>
           <span class="music-track-name" id="music-track-name"></span>
           <input type="range" class="music-volume" id="music-volume" min="0" max="100" value="30" title="Volume">
         </div>
@@ -76,6 +77,7 @@ const MusicPlayer = (function() {
       const playBtn = e.target.closest('#music-play');
       const prevBtn = e.target.closest('#music-prev');
       const nextBtn = e.target.closest('#music-next');
+      const shuffleBtn = e.target.closest('#music-shuffle');
 
       if (toggle) {
         const controls = document.getElementById('music-controls');
@@ -88,6 +90,7 @@ const MusicPlayer = (function() {
       if (playBtn) togglePlay();
       if (prevBtn) prevTrack();
       if (nextBtn) nextTrack();
+      if (shuffleBtn) toggleShuffle();
     });
 
     document.addEventListener('input', (e) => {
@@ -129,8 +132,32 @@ const MusicPlayer = (function() {
     }
   }
 
+  let trackHistory = [];
+  let isShuffle = true;
+
   function nextTrack() {
-    currentTrack = (currentTrack + 1) % tracks.length;
+    if (isShuffle) {
+      // Random shuffle — avoid immediate repeats
+      let next;
+      if (tracks.length === 1) {
+        next = 0;
+      } else {
+        const available = [];
+        for (let i = 0; i < tracks.length; i++) {
+          if (i !== currentTrack) available.push(i);
+        }
+        // Avoid last 2 tracks in history if possible
+        const recentSet = new Set(trackHistory.slice(-2));
+        const fresh = available.filter(i => !recentSet.has(i));
+        const pool = fresh.length > 0 ? fresh : available;
+        next = pool[Math.floor(Math.random() * pool.length)];
+      }
+      trackHistory.push(next);
+      if (trackHistory.length > 10) trackHistory.shift();
+      currentTrack = next;
+    } else {
+      currentTrack = (currentTrack + 1) % tracks.length;
+    }
     audio.src = tracks[currentTrack].file;
     audio.load();
     if (isPlaying) {
@@ -140,7 +167,13 @@ const MusicPlayer = (function() {
   }
 
   function prevTrack() {
-    currentTrack = (currentTrack - 1 + tracks.length) % tracks.length;
+    // Go back in history if available, otherwise sequential
+    if (trackHistory.length > 1) {
+      trackHistory.pop(); // remove current
+      currentTrack = trackHistory[trackHistory.length - 1];
+    } else {
+      currentTrack = (currentTrack - 1 + tracks.length) % tracks.length;
+    }
     audio.src = tracks[currentTrack].file;
     audio.load();
     if (isPlaying) {
@@ -149,16 +182,29 @@ const MusicPlayer = (function() {
     updateUI();
   }
 
+  function toggleShuffle() {
+    isShuffle = !isShuffle;
+    updateUI();
+  }
+
   function updateUI() {
     const playBtn = document.getElementById('music-play');
     const trackName = document.getElementById('music-track-name');
     const toggleBtn = document.getElementById('music-toggle');
+    const shuffleBtn = document.getElementById('music-shuffle');
 
     if (playBtn) {
       const icon = playBtn.querySelector('i');
       if (icon) {
         icon.className = isPlaying ? 'fas fa-pause' : 'fas fa-play';
       }
+    }
+
+    if (shuffleBtn) {
+      shuffleBtn.style.opacity = isShuffle ? '1' : '0.4';
+      shuffleBtn.title = isShuffle
+        ? ((I18N && I18N.getLang ? I18N.getLang() : 'zh') === 'zh' ? '随机播放：开' : 'Shuffle: ON')
+        : ((I18N && I18N.getLang ? I18N.getLang() : 'zh') === 'zh' ? '随机播放：关' : 'Shuffle: OFF');
     }
 
     if (trackName) {
@@ -188,5 +234,5 @@ const MusicPlayer = (function() {
     init();
   }
 
-  return { init, play, pause, togglePlay, nextTrack, prevTrack };
+  return { init, play, pause, togglePlay, nextTrack, prevTrack, toggleShuffle };
 })();

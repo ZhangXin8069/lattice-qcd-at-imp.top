@@ -8,7 +8,9 @@
     "nav.students": "研究生",
     "nav.conferences": "会议",
     "nav.summerSchools": "夏令营",
+    "nav.software": "软件工作",
     "nav.gallery": "图库",
+    "nav.help": "帮助反馈",
     "nav.contact": "联系我们",
 
     "hero.title": "格点量子色动力学课题组",
@@ -23,6 +25,9 @@
     "about.stats.citations": "累计引用",
     "about.stats.students": "培养研究生",
     "about.stats.years": "研究年限",
+    "about.leePhoto": "李政道先生 (Prof. T.D. Lee)",
+    "about.groupPhoto": "课题组合照 (Group Photo, 2026)",
+    "about.leePdf": "李政道先生与芯片上的格点量子色动力学 (PDF)",
 
     "advisors.title": "导师简介",
     "advisors.sun.name": "孙鹏",
@@ -55,6 +60,7 @@
     "publications.loadMore": "加载更多",
     "publications.cited": "引用",
     "publications.noResults": "未找到相关论文",
+    "publications.offlineData": "📡 离线数据 — INSPIRE-HEP API 不可用，显示缓存数据",
 
     "students.title": "研究生",
     "students.fromPapers": "（数据来源于INSPIRE-HEP论文作者分析）",
@@ -76,6 +82,23 @@
     "gallery.title": "图库",
     "gallery.video": "视频",
 
+    "software.title": "软件工作",
+    "software.subtitle": "课题组开发的格点QCD相关软件工具",
+    "software.pyqcu.desc": "基于Python的格点QCD量子计算模拟工具包，支持在经典和量子计算平台上进行格点QCD模拟。",
+    "software.viewRepo": "查看仓库 (Gitee)",
+    "software.testReport.title": "PyQCU 应用测试报告",
+    "software.testReport.desc": "508应用测试报告，验证PyQCU在格点QCD计算中的正确性与性能。",
+    "software.viewPdf": "查看PDF",
+    "software.gitee.title": "Gitee 贡献度",
+    "software.gitee.desc": "张鑫在Gitee平台上的代码贡献统计（截至2026年7月）。",
+    "software.workReports.title": "工作汇报幻灯片",
+
+    "help.title": "帮助反馈",
+    "help.subtitle": "如有任何问题或建议，欢迎联系我们",
+    "help.admin": "网站管理员",
+    "help.adminRole": "技术支持与内容维护",
+    "help.note": "如需更新网站内容、报告问题或提供建议，请发送邮件至以上地址。",
+
     "footer.contact": "联系我们",
     "footer.address": "甘肃省兰州市城关区南昌路509号",
     "footer.institution": "中国科学院近代物理研究所",
@@ -96,7 +119,9 @@
     "nav.students": "Students",
     "nav.conferences": "Conferences",
     "nav.summerSchools": "Summer Schools",
+    "nav.software": "Software",
     "nav.gallery": "Gallery",
+    "nav.help": "Help & Feedback",
     "nav.contact": "Contact",
 
     "hero.title": "Lattice QCD Research Group",
@@ -111,6 +136,9 @@
     "about.stats.citations": "Citations",
     "about.stats.students": "Students",
     "about.stats.years": "Years",
+    "about.leePhoto": "Prof. T.D. Lee",
+    "about.groupPhoto": "Group Photo (2026)",
+    "about.leePdf": "Prof. T.D. Lee and Chip-based Lattice QCD (PDF)",
 
     "advisors.title": "Advisors",
     "advisors.sun.name": "Peng Sun",
@@ -143,6 +171,7 @@
     "publications.loadMore": "Load More",
     "publications.cited": "citations",
     "publications.noResults": "No matching papers found",
+    "publications.offlineData": "📡 Offline Data — INSPIRE-HEP API unavailable, showing cached data",
 
     "students.title": "Graduate Students",
     "students.fromPapers": "(Data extracted from INSPIRE-HEP paper author analysis)",
@@ -163,6 +192,23 @@
 
     "gallery.title": "Gallery",
     "gallery.video": "Video",
+
+    "software.title": "Software Work",
+    "software.subtitle": "Lattice QCD software tools developed by the group",
+    "software.pyqcu.desc": "Python-based Lattice QCD quantum computing simulation toolkit, supporting lattice QCD simulations on classical and quantum computing platforms.",
+    "software.viewRepo": "View Repository (Gitee)",
+    "software.testReport.title": "PyQCU Application Test Report",
+    "software.testReport.desc": "508 Application Test Report, validating the correctness and performance of PyQCU in lattice QCD calculations.",
+    "software.viewPdf": "View PDF",
+    "software.gitee.title": "Gitee Contributions",
+    "software.gitee.desc": "Code contribution statistics of Zhang Xin on the Gitee platform (as of July 2026).",
+    "software.workReports.title": "Work Report Slides",
+
+    "help.title": "Help & Feedback",
+    "help.subtitle": "If you have any questions or suggestions, please contact us",
+    "help.admin": "Website Administrator",
+    "help.adminRole": "Technical Support & Content Maintenance",
+    "help.note": "To update website content, report issues, or provide suggestions, please send an email to the address above.",
 
     "footer.contact": "Contact Us",
     "footer.address": "509 Nanchang Road, Chengguan District, Lanzhou, Gansu, China",

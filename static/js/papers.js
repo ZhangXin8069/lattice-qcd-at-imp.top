@@ -23,6 +23,8 @@ const Papers = (function() {
     setupSearch();
   }
 
+  let isOffline = false;
+
   async function loadPapers() {
     const container = document.getElementById('publications-list');
     if (container) {
@@ -31,12 +33,81 @@ const Papers = (function() {
 
     try {
       await fetchFromINSPIRE();
+      isOffline = false;
     } catch (e) {
-      console.warn('INSPIRE-HEP fetch failed, falling back to static data:', e.message);
-      await loadFromStatic();
+      console.warn('INSPIRE-HEP fetch failed, trying offline data:', e.message);
+      const offlineLoaded = await loadFromOfflineData();
+      if (!offlineLoaded) {
+        console.warn('Offline data not available, falling back to static data');
+        await loadFromStatic();
+        isOffline = false;
+      } else {
+        isOffline = true;
+      }
     }
     // Sort by year descending
     allPapers.sort((a, b) => (b.year || 0) - (a.year || 0));
+    updateOfflineBadge();
+  }
+
+  function updateOfflineBadge() {
+    const badge = document.getElementById('pub-offline-badge');
+    if (badge) {
+      badge.style.display = isOffline ? 'block' : 'none';
+    }
+  }
+
+  async function loadFromOfflineData() {
+    try {
+      // Try to fetch from offline saved INSPIRE-HEP pages
+      const authorIds = ['1659207', '259106'];
+      const papers = [];
+      const studentCount = {};
+
+      for (const authorId of authorIds) {
+        try {
+          const resp = await fetch(`custom/inspirehep.net/authors/${authorId}`);
+          if (!resp.ok) continue;
+          const html = await resp.text();
+
+          // Parse paper titles and metadata from INSPIRE-HEP HTML
+          // Look for paper entries in the saved HTML
+          const paperRegex = /<a[^>]*href="\/literature\/(\d+)"[^>]*>([^<]+)<\/a>/gi;
+          let match;
+          while ((match = paperRegex.exec(html)) !== null) {
+            const id = match[1];
+            const title = match[2].replace(/&amp;/g, '&').replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&#39;/g, "'").trim();
+            if (!title || title.length < 3) continue;
+            if (papers.find(p => p.id === id)) continue;
+            papers.push({
+              id: id,
+              title: title,
+              authors: [],
+              journal: '',
+              volume: '',
+              pages: '',
+              year: null,
+              arxiv_id: '',
+              doi: '',
+              citation_count: 0
+            });
+          }
+        } catch (e) {
+          console.warn(`Failed to load offline data for author ${authorId}:`, e);
+        }
+      }
+
+      if (papers.length > 0) {
+        allPapers = papers;
+        // Populate students with empty array (can't parse from offline HTML easily)
+        students = [];
+        return true;
+      }
+      return false;
+    } catch (e) {
+      console.warn('Offline data parsing failed:', e);
+      return false;
+    }
   }
 
   async function fetchFromINSPIRE() {

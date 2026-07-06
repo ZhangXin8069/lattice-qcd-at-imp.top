@@ -1,0 +1,121 @@
+{
+  "last_updated": "2026-07-06",
+  "site_info": {
+    "title_zh": "格点量子色动力学课题组",
+    "title_en": "Lattice QCD Research Group",
+    "institution": "中国科学院近代物理研究所 (Institute of Modern Physics, CAS)",
+    "url": "https://lattice-qcd-at-imp.top",
+    "platform": "GitHub Pages"
+  },
+  "advisors": [
+    {
+      "name_zh": "孙鹏",
+      "name_en": "Peng Sun",
+      "title": "研究员 (Professor)",
+      "email": "pengsun@impcas.ac.cn",
+      "inspire_url": "https://inspirehep.net/authors/1659207",
+      "research_tags_zh": ["强子谱学", "强子结构", "部分子分布函数"],
+      "research_tags_en": ["Hadron Spectroscopy", "Hadron Structure", "Parton Distribution Functions"],
+      "avatar": "custom/孙鹏头像.png"
+    },
+    {
+      "name_zh": "刘柳明",
+      "name_en": "Liuming Liu",
+      "title": "研究员 (Professor)",
+      "email": "liuming@impcas.ac.cn",
+      "inspire_url": "https://inspirehep.net/authors/1259106",
+      "research_tags_zh": ["核子结构", "部分子分布函数", "强子弱衰变"],
+      "research_tags_en": ["Nucleon Structure", "Parton Distribution Functions", "Hadronic Weak Decays"],
+      "avatar": "custom/刘柳明头像.png"
+    }
+  ],
+  "research_areas": [
+    {"key": "area1", "title_zh": "粲重子散射", "title_en": "Charmed Baryon Scattering"},
+    {"key": "area2", "title_zh": "部分子分布函数", "title_en": "Parton Distribution Functions"},
+    {"key": "area3", "title_zh": "核子自旋结构", "title_en": "Nucleon Spin Structure"},
+    {"key": "area4", "title_zh": "格点QCD算法", "title_en": "Lattice QCD Algorithms"},
+    {"key": "area5", "title_zh": "核效应", "title_en": "Nuclear Effects"}
+  ],
+  "paper_sources": [
+    {"url": "https://inspirehep.net/authors/1659207", "author": "Peng Sun"},
+    {"url": "https://inspirehep.net/authors/1259106", "author": "Liuming Liu"},
+    {"offline_fallback": "custom/inspirehep.net/authors/1659207"},
+    {"offline_fallback": "custom/inspirehep.net/authors/259106"}
+  ],
+  "papers_count": 67,
+  "citation_count": 2800,
+  "students": [
+    {"name": "Chen Chen", "papers": 3},
+    {"name": "Yiqi Geng", "papers": 2},
+    {"name": "Hongxin Dong", "papers": 2},
+    {"name": "Hanyang Xing", "papers": 1}
+  ],
+  "conferences": [
+    {"name_zh": "第43届国际格点场论研讨会 (Lattice 2026)", "status": "upcoming", "date": "2026-07-26", "url": "https://indico.global/event/16565/"},
+    {"name_zh": "第42届国际格点场论研讨会 (Lattice 2025)", "status": "past", "date": "2025-11-02"},
+    {"name_zh": "第五届中国格点量子色动力学研讨会", "status": "past", "date": "2025-10-09", "url": "https://indico.itp.ac.cn/event/324/"},
+    {"name_zh": "核物理中的格点QCD应用研讨会", "status": "past", "date": "2025-06-27"},
+    {"name_zh": "夸克物质2025", "status": "past", "date": "2025-04-06"},
+    {"name_zh": "国际格点QCD进展研讨会", "status": "past", "date": "2025-05-12"}
+  ],
+  "summer_schools": [
+    {"name_zh": "第14届华大QCD讲习班：QCD中的自旋与极化", "status": "upcoming", "date": "2026-09-20", "url": "https://indico.ihep.ac.cn/event/29652/"},
+    {"name_zh": "第13届华大QCD讲习班：QCD中的非平衡过程", "status": "past", "date": "2025-08-25"},
+    {"name_zh": "第12届华大QCD讲习班：EIC物理的实用理论工具", "status": "past", "date": "2024-08-01"},
+    {"name_zh": "第11届华大QCD讲习班：夸克物质与粒子探测", "status": "past", "date": "2023-08-01"},
+    {"name_zh": "第10届华大QCD讲习班：高能核物理专题", "status": "past", "date": "2022-08-01"},
+    {"name_zh": "第4届华大QCD讲习班：格点QCD", "status": "past", "date": "2015-08-01"}
+  ],
+  "software_work": {
+    "pyqcu": {
+      "name": "PyQCU",
+      "url": "https://gitee.com/zhangxin8069/PyQCU",
+      "test_report_pdf": "custom/张鑫 508应用测试报告-PyQCU.pdf",
+      "gitee_contributions": "custom/张鑫 20260706gitee贡献度.png"
+    },
+    "work_reports": [
+      "custom/张鑫 20251227工作汇报_01.png",
+      "custom/张鑫 20251227工作汇报_02.png",
+      "custom/张鑫 20251227工作汇报_03.png",
+      "custom/张鑫 20251227工作汇报_04.png",
+      "custom/张鑫 20251227工作汇报_05.png",
+      "custom/张鑫 20251227工作汇报_06.png",
+      "custom/张鑫 20251227工作汇报_07.png",
+      "custom/张鑫 20251227工作汇报_08.png",
+      "custom/张鑫 20260531工作汇报_01.png"
+    ]
+  },
+  "help": {
+    "admin_image": "custom/网站管理员.jpg",
+    "email": "zhangxin8069@qq.com"
+  },
+  "media_assets": {
+    "favicon": "custom/李政道手写\"格\"图.png",
+    "background_music": [
+      "custom/菊次郎的夏天(轻灵版).mp3",
+      "custom/菊次郎的夏天(经典版).mp3",
+      "custom/菊次郎的夏天(治愈版).mp3"
+    ],
+    "background_videos": [
+      "custom/QCD涨落视频.mp4",
+      "custom/qcd_color_force.mp4"
+    ],
+    "about_images": [
+      "custom/李政道坐像.jpg",
+      "custom/课题组合照20260706.png",
+      "custom/标准模型图.png"
+    ],
+    "about_pdf": "custom/李政道先生与芯片上的格点量子色动力学.pdf",
+    "section_backgrounds": {
+      "students": "custom/近代物理研究所惠州分部办公楼.jpg",
+      "conferences": "custom/QCD涨落图.gif",
+      "summer_schools": "custom/孙鹏讲习图.jpg"
+    }
+  },
+  "theme": {
+    "dark_mode": "星场动画 (Starfield animation)",
+    "light_mode": "樱花雨动画 (Cherry blossom petals falling diagonally)",
+    "reference": "https://web-animations.github.io/web-animations-demos/#starfield/starfield-indiv.html"
+  },
+  "correction_notes": "请在此文件中修正任何错误数据，修正后运行 /update-website summary 重新生成网站数据。"
+}

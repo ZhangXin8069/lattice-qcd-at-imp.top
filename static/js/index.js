@@ -204,10 +204,142 @@
     }
   }
 
+  // Load summer schools extra content from 夏令营补充.html
+  async function loadSummerSchoolsExtra() {
+    const container = document.getElementById('summer-schools-extra');
+    if (!container) return;
+
+    try {
+      const resp = await fetch('custom/夏令营补充.html');
+      const html = await resp.text();
+
+      // Parse links from the HTML
+      const linkRegex = /<A\s+HREF="([^"]+)"[^>]*>([^<]+)<\/A>/gi;
+      const links = [];
+      let match;
+      while ((match = linkRegex.exec(html)) !== null) {
+        links.push({ url: match[1], title: match[2].trim() });
+      }
+
+      if (links.length === 0) return;
+
+      const lang = (I18N && I18N.getLang) ? I18N.getLang() : 'zh';
+
+      container.innerHTML = `
+        <h4>${lang === 'zh' ? '更多格点QCD相关会议与讲习班' : 'More Lattice QCD Conferences & Schools'}</h4>
+        <ul class="extra-links-list">
+          ${links.map(l => `<li><a href="${l.url}" target="_blank">🔗 ${l.title}</a></li>`).join('')}
+        </ul>
+      `;
+
+      setTimeout(() => {
+        container.querySelectorAll('.reveal-child, .reveal-up').forEach(el => el.classList.add('revealed'));
+      }, 100);
+    } catch (e) {
+      console.warn('Failed to load summer schools extra content:', e);
+    }
+  }
+
+  // Work reports slideshow
+  function initSlideshow() {
+    const wrapper = document.getElementById('slides-wrapper');
+    const dotsContainer = document.getElementById('slide-dots');
+    const prevBtn = document.getElementById('slide-prev');
+    const nextBtn = document.getElementById('slide-next');
+
+    if (!wrapper || !dotsContainer) return;
+
+    const slides = wrapper.querySelectorAll('.slide');
+    const totalSlides = slides.length;
+    if (totalSlides === 0) return;
+
+    let currentSlide = 0;
+    let autoPlayInterval;
+
+    // Create dots
+    for (let i = 0; i < totalSlides; i++) {
+      const dot = document.createElement('button');
+      dot.className = 'slide-dot' + (i === 0 ? ' active' : '');
+      dot.setAttribute('aria-label', `Slide ${i + 1}`);
+      dot.addEventListener('click', () => goToSlide(i));
+      dotsContainer.appendChild(dot);
+    }
+
+    function goToSlide(index) {
+      currentSlide = ((index % totalSlides) + totalSlides) % totalSlides;
+      wrapper.style.transform = `translateX(-${currentSlide * 100}%)`;
+      dotsContainer.querySelectorAll('.slide-dot').forEach((d, i) => {
+        d.classList.toggle('active', i === currentSlide);
+      });
+    }
+
+    function nextSlide() { goToSlide(currentSlide + 1); }
+    function prevSlide() { goToSlide(currentSlide - 1); }
+
+    function startAutoPlay() {
+      stopAutoPlay();
+      autoPlayInterval = setInterval(nextSlide, 4000);
+    }
+
+    function stopAutoPlay() {
+      if (autoPlayInterval) { clearInterval(autoPlayInterval); autoPlayInterval = null; }
+    }
+
+    if (prevBtn) prevBtn.addEventListener('click', () => { prevSlide(); startAutoPlay(); });
+    if (nextBtn) nextBtn.addEventListener('click', () => { nextSlide(); startAutoPlay(); });
+
+    // Touch support
+    let touchStartX = 0;
+    const slideshowContainer = document.getElementById('work-reports-slideshow');
+    if (slideshowContainer) {
+      slideshowContainer.addEventListener('touchstart', (e) => {
+        touchStartX = e.touches[0].clientX;
+        stopAutoPlay();
+      }, { passive: true });
+      slideshowContainer.addEventListener('touchend', (e) => {
+        const diff = touchStartX - e.changedTouches[0].clientX;
+        if (Math.abs(diff) > 50) {
+          if (diff > 0) nextSlide();
+          else prevSlide();
+        }
+        startAutoPlay();
+      });
+    }
+
+    startAutoPlay();
+
+    // Pause on hover
+    if (slideshowContainer) {
+      slideshowContainer.addEventListener('mouseenter', stopAutoPlay);
+      slideshowContainer.addEventListener('mouseleave', startAutoPlay);
+    }
+  }
+
+  // Clickable image fullscreen
+  function initClickableImages() {
+    document.addEventListener('click', (e) => {
+      const img = e.target.closest('.clickable-img');
+      if (!img) return;
+
+      const overlay = document.createElement('div');
+      overlay.className = 'image-fullscreen-overlay';
+      const fullImg = document.createElement('img');
+      fullImg.src = img.src;
+      fullImg.alt = img.alt;
+      overlay.appendChild(fullImg);
+      overlay.addEventListener('click', () => overlay.remove());
+      document.addEventListener('keydown', function closeOnEsc(ev) {
+        if (ev.key === 'Escape') { overlay.remove(); document.removeEventListener('keydown', closeOnEsc); }
+      });
+      document.body.appendChild(overlay);
+    });
+  }
+
   // Re-render dynamic sections on language change
   document.addEventListener('langChanged', () => {
     loadConferences();
     loadSummerSchools();
+    loadSummerSchoolsExtra();
     loadStudents();
   });
 
@@ -217,8 +349,11 @@
     setupLangToggle();
     initScrollToTop();
     initLightbox();
+    initSlideshow();
+    initClickableImages();
     loadConferences();
     loadSummerSchools();
+    loadSummerSchoolsExtra();
     loadStudents();
   }
 

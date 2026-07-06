@@ -38,7 +38,7 @@
   <link rel="preconnect" href="https://cdn.jsdelivr.net">
 
   <!-- Favicon -->
-  <link rel="icon" type="image/x-icon" href="static/images/favicon.ico">
+  <link rel="icon" type="image/png" href="custom/李政道手写&#34;格&#34;图.png">
 
   <!-- CSS -->
   <link rel="stylesheet" href="static/css/bulma.min.css">
@@ -116,7 +116,9 @@
       <li><a href="#students" class="navbar-item" data-i18n="nav.students">研究生</a></li>
       <li><a href="#conferences" class="navbar-item" data-i18n="nav.conferences">会议</a></li>
       <li><a href="#summer-schools" class="navbar-item" data-i18n="nav.summerSchools">夏令营</a></li>
+      <li><a href="#software" class="navbar-item" data-i18n="nav.software">软件工作</a></li>
       <li><a href="#gallery" class="navbar-item" data-i18n="nav.gallery">图库</a></li>
+      <li><a href="#help" class="navbar-item" data-i18n="nav.help">帮助反馈</a></li>
     </ul>
     <div class="navbar-actions">
       <button id="theme-toggle" class="nav-action-btn" aria-label="Toggle dark mode" title="深色模式">
@@ -129,7 +131,8 @@
 
 <!-- ===== Hero Section ===== -->
 <section id="hero">
-  <canvas id="particle-canvas"></canvas>
+  <canvas id="starfield-canvas" class="hero-canvas"></canvas>
+  <canvas id="sakura-canvas" class="hero-canvas"></canvas>
   <div class="hero-overlay"></div>
   <div class="hero-content">
     <h1 class="hero-title" data-i18n="hero.title">格点量子色动力学课题组</h1>
@@ -164,6 +167,24 @@
       <div class="about-image">
         <img src="custom/标准模型图.png" alt="标准模型图示" loading="lazy">
       </div>
+    </div>
+
+    <div class="about-images-row reveal-up">
+      <div class="about-image-card">
+        <img src="custom/李政道坐像.jpg" alt="李政道先生坐像" loading="lazy">
+        <span class="about-image-caption" data-i18n="about.leePhoto">李政道先生 (Prof. T.D. Lee)</span>
+      </div>
+      <div class="about-image-card">
+        <img src="custom/课题组合照20260706.png" alt="课题组合照" loading="lazy">
+        <span class="about-image-caption" data-i18n="about.groupPhoto">课题组合照 (Group Photo, 2026)</span>
+      </div>
+    </div>
+
+    <div class="about-pdf-link reveal-up">
+      <a href="custom/李政道先生与芯片上的格点量子色动力学.pdf" target="_blank" class="pdf-download-btn">
+        <i class="fas fa-file-pdf"></i>&ensp;<span data-i18n="about.leePdf">李政道先生与芯片上的格点量子色动力学 (PDF)</span>
+        <i class="fas fa-external-link-alt"></i>
+      </a>
     </div>
 
     <div class="about-stats reveal-up">
@@ -230,7 +251,11 @@
 </section>
 
 <!-- ===== Research Areas Section ===== -->
-<section id="research" class="section reveal">
+<section id="research" class="section reveal section-bg-video">
+  <video class="section-bg-video-el" autoplay muted loop playsinline preload="none">
+    <source src="custom/qcd_color_force.mp4" type="video/mp4">
+  </video>
+  <div class="section-bg-overlay"></div>
   <div class="section-header">
     <h2 class="section-title" data-i18n="research.title">研究方向</h2>
   </div>
@@ -273,12 +298,16 @@
     <input type="text" id="pub-search" data-i18n-placeholder="publications.search" placeholder="搜索论文...">
   </div>
   <div id="publications-list" class="publications-list"></div>
+  <div id="pub-offline-badge" class="pub-offline-badge" style="display:none;">
+    <i class="fas fa-database"></i>&ensp;<span data-i18n="publications.offlineData">离线数据</span>
+  </div>
   <p id="pub-no-results" class="pub-no-results" style="display:none;" data-i18n="publications.noResults">未找到相关论文</p>
   <button id="pub-load-more" class="pub-load-more" style="display:none;" data-i18n="publications.loadMore">加载更多</button>
 </section>
 
 <!-- ===== Students Section ===== -->
-<section id="students" class="section reveal">
+<section id="students" class="section reveal section-bg-img" style="background-image: url('custom/近代物理研究所惠州分部办公楼.jpg');">
+  <div class="section-bg-overlay"></div>
   <div class="section-header">
     <h2 class="section-title" data-i18n="students.title">研究生</h2>
     <p class="section-subtitle" data-i18n="students.fromPapers">（数据来源于INSPIRE-HEP论文作者分析）</p>
@@ -288,7 +317,8 @@
 </section>
 
 <!-- ===== Conferences Section ===== -->
-<section id="conferences" class="section section-alt reveal">
+<section id="conferences" class="section section-alt reveal section-bg-img" style="background-image: url('custom/QCD涨落图.gif');">
+  <div class="section-bg-overlay"></div>
   <div class="section-header">
     <h2 class="section-title" data-i18n="conferences.title">学术会议</h2>
   </div>
@@ -296,12 +326,76 @@
 </section>
 
 <!-- ===== Summer Schools Section ===== -->
-<section id="summer-schools" class="section reveal">
+<section id="summer-schools" class="section reveal section-bg-img" style="background-image: url('custom/孙鹏讲习图.jpg');">
+  <div class="section-bg-overlay"></div>
   <div class="section-header">
     <h2 class="section-title" data-i18n="summerSchools.title">夏令营与讲习班</h2>
     <p class="section-subtitle" data-i18n="summerSchools.recommend">以下为推荐研究生参加的暑期学校与讲习班：</p>
   </div>
   <div id="summer-schools-grid" class="summer-schools-grid"></div>
+  <div id="summer-schools-extra" class="summer-schools-extra reveal-up"></div>
+</section>
+
+<!-- ===== Software Work Section ===== -->
+<section id="software" class="section section-alt reveal">
+  <div class="section-header">
+    <h2 class="section-title" data-i18n="software.title">软件工作</h2>
+    <p class="section-subtitle" data-i18n="software.subtitle">课题组开发的格点QCD相关软件工具</p>
+  </div>
+  <div class="software-grid">
+    <!-- PyQCU Card -->
+    <div class="software-card reveal-child">
+      <div class="software-icon"><i class="fas fa-microchip"></i></div>
+      <h3 class="software-name">PyQCU</h3>
+      <p class="software-desc" data-i18n="software.pyqcu.desc">基于Python的格点QCD量子计算模拟工具包，支持在经典和量子计算平台上进行格点QCD模拟。</p>
+      <div class="software-links">
+        <a href="https://gitee.com/zhangxin8069/PyQCU" target="_blank" class="software-link-btn">
+          <i class="fas fa-code-branch"></i>&ensp;<span data-i18n="software.viewRepo">查看仓库 (Gitee)</span>
+        </a>
+      </div>
+    </div>
+    <!-- Test Report Card -->
+    <div class="software-card reveal-child">
+      <div class="software-icon"><i class="fas fa-file-alt"></i></div>
+      <h3 class="software-name" data-i18n="software.testReport.title">PyQCU 应用测试报告</h3>
+      <p class="software-desc" data-i18n="software.testReport.desc">508应用测试报告，验证PyQCU在格点QCD计算中的正确性与性能。</p>
+      <div class="software-links">
+        <a href="custom/张鑫 508应用测试报告-PyQCU.pdf" target="_blank" class="software-link-btn">
+          <i class="fas fa-file-pdf"></i>&ensp;<span data-i18n="software.viewPdf">查看PDF</span>
+        </a>
+      </div>
+    </div>
+    <!-- Gitee Contributions Card -->
+    <div class="software-card reveal-child">
+      <div class="software-icon"><i class="fas fa-chart-line"></i></div>
+      <h3 class="software-name" data-i18n="software.gitee.title">Gitee 贡献度</h3>
+      <p class="software-desc" data-i18n="software.gitee.desc">张鑫在Gitee平台上的代码贡献统计（截至2026年7月）。</p>
+      <div class="software-contrib-img">
+        <img src="custom/张鑫 20260706gitee贡献度.png" alt="Gitee贡献度" loading="lazy" class="clickable-img">
+      </div>
+    </div>
+  </div>
+
+  <!-- Work Reports Slideshow -->
+  <div class="work-reports-section reveal-up">
+    <h3 class="work-reports-title" data-i18n="software.workReports.title">工作汇报幻灯片</h3>
+    <div class="slideshow-container" id="work-reports-slideshow">
+      <div class="slides-wrapper" id="slides-wrapper">
+        <div class="slide"><img src="custom/张鑫 20251227工作汇报_01.png" alt="工作汇报 01" loading="lazy"></div>
+        <div class="slide"><img src="custom/张鑫 20251227工作汇报_02.png" alt="工作汇报 02" loading="lazy"></div>
+        <div class="slide"><img src="custom/张鑫 20251227工作汇报_03.png" alt="工作汇报 03" loading="lazy"></div>
+        <div class="slide"><img src="custom/张鑫 20251227工作汇报_04.png" alt="工作汇报 04" loading="lazy"></div>
+        <div class="slide"><img src="custom/张鑫 20251227工作汇报_05.png" alt="工作汇报 05" loading="lazy"></div>
+        <div class="slide"><img src="custom/张鑫 20251227工作汇报_06.png" alt="工作汇报 06" loading="lazy"></div>
+        <div class="slide"><img src="custom/张鑫 20251227工作汇报_07.png" alt="工作汇报 07" loading="lazy"></div>
+        <div class="slide"><img src="custom/张鑫 20251227工作汇报_08.png" alt="工作汇报 08" loading="lazy"></div>
+        <div class="slide"><img src="custom/张鑫 20260531工作汇报_01.png" alt="工作汇报 20260531" loading="lazy"></div>
+      </div>
+      <button class="slide-btn slide-prev" id="slide-prev" aria-label="Previous slide"><i class="fas fa-chevron-left"></i></button>
+      <button class="slide-btn slide-next" id="slide-next" aria-label="Next slide"><i class="fas fa-chevron-right"></i></button>
+      <div class="slide-dots" id="slide-dots"></div>
+    </div>
+  </div>
 </section>
 
 <!-- ===== Gallery Section ===== -->
@@ -338,6 +432,29 @@
         <span>课题组照片<br>(Group Photo)</span>
       </div>
       <div class="gallery-caption">课题组集体照 — 占位符 (Placeholder)</div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== Help & Feedback Section ===== -->
+<section id="help" class="section reveal">
+  <div class="section-header">
+    <h2 class="section-title" data-i18n="help.title">帮助反馈</h2>
+    <p class="section-subtitle" data-i18n="help.subtitle">如有任何问题或建议，欢迎联系我们</p>
+  </div>
+  <div class="help-content">
+    <div class="help-card reveal-child">
+      <div class="help-admin-img">
+        <img src="custom/网站管理员.jpg" alt="网站管理员" loading="lazy">
+      </div>
+      <div class="help-info">
+        <h3 class="help-name" data-i18n="help.admin">网站管理员</h3>
+        <p class="help-role" data-i18n="help.adminRole">技术支持与内容维护</p>
+        <a href="mailto:zhangxin8069@qq.com" class="help-email-link">
+          <i class="fas fa-envelope"></i>&ensp;zhangxin8069@qq.com
+        </a>
+        <p class="help-note" data-i18n="help.note">如需更新网站内容、报告问题或提供建议，请发送邮件至以上地址。</p>
+      </div>
     </div>
   </div>
 </section>
