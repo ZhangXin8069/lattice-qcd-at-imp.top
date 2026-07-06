@@ -19,6 +19,9 @@ const MusicPlayer = (function() {
     audio.volume = 0.3;
     audio.preload = 'none';
 
+    // Random initial track
+    currentTrack = Math.floor(Math.random() * tracks.length);
+
     audio.addEventListener('ended', () => {
       nextTrack();
     });
@@ -31,9 +34,32 @@ const MusicPlayer = (function() {
     renderPlayer();
     setupListeners();
 
-    // Listen for first user interaction to enable audio
-    const enableAudio = () => {
+    // Attempt auto-play on load
+    const tryAutoPlay = () => {
+      if (hasInteracted) return;
       hasInteracted = true;
+      audio.src = tracks[currentTrack].file;
+      audio.load();
+      audio.play().then(() => {
+        isPlaying = true;
+        updateUI();
+      }).catch(() => {
+        // Browser blocked auto-play, will wait for user
+        isPlaying = false;
+        updateUI();
+      });
+    };
+
+    // Try after a short delay (some browsers allow muted auto-play)
+    setTimeout(() => {
+      tryAutoPlay();
+    }, 500);
+
+    // Also listen for first user interaction
+    const enableAudio = () => {
+      if (!hasInteracted) {
+        tryAutoPlay();
+      }
       document.removeEventListener('click', enableAudio);
       document.removeEventListener('keydown', enableAudio);
       document.removeEventListener('touchstart', enableAudio);

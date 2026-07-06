@@ -121,6 +121,9 @@
       <li><a href="#help" class="navbar-item" data-i18n="nav.help">帮助反馈</a></li>
     </ul>
     <div class="navbar-actions">
+      <button id="search-toggle" class="nav-action-btn" aria-label="Search" title="搜索">
+        <i class="fas fa-search"></i>
+      </button>
       <button id="theme-toggle" class="nav-action-btn" aria-label="Toggle dark mode" title="深色模式">
         <i class="fas fa-moon"></i>
       </button>
@@ -289,7 +292,11 @@
 </section>
 
 <!-- ===== Publications Section ===== -->
-<section id="publications" class="section section-alt reveal">
+<section id="publications" class="section section-alt reveal section-bg-video">
+  <video class="section-bg-video-el" autoplay muted loop playsinline preload="none">
+    <source src="custom/quantum_physics_higgs_mechanism_feynman_diagrams.mp4" type="video/mp4">
+  </video>
+  <div class="section-bg-overlay"></div>
   <div class="section-header">
     <h2 class="section-title" data-i18n="publications.title">论文发表</h2>
   </div>
@@ -497,6 +504,21 @@
 <div id="lightbox" class="lightbox" aria-label="Image preview" role="dialog">
   <button class="lightbox-close" aria-label="Close preview">&times;</button>
   <img id="lightbox-img" src="" alt="Preview">
+</div>
+
+<!-- ===== Global Search Modal ===== -->
+<div id="search-modal" class="search-modal" aria-hidden="true">
+  <div class="search-backdrop"></div>
+  <div class="search-dialog">
+    <div class="search-input-wrapper">
+      <i class="fas fa-search search-input-icon"></i>
+      <input type="text" id="search-input" class="search-input" data-i18n-placeholder="search.placeholder" placeholder="搜索网站内容..." autocomplete="off">
+      <button id="search-close" class="search-close-btn" aria-label="Close search">&times;</button>
+    </div>
+    <div id="search-results" class="search-results">
+      <p class="search-hint" data-i18n="search.hint">输入关键词搜索导师、论文、研究方向、会议等内容</p>
+    </div>
+  </div>
 </div>
 
 <!-- ===== Music Player Container ===== -->

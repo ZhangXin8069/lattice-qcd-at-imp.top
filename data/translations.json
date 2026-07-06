@@ -108,7 +108,11 @@
     "music.noMusic": "未在播放",
     "theme.light": "浅色模式",
     "theme.dark": "深色模式",
-    "lang.switch": "English"
+    "lang.switch": "English",
+    "search.placeholder": "搜索导师、论文、研究方向...",
+    "search.hint": "输入关键词搜索导师、论文、研究方向、会议等内容",
+    "search.noResults": "未找到相关结果"
+
   },
   "en": {
     "nav.home": "Home",
@@ -219,6 +223,9 @@
     "music.noMusic": "Not playing",
     "theme.light": "Light Mode",
     "theme.dark": "Dark Mode",
-    "lang.switch": "中文"
+    "lang.switch": "中文",
+    "search.placeholder": "Search advisors, papers, research...",
+    "search.hint": "Type keywords to search advisors, papers, research areas, conferences, etc.",
+    "search.noResults": "No results found"
   }
 }

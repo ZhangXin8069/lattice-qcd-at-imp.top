@@ -37,10 +37,8 @@
     {"key": "area5", "title_zh": "核效应", "title_en": "Nuclear Effects"}
   ],
   "paper_sources": [
-    {"url": "https://inspirehep.net/authors/1659207", "author": "Peng Sun"},
-    {"url": "https://inspirehep.net/authors/1259106", "author": "Liuming Liu"},
-    {"offline_fallback": "custom/inspirehep.net/authors/1659207"},
-    {"offline_fallback": "custom/inspirehep.net/authors/259106"}
+    {"url": "https://inspirehep.net/authors/1659207", "author": "Peng Sun", "offline_fallback": "custom/inspirehep.net/authors/1659207/INSPIRE-CiteAll.html"},
+    {"url": "https://inspirehep.net/authors/1259106", "author": "Liuming Liu", "offline_fallback": "custom/inspirehep.net/authors/1259106/INSPIRE-CiteAll.html"}
   ],
   "papers_count": 67,
   "citation_count": 2800,
@@ -98,7 +96,8 @@
     ],
     "background_videos": [
       "custom/QCD涨落视频.mp4",
-      "custom/qcd_color_force.mp4"
+      "custom/qcd_color_force.mp4",
+      "custom/quantum_physics_higgs_mechanism_feynman_diagrams.mp4"
     ],
     "about_images": [
       "custom/李政道坐像.jpg",
@@ -107,10 +106,17 @@
     ],
     "about_pdf": "custom/李政道先生与芯片上的格点量子色动力学.pdf",
     "section_backgrounds": {
+      "research": "custom/qcd_color_force.mp4 (video)",
+      "publications": "custom/quantum_physics_higgs_mechanism_feynman_diagrams.mp4 (video)",
       "students": "custom/近代物理研究所惠州分部办公楼.jpg",
       "conferences": "custom/QCD涨落图.gif",
       "summer_schools": "custom/孙鹏讲习图.jpg"
     }
+  },
+  "features": {
+    "search": "全局搜索 (Ctrl+K 或 / 快捷键)",
+    "music": "自动播放、随机初始曲目、洗牌模式",
+    "background_opacity": "0.35 (叠加层透明度)"
   },
   "theme": {
     "dark_mode": "星场动画 (Starfield animation)",

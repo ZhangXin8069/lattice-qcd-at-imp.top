@@ -60,13 +60,13 @@ const Papers = (function() {
   async function loadFromOfflineData() {
     try {
       // Try to fetch from offline saved INSPIRE-HEP pages
-      const authorIds = ['1659207', '259106'];
+      const authorIds = ['1659207', '1259106'];
       const papers = [];
       const studentCount = {};
 
       for (const authorId of authorIds) {
         try {
-          const resp = await fetch(`custom/inspirehep.net/authors/${authorId}`);
+          const resp = await fetch(`custom/inspirehep.net/authors/${authorId}/INSPIRE-CiteAll.html`);
           if (!resp.ok) continue;
           const html = await resp.text();
 

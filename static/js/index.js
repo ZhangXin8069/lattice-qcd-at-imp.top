@@ -184,6 +184,160 @@
     }, 100);
   }
 
+  // ===== Global Search =====
+  function initGlobalSearch() {
+    const modal = document.getElementById('search-modal');
+    const input = document.getElementById('search-input');
+    const results = document.getElementById('search-results');
+    const toggleBtn = document.getElementById('search-toggle');
+    const closeBtn = document.getElementById('search-close');
+    const backdrop = modal ? modal.querySelector('.search-backdrop') : null;
+
+    if (!modal || !input || !results) return;
+
+    // Build search index from page content
+    function buildSearchIndex() {
+      const index = [];
+      const sections = document.querySelectorAll('section[id]');
+      sections.forEach(section => {
+        const id = section.id;
+        // Get section name from the title
+        const titleEl = section.querySelector('.section-title, h2');
+        let sectionName = titleEl ? titleEl.textContent.trim() : id;
+        // Get nav label
+        const navItem = document.querySelector(`.navbar-item[href="#${id}"]`);
+        if (navItem) sectionName = navItem.textContent.trim();
+
+        // Collect all text content in this section
+        const textBlocks = [];
+        const walker = document.createTreeWalker(
+          section,
+          NodeFilter.SHOW_TEXT,
+          null,
+          false
+        );
+        let node;
+        while ((node = walker.nextNode())) {
+          const text = node.textContent.trim();
+          if (text.length > 5 && !text.startsWith('©')) {
+            textBlocks.push(text);
+          }
+        }
+
+        // Also index paper cards and other dynamic content
+        section.querySelectorAll('.paper-card, .advisor-card, .research-card, .software-card, .student-card, .timeline-item, .school-card').forEach(card => {
+          const cardText = card.textContent.trim();
+          if (cardText.length > 5) textBlocks.push(cardText);
+        });
+
+        if (textBlocks.length > 0) {
+          index.push({
+            sectionId: id,
+            sectionName: sectionName,
+            texts: textBlocks
+          });
+        }
+      });
+      return index;
+    }
+
+    let searchIndex = [];
+    let debounceTimer = null;
+
+    function openSearch() {
+      modal.classList.add('active');
+      modal.setAttribute('aria-hidden', 'false');
+      input.value = '';
+      results.innerHTML = `<p class="search-hint">${(I18N && I18N.t) ? I18N.t('search.hint') : '输入关键词搜索导师、论文、研究方向、会议等内容'}</p>`;
+      searchIndex = buildSearchIndex();
+      setTimeout(() => input.focus(), 100);
+    }
+
+    function closeSearch() {
+      modal.classList.remove('active');
+      modal.setAttribute('aria-hidden', 'true');
+    }
+
+    function performSearch() {
+      if (debounceTimer) clearTimeout(debounceTimer);
+      debounceTimer = setTimeout(() => {
+        const query = input.value.trim().toLowerCase();
+        if (!query) {
+          results.innerHTML = `<p class="search-hint">${(I18N && I18N.t) ? I18N.t('search.hint') : '输入关键词搜索导师、论文、研究方向、会议等内容'}</p>`;
+          return;
+        }
+
+        const matches = [];
+        for (const sec of searchIndex) {
+          for (const text of sec.texts) {
+            const lowerText = text.toLowerCase();
+            const idx = lowerText.indexOf(query);
+            if (idx !== -1) {
+              // Extract context around the match
+              const start = Math.max(0, idx - 40);
+              const end = Math.min(lowerText.length, idx + query.length + 40);
+              let context = text.substring(start, end);
+              if (start > 0) context = '...' + context;
+              if (end < text.length) context = context + '...';
+              // Highlight the match
+              const highlighted = context.replace(
+                new RegExp(query.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'gi'),
+                match => `<mark>${match}</mark>`
+              );
+              matches.push({
+                sectionId: sec.sectionId,
+                sectionName: sec.sectionName,
+                context: highlighted
+              });
+              break; // One match per section is enough
+            }
+          }
+        }
+
+        if (matches.length === 0) {
+          results.innerHTML = `<p class="search-no-results">🔍 ${(I18N && I18N.t) ? I18N.t('search.noResults') : '未找到相关结果'}</p>`;
+        } else {
+          results.innerHTML = matches.slice(0, 15).map(m => `
+            <a class="search-result-item reveal-child" href="#${m.sectionId}" data-section="${m.sectionId}">
+              <div class="search-result-section">${m.sectionName}</div>
+              <div class="search-result-context">${m.context}</div>
+            </a>
+          `).join('');
+          // Trigger reveal
+          setTimeout(() => {
+            results.querySelectorAll('.reveal-child').forEach(el => el.classList.add('revealed'));
+          }, 50);
+        }
+      }, 200);
+    }
+
+    // Event listeners
+    if (toggleBtn) toggleBtn.addEventListener('click', openSearch);
+    if (closeBtn) closeBtn.addEventListener('click', closeSearch);
+    if (backdrop) backdrop.addEventListener('click', closeSearch);
+    input.addEventListener('input', performSearch);
+
+    // Close on Escape
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && modal.classList.contains('active')) {
+        closeSearch();
+      }
+      // Ctrl+K or / to open search
+      if ((e.ctrlKey && e.key === 'k') || (e.key === '/' && !e.ctrlKey && !e.metaKey && document.activeElement === document.body)) {
+        e.preventDefault();
+        openSearch();
+      }
+    });
+
+    // Close on result click
+    results.addEventListener('click', (e) => {
+      const item = e.target.closest('.search-result-item');
+      if (item) {
+        closeSearch();
+      }
+    });
+  }
+
   // Theme toggle handler
   function setupThemeToggle() {
     const btn = document.getElementById('theme-toggle');
@@ -347,6 +501,7 @@
   function init() {
     setupThemeToggle();
     setupLangToggle();
+    initGlobalSearch();
     initScrollToTop();
     initLightbox();
     initSlideshow();
