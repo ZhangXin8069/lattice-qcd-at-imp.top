@@ -8,15 +8,56 @@
     ],
     "论文源(第一单位为Lanzhou, Inst. Modern Phys.)": [
         "https://inspirehep.net/authors/1659207",
-        "https://inspirehep.net/authors/1259106"
+        "https://inspirehep.net/authors/1259106",
+        "如果inspirehep.net访问失败,则读取custom/inspirehep.net/authors,标明此为离线数据"
     ],
-    "研究生": "论文源中单位为单位为Lanzhou, Inst. Modern Phys.的作者",
-    "会议": "网络收集",
-    "夏令营": "网络收集",
+    "研究方向": [
+        "custom/QCD涨落视频.mp4与custom/qcd_color_force.mp4作为背景"
+    ],
+    "研究生": [
+        "论文源中单位为单位为Lanzhou, Inst. Modern Phys.的作者",
+        "custom/近代物理研究所惠州分部办公楼.jpg作为背景"
+    ],
+    "会议": [
+        "网络收集",
+        "custom/QCD涨落图.gif作为背景"
+    ],
+    "夏令营": [
+        "网络收集",
+        "custom/夏令营补充.html",
+        "custom/孙鹏讲习图.jpg作为背景"
+    ],
     "配图": "尽可能丰富,如果获取不到图片则留下带有相应描述的占位符",
     "动态效果": "尽可能多,可参考/static",
-    "背景音乐": ["/*.mp3","自动随机循环播放"],
+    "背景音乐": [
+        "/*.mp3",
+        "自动随机循环播放"
+    ],
     "挂载平台": "Github Page",
     "总体主题": "参考/static",
-    "额外要求": "同时给出全流程skill"
+    "网站图标": "custom/李政道手写\"格\"图.png",
+    "网站背景": [
+        "深色模式参考https://web-animations.github.io/web-animations-demos/#starfield/starfield-indiv.html",
+        "浅色模式参考https://web-animations.github.io/web-animations-demos/#starfield/starfield-indiv.html,改为白底樱花雨,注意斜向下飘落",
+        "保持两个模式风格近似"
+    ],
+    "关于我们": [
+        "插图为lattice-qcd-at-imp.top/custom/李政道坐像.jpg与custom/课题组合照20260706.png组合",
+        "custom/李政道先生与芯片上的格点量子色动力学.pdf展示"
+    ],
+    "软件工作": [
+        "https://gitee.com/zhangxin8069/PyQCU",
+        "custom/张鑫 508应用测试报告-PyQCU.pdf展示",
+        "custom/张鑫 20260706gitee贡献度.png附上",
+        "custom/张鑫 .*工作汇报.*.png幻灯片展示"
+    ],
+    "帮助反馈": [
+        "custom/网站管理员.jpg",
+        "zhangxin8069@qq.com"
+    ],
+    "额外要求": [
+        "同时给出全流程skill",
+        "如果有参考链接一定要附上超链接",
+        "所有呈现的数据汇总到一个根目录下的文件以提供修正"
+    ],
 }
