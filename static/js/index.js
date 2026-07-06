@@ -59,6 +59,9 @@
       const resp = await fetch('data/conferences.json');
       const conferences = await resp.json();
 
+      // Sort by date descending
+      conferences.sort((a, b) => (b.date || '').localeCompare(a.date || ''));
+
       const lang = (I18N && I18N.getLang) ? I18N.getLang() : 'zh';
       const upcomingHTML = [];
       const pastHTML = [];
@@ -114,6 +117,9 @@
     try {
       const resp = await fetch('data/summer-schools.json');
       const schools = await resp.json();
+
+      // Sort by date descending
+      schools.sort((a, b) => (b.date || '').localeCompare(a.date || ''));
 
       const lang = (I18N && I18N.getLang) ? I18N.getLang() : 'zh';
 
@@ -195,40 +201,41 @@
 
     if (!modal || !input || !results) return;
 
-    // Build search index from page content
+    let debounceTimer = null;
+
+    // i18n safe helper
+    function t(key, fallback) {
+      try { return (typeof I18N !== 'undefined' && I18N.t) ? I18N.t(key) : fallback; }
+      catch(e) { return fallback; }
+    }
+
+    // Build search index fresh from current live DOM every time
     function buildSearchIndex() {
-      const index = [];
-      const sections = document.querySelectorAll('section[id]');
-      sections.forEach(section => {
-        const id = section.id;
-        // Get section name from the title
-        const titleEl = section.querySelector('.section-title, h2');
-        let sectionName = titleEl ? titleEl.textContent.trim() : id;
-        // Get nav label
-        const navItem = document.querySelector(`.navbar-item[href="#${id}"]`);
+      var index = [];
+      var sections = document.querySelectorAll('section[id]');
+      sections.forEach(function(section) {
+        var id = section.id;
+        var titleEl = section.querySelector('.section-title, h2, h3');
+        var sectionName = titleEl ? titleEl.textContent.trim() : id;
+        var navItem = document.querySelector('.navbar-item[href="#' + id + '"]');
         if (navItem) sectionName = navItem.textContent.trim();
 
-        // Collect all text content in this section
-        const textBlocks = [];
-        const walker = document.createTreeWalker(
-          section,
-          NodeFilter.SHOW_TEXT,
-          null,
-          false
-        );
-        let node;
-        while ((node = walker.nextNode())) {
-          const text = node.textContent.trim();
-          if (text.length > 5 && !text.startsWith('©')) {
-            textBlocks.push(text);
-          }
-        }
-
-        // Also index paper cards and other dynamic content
-        section.querySelectorAll('.paper-card, .advisor-card, .research-card, .software-card, .student-card, .timeline-item, .school-card').forEach(card => {
-          const cardText = card.textContent.trim();
-          if (cardText.length > 5) textBlocks.push(cardText);
+        // Collect text blocks
+        var textBlocks = [];
+        // Get all visible text via innerText (includes dynamic content)
+        var fullText = section.innerText || section.textContent || '';
+        var lines = fullText.split('\n').filter(function(l) {
+          var t = l.trim();
+          return t.length > 3 && t !== '©';
         });
+        textBlocks = lines;
+
+        // Also extract individual cards for more precise matching
+        var cards = section.querySelectorAll('.paper-card, .advisor-card, .research-card, .software-card, .student-card, .timeline-item, .school-card');
+        for (var c = 0; c < cards.length; c++) {
+          var cardText = cards[c].textContent.trim();
+          if (cardText.length > 5) textBlocks.push(cardText);
+        }
 
         if (textBlocks.length > 0) {
           index.push({
@@ -241,74 +248,85 @@
       return index;
     }
 
-    let searchIndex = [];
-    let debounceTimer = null;
+    // Escape regex special chars
+    function escapeRegex(str) {
+      return str.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+    }
 
     function openSearch() {
       modal.classList.add('active');
       modal.setAttribute('aria-hidden', 'false');
       input.value = '';
-      results.innerHTML = `<p class="search-hint">${(I18N && I18N.t) ? I18N.t('search.hint') : '输入关键词搜索导师、论文、研究方向、会议等内容'}</p>`;
-      searchIndex = buildSearchIndex();
-      setTimeout(() => input.focus(), 100);
+      results.innerHTML = '<p class="search-hint">' + t('search.hint', '输入关键词搜索导师、论文、研究方向、会议等内容') + '</p>';
+      setTimeout(function() { input.focus(); }, 100);
     }
 
     function closeSearch() {
       modal.classList.remove('active');
       modal.setAttribute('aria-hidden', 'true');
+      input.value = '';
     }
 
     function performSearch() {
       if (debounceTimer) clearTimeout(debounceTimer);
-      debounceTimer = setTimeout(() => {
-        const query = input.value.trim().toLowerCase();
+      debounceTimer = setTimeout(function() {
+        var query = input.value.trim().toLowerCase();
         if (!query) {
-          results.innerHTML = `<p class="search-hint">${(I18N && I18N.t) ? I18N.t('search.hint') : '输入关键词搜索导师、论文、研究方向、会议等内容'}</p>`;
+          results.innerHTML = '<p class="search-hint">' + t('search.hint', '输入关键词搜索导师、论文、研究方向、会议等内容') + '</p>';
           return;
         }
 
-        const matches = [];
-        for (const sec of searchIndex) {
-          for (const text of sec.texts) {
-            const lowerText = text.toLowerCase();
-            const idx = lowerText.indexOf(query);
+        // Rebuild index fresh from live DOM each search
+        var searchIndex = buildSearchIndex();
+        var matches = [];
+
+        for (var i = 0; i < searchIndex.length; i++) {
+          var sec = searchIndex[i];
+          for (var j = 0; j < sec.texts.length; j++) {
+            var text = sec.texts[j];
+            var lowerText = text.toLowerCase();
+            var idx = lowerText.indexOf(query);
             if (idx !== -1) {
-              // Extract context around the match
-              const start = Math.max(0, idx - 40);
-              const end = Math.min(lowerText.length, idx + query.length + 40);
-              let context = text.substring(start, end);
+              var start = Math.max(0, idx - 50);
+              var end = Math.min(text.length, idx + query.length + 50);
+              var context = text.substring(start, end);
               if (start > 0) context = '...' + context;
               if (end < text.length) context = context + '...';
-              // Highlight the match
-              const highlighted = context.replace(
-                new RegExp(query.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'gi'),
-                match => `<mark>${match}</mark>`
+
+              // Highlight match (sanitize context first for HTML)
+              var div = document.createElement('div');
+              div.textContent = context;
+              var safeContext = div.innerHTML;
+              var safeQuery = escapeRegex(query);
+              var highlighted = safeContext.replace(
+                new RegExp('(' + safeQuery + ')', 'gi'),
+                '<mark>$1</mark>'
               );
+
               matches.push({
                 sectionId: sec.sectionId,
                 sectionName: sec.sectionName,
                 context: highlighted
               });
-              break; // One match per section is enough
+              break; // 1 match per section
             }
           }
         }
 
         if (matches.length === 0) {
-          results.innerHTML = `<p class="search-no-results">🔍 ${(I18N && I18N.t) ? I18N.t('search.noResults') : '未找到相关结果'}</p>`;
+          results.innerHTML = '<p class="search-no-results">🔍 ' + t('search.noResults', '未找到相关结果') + '</p>';
         } else {
-          results.innerHTML = matches.slice(0, 15).map(m => `
-            <a class="search-result-item reveal-child" href="#${m.sectionId}" data-section="${m.sectionId}">
-              <div class="search-result-section">${m.sectionName}</div>
-              <div class="search-result-context">${m.context}</div>
-            </a>
-          `).join('');
-          // Trigger reveal
-          setTimeout(() => {
-            results.querySelectorAll('.reveal-child').forEach(el => el.classList.add('revealed'));
-          }, 50);
+          var html = '';
+          for (var m = 0; m < Math.min(matches.length, 15); m++) {
+            var match = matches[m];
+            html += '<a class="search-result-item" href="#' + match.sectionId + '">';
+            html += '<div class="search-result-section">' + match.sectionName + '</div>';
+            html += '<div class="search-result-context">' + match.context + '</div>';
+            html += '</a>';
+          }
+          results.innerHTML = html;
         }
-      }, 200);
+      }, 150);
     }
 
     // Event listeners
@@ -317,23 +335,35 @@
     if (backdrop) backdrop.addEventListener('click', closeSearch);
     input.addEventListener('input', performSearch);
 
-    // Close on Escape
-    document.addEventListener('keydown', (e) => {
+    // Keyboard shortcuts
+    document.addEventListener('keydown', function(e) {
       if (e.key === 'Escape' && modal.classList.contains('active')) {
         closeSearch();
+        return;
       }
-      // Ctrl+K or / to open search
-      if ((e.ctrlKey && e.key === 'k') || (e.key === '/' && !e.ctrlKey && !e.metaKey && document.activeElement === document.body)) {
+      // Ctrl+K or / to open (only when not typing in an input)
+      var activeTag = document.activeElement ? document.activeElement.tagName : '';
+      var isInput = activeTag === 'INPUT' || activeTag === 'TEXTAREA' || activeTag === 'SELECT';
+      if (!isInput && ((e.ctrlKey && e.key === 'k') || e.key === '/')) {
         e.preventDefault();
         openSearch();
       }
     });
 
-    // Close on result click
-    results.addEventListener('click', (e) => {
-      const item = e.target.closest('.search-result-item');
-      if (item) {
+    // Result click: close modal and navigate
+    results.addEventListener('click', function(e) {
+      var item = e.target.closest('.search-result-item');
+      if (!item) return;
+      e.preventDefault();
+      var targetId = item.getAttribute('href');
+      if (targetId && targetId.startsWith('#')) {
         closeSearch();
+        var target = document.getElementById(targetId.substring(1));
+        if (target) {
+          setTimeout(function() {
+            target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+          }, 150);
+        }
       }
     });
   }
@@ -372,10 +402,17 @@
       const links = [];
       let match;
       while ((match = linkRegex.exec(html)) !== null) {
-        links.push({ url: match[1], title: match[2].trim() });
+        // Extract year for sorting
+        const title = match[2].trim();
+        const yearMatch = title.match(/(\d{4})/);
+        const year = yearMatch ? parseInt(yearMatch[1], 10) : 0;
+        links.push({ url: match[1], title: title, year: year });
       }
 
       if (links.length === 0) return;
+
+      // Sort by year descending
+      links.sort((a, b) => b.year - a.year);
 
       const lang = (I18N && I18N.getLang) ? I18N.getLang() : 'zh';
 

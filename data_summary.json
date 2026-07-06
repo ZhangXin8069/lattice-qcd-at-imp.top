@@ -95,9 +95,7 @@
       "custom/菊次郎的夏天(治愈版).mp3"
     ],
     "background_videos": [
-      "custom/QCD涨落视频.mp4",
-      "custom/qcd_color_force.mp4",
-      "custom/quantum_physics_higgs_mechanism_feynman_diagrams.mp4"
+      "custom/QCD涨落视频.mp4"
     ],
     "about_images": [
       "custom/李政道坐像.png",
@@ -106,9 +104,9 @@
     ],
     "about_pdf": "custom/李政道先生与芯片上的格点量子色动力学.pdf",
     "section_backgrounds": {
-      "research": "custom/qcd_color_force.mp4 (video)",
-      "publications": "custom/quantum_physics_higgs_mechanism_feynman_diagrams.mp4 (video)",
-      "students": "custom/近代物理研究所惠州分部办公楼.jpg",
+      "research": "custom/近代物理研究所惠州分部办公楼.jpg",
+      "publications": "custom/刘柳明讲习图.jpg (placeholder)",
+      "students": "custom/张鑫讲习图.jpg (placeholder)",
       "conferences": "custom/QCD涨落图.gif",
       "summer_schools": "custom/孙鹏讲习图.jpg"
     }
