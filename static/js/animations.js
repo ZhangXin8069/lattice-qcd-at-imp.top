@@ -22,8 +22,8 @@ const Animations = (function() {
       let mouse = { x: -1000, y: -1000 };
 
       function resizeStarfield() {
-        starfieldCanvas.width = hero.offsetWidth;
-        starfieldCanvas.height = hero.offsetHeight;
+        starfieldCanvas.width = window.innerWidth;
+        starfieldCanvas.height = window.innerHeight;
       }
 
       function createStars() {
@@ -118,7 +118,7 @@ const Animations = (function() {
       resizeStarfield();
       createStars();
       starfieldCanvas.addEventListener('mousemove', handleStarMouse);
-      window.addEventListener('resize', () => { resizeStarfield(); createStars(); });
+      window.addEventListener('resize', function() { resizeStarfield(); createStars(); });
 
       // Visibility pause
       const starObserver = new IntersectionObserver((entries) => {
@@ -141,8 +141,8 @@ const Animations = (function() {
       let petals = [];
 
       function resizeSakura() {
-        sakuraCanvas.width = hero.offsetWidth;
-        sakuraCanvas.height = hero.offsetHeight;
+        sakuraCanvas.width = window.innerWidth;
+        sakuraCanvas.height = window.innerHeight;
       }
 
       function createPetals() {

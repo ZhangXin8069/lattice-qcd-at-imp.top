@@ -208,6 +208,19 @@
         <div class="stat-label" data-i18n="about.stats.years">研究年限</div>
       </div>
     </div>
+
+    <!-- About Horizontal Scroll Gallery -->
+    <div class="about-gallery reveal-up">
+      <h3 class="about-gallery-title" data-i18n="about.slideshow">课题组掠影</h3>
+      <div class="about-scroll-container" id="about-scroll">
+        <div class="about-scroll-track">
+          <div class="about-scroll-item"><img src="custom/孙鹏讲习图.png" alt="孙鹏讲习图" loading="lazy"></div>
+          <div class="about-scroll-item"><img src="custom/刘柳明讲习图.png" alt="刘柳明讲习图" loading="lazy"></div>
+          <div class="about-scroll-item"><img src="custom/张鑫讲习图.png" alt="张鑫讲习图" loading="lazy"></div>
+          <div class="about-scroll-item"><img src="custom/近代物理研究所惠州分部办公楼.png" alt="近代物理研究所惠州分部" loading="lazy"></div>
+        </div>
+      </div>
+    </div>
   </div>
 </section>
 
@@ -254,7 +267,7 @@
 </section>
 
 <!-- ===== Research Areas Section ===== -->
-<section id="research" class="section reveal section-bg-img" style="background-image: url('custom/近代物理研究所惠州分部办公楼.png');">
+<section id="research" class="section reveal">
   <div class="section-bg-overlay"></div>
   <div class="section-header">
     <h2 class="section-title" data-i18n="research.title">研究方向</h2>
@@ -289,7 +302,7 @@
 </section>
 
 <!-- ===== Publications Section ===== -->
-<section id="publications" class="section section-alt reveal section-bg-img" style="background-image: url('custom/刘柳明讲习图.png');">
+<section id="publications" class="section section-alt reveal">
   <div class="section-bg-overlay"></div>
   <div class="section-header">
     <h2 class="section-title" data-i18n="publications.title">论文发表</h2>
@@ -307,7 +320,7 @@
 </section>
 
 <!-- ===== Students Section ===== -->
-<section id="students" class="section reveal section-bg-img" style="background-image: url('custom/张鑫讲习图.png');">
+<section id="students" class="section reveal">
   <div class="section-bg-overlay"></div>
   <div class="section-header">
     <h2 class="section-title" data-i18n="students.title">研究生</h2>
@@ -318,7 +331,7 @@
 </section>
 
 <!-- ===== Conferences Section ===== -->
-<section id="conferences" class="section section-alt reveal section-bg-img" style="background-image: url('custom/QCD涨落图.gif');">
+<section id="conferences" class="section section-alt reveal">
   <div class="section-bg-overlay"></div>
   <div class="section-header">
     <h2 class="section-title" data-i18n="conferences.title">学术会议</h2>
@@ -327,7 +340,7 @@
 </section>
 
 <!-- ===== Summer Schools Section ===== -->
-<section id="summer-schools" class="section reveal section-bg-img" style="background-image: url('custom/孙鹏讲习图.png');">
+<section id="summer-schools" class="section reveal">
   <div class="section-bg-overlay"></div>
   <div class="section-header">
     <h2 class="section-title" data-i18n="summerSchools.title">夏令营与讲习班</h2>
@@ -418,8 +431,10 @@
       <div class="gallery-caption">李政道先生手写"格"字 (Prof. T.D. Lee's Handwritten "Ge" Character)</div>
     </div>
     <div class="gallery-item reveal-child">
-      <video src="custom/QCD涨落视频.mp4" muted loop playsinline preload="none" loading="lazy"></video>
-      <div class="gallery-caption">QCD涨落视频 (QCD Fluctuation Video)</div>
+      <div style="width:100%;height:100%;background:linear-gradient(135deg,#0ea5e9,#8b5cf6);display:flex;align-items:center;justify-content:center;color:white;font-size:1.5rem;font-weight:700;">
+        <span>QCD涨落视频<br>(QCD Fluctuation Video)</span>
+      </div>
+      <div class="gallery-caption">QCD涨落视频 — 占位符 (Placeholder)</div>
     </div>
     <!-- Placeholder images with descriptions -->
     <div class="gallery-item reveal-child">
@@ -438,7 +453,8 @@
 </section>
 
 <!-- ===== Help & Feedback Section ===== -->
-<section id="help" class="section reveal">
+<section id="help" class="section reveal section-bg-img" style="background-image: url('custom/QCD涨落图.gif');">
+  <div class="section-bg-overlay"></div>
   <div class="section-header">
     <h2 class="section-title" data-i18n="help.title">帮助反馈</h2>
     <p class="section-subtitle" data-i18n="help.subtitle">如有任何问题或建议，欢迎联系我们</p>
