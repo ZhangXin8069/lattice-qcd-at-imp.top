@@ -14,14 +14,14 @@
     ],
     "论文": [
         "优先使用custom/inspirehep.net/authors",
-        "custom/quantum_physics_higgs_mechanism_feynman_diagrams.mp4作为背景"
+        "custom/刘柳明讲习图.jpg作为背景"
     ],
     "研究方向": [
-        "custom/QCD涨落视频.mp4与custom/qcd_color_force.mp4作为背景"
+        "custom/近代物理研究所惠州分部办公楼.jpg作为背景"
     ],
     "研究生": [
         "论文源中单位为单位为Lanzhou, Inst. Modern Phys.的作者",
-        "custom/近代物理研究所惠州分部办公楼.jpg作为背景"
+        "custom/张鑫讲习图.jpg作为背景"
     ],
     "会议": [
         "网络收集",
@@ -29,7 +29,7 @@
     ],
     "夏令营": [
         "网络收集",
-        "custom/夏令营补充.html作为网络收集的内容补充",
+        "custom/夏令营补充.html作为网络收集的内容补充,按照日期排列",
         "custom/孙鹏讲习图.jpg作为背景",
         "格式统一"
     ],
@@ -67,6 +67,6 @@
         "如果有参考链接一定要附上超链接",
         "所有呈现的数据汇总到一个根目录下的文件以提供修正",
         "背景透明度为0.35",
-        "增加用户全局搜索功能"
+        "增加用户全局搜索功能,要求能够正常使用"
     ]
 }
