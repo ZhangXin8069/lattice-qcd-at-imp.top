@@ -9,7 +9,12 @@
     "论文源(第一单位为Lanzhou, Inst. Modern Phys.)": [
         "https://inspirehep.net/authors/1659207",
         "https://inspirehep.net/authors/1259106",
-        "如果inspirehep.net访问失败,则读取custom/inspirehep.net/authors,标明此为离线数据"
+        "如果inspirehep.net访问失败,则读取custom/inspirehep.net/authors/1659207/INSPIRE-CiteAll.html",
+        "如果inspirehep.net访问失败,则读取custom/inspirehep.net/authors/1259106/INSPIRE-CiteAll.html"
+    ],
+    "论文": [
+        "优先使用custom/inspirehep.net/authors",
+        "custom/quantum_physics_higgs_mechanism_feynman_diagrams.mp4作为背景"
     ],
     "研究方向": [
         "custom/QCD涨落视频.mp4与custom/qcd_color_force.mp4作为背景"
@@ -24,18 +29,20 @@
     ],
     "夏令营": [
         "网络收集",
-        "custom/夏令营补充.html",
-        "custom/孙鹏讲习图.jpg作为背景"
+        "custom/夏令营补充.html作为网络收集的内容补充",
+        "custom/孙鹏讲习图.jpg作为背景",
+        "格式统一"
     ],
     "配图": "尽可能丰富,如果获取不到图片则留下带有相应描述的占位符",
     "动态效果": "尽可能多,可参考/static",
     "背景音乐": [
         "/*.mp3",
-        "自动随机循环播放"
+        "自动播放",
+        "每次刷新网页时随机选定初始音乐"
     ],
     "挂载平台": "Github Page",
     "总体主题": "参考/static",
-    "网站图标": "custom/李政道手写\"格\"图.png",
+    "网站与课题组图标": "custom/李政道手写\"格\"图.png",
     "网站背景": [
         "深色模式参考https://web-animations.github.io/web-animations-demos/#starfield/starfield-indiv.html",
         "浅色模式参考https://web-animations.github.io/web-animations-demos/#starfield/starfield-indiv.html,改为白底樱花雨,注意斜向下飘落",
@@ -49,7 +56,7 @@
         "https://gitee.com/zhangxin8069/PyQCU",
         "custom/张鑫 508应用测试报告-PyQCU.pdf展示",
         "custom/张鑫 20260706gitee贡献度.png附上",
-        "custom/张鑫 .*工作汇报.*.png幻灯片展示"
+        "custom/张鑫 .*工作汇报.*.png自动幻灯片展示"
     ],
     "帮助反馈": [
         "custom/网站管理员.jpg",
@@ -58,6 +65,8 @@
     "额外要求": [
         "同时给出全流程skill",
         "如果有参考链接一定要附上超链接",
-        "所有呈现的数据汇总到一个根目录下的文件以提供修正"
-    ],
+        "所有呈现的数据汇总到一个根目录下的文件以提供修正",
+        "背景透明度为0.35",
+        "增加用户全局搜索功能"
+    ]
 }
