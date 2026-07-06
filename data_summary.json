@@ -114,7 +114,7 @@
   "features": {
     "search": "全局搜索 (Ctrl+K 或 / 快捷键)",
     "music": "自动播放、随机初始曲目、洗牌模式",
-    "background_opacity": "0.35 (叠加层透明度)"
+    "background_opacity": "主页动效 section 0.35 / 非主页动效(help) 0.85"
   },
   "theme": {
     "dark_mode": "星场动画 (Starfield animation)",

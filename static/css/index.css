@@ -1343,13 +1343,21 @@ body {
   pointer-events: none;
 }
 
-/* Light mode overlay: white semi-transparent */
+/* Default overlay: for sections with 主页动效 (canvas) background — lower opacity so animation shows through */
 [data-theme="light"] .section-bg-overlay {
+  background: rgba(255, 255, 255, 0.35);
+}
+
+[data-theme="dark"] .section-bg-overlay {
+  background: rgba(15, 23, 42, 0.35);
+}
+
+/* Help section: bg is NOT 主页动效 → opacity 0.85 per requirement */
+[data-theme="light"] #help .section-bg-overlay {
   background: rgba(255, 255, 255, 0.85);
 }
 
-/* Dark mode overlay: dark semi-transparent */
-[data-theme="dark"] .section-bg-overlay {
+[data-theme="dark"] #help .section-bg-overlay {
   background: rgba(15, 23, 42, 0.85);
 }
 
