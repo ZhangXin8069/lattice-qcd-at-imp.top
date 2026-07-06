@@ -9,9 +9,9 @@ const MusicPlayer = (function() {
   let hasInteracted = false;
 
   const tracks = [
-    { file: '菊次郎的夏天(轻灵版).mp3', name_zh: '菊次郎的夏天 (轻灵版)', name_en: 'Summer (Light)' },
-    { file: '菊次郎的夏天(经典版).mp3', name_zh: '菊次郎的夏天 (经典版)', name_en: 'Summer (Classic)' },
-    { file: '菊次郎的夏天(治愈版).mp3', name_zh: '菊次郎的夏天 (治愈版)', name_en: 'Summer (Healing)' }
+    { file: 'custom/菊次郎的夏天(轻灵版).mp3', name_zh: '菊次郎的夏天 (轻灵版)', name_en: 'Summer (Light)' },
+    { file: 'custom/菊次郎的夏天(经典版).mp3', name_zh: '菊次郎的夏天 (经典版)', name_en: 'Summer (Classic)' },
+    { file: 'custom/菊次郎的夏天(治愈版).mp3', name_zh: '菊次郎的夏天 (治愈版)', name_en: 'Summer (Healing)' }
   ];
 
   function init() {
