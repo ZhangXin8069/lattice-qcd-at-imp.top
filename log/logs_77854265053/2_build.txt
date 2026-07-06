@@ -251,11 +251,11 @@
 2026-07-06T15:58:13.5760579Z ./README.md
 2026-07-06T15:58:13.5761132Z ./static/
 2026-07-06T15:58:13.5761435Z ./static/images/
-2026-07-06T15:58:13.5761795Z ./static/images/carousel4.jpg
+2026-07-06T15:58:13.5761795Z ./static/images/carousel4.png
 2026-07-06T15:58:13.5764150Z ./static/images/favicon.ico
-2026-07-06T15:58:13.5764578Z ./static/images/carousel3.jpg
-2026-07-06T15:58:13.5769000Z ./static/images/carousel2.jpg
-2026-07-06T15:58:13.5772725Z ./static/images/carousel1.jpg
+2026-07-06T15:58:13.5764578Z ./static/images/carousel3.png
+2026-07-06T15:58:13.5769000Z ./static/images/carousel2.png
+2026-07-06T15:58:13.5772725Z ./static/images/carousel1.png
 2026-07-06T15:58:13.5775282Z ./static/css/
 2026-07-06T15:58:13.5775640Z ./static/css/bulma.min.css
 2026-07-06T15:58:13.5777894Z ./static/css/bulma-slider.min.css
@@ -291,7 +291,7 @@
 2026-07-06T15:58:13.5884081Z ./custom/夏令营补充.html
 2026-07-06T15:58:13.5884523Z ./custom/李政道手写"格"图.png
 2026-07-06T15:58:13.5886831Z ./custom/张鑫 20251227工作汇报_05.png
-2026-07-06T15:58:13.5913144Z ./custom/近代物理研究所惠州分部办公楼.jpg
+2026-07-06T15:58:13.5913144Z ./custom/近代物理研究所惠州分部办公楼.png
 2026-07-06T15:58:13.5915810Z ./custom/张鑫 508应用测试报告-PyQCU.pdf
 2026-07-06T15:58:13.5956401Z ./custom/张鑫 20251227工作汇报_02.png
 2026-07-06T15:58:13.5983214Z ./custom/inspirehep.net/
@@ -301,8 +301,8 @@
 2026-07-06T15:58:13.5986146Z ./custom/inspirehep.net/authors/1659207/
 2026-07-06T15:58:13.5987290Z ./custom/inspirehep.net/authors/1659207/INSPIRE-CiteAll.html
 2026-07-06T15:58:13.5988160Z ./custom/张鑫 20251227工作汇报_07.png
-2026-07-06T15:58:13.6007018Z ./custom/孙鹏讲习图.jpg
-2026-07-06T15:58:13.6008203Z ./custom/网站管理员.jpg
+2026-07-06T15:58:13.6007018Z ./custom/孙鹏讲习图.png
+2026-07-06T15:58:13.6008203Z ./custom/网站管理员.png
 2026-07-06T15:58:13.6010007Z ./custom/孙鹏头像.png
 2026-07-06T15:58:13.6012667Z ./custom/QCD涨落图.gif
 2026-07-06T15:58:13.6048621Z ./custom/张鑫 20251227工作汇报_06.png
