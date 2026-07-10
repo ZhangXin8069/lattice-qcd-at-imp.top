@@ -44,7 +44,7 @@
     "location_en": "Central China Normal University, Wuhan",
     "topic_zh": "夸克物质与粒子探测",
     "topic_en": "Quark Matter and Particle Detection",
-    "url": "https://indico.ihep.ac.cn/event/29652/page/2567-past-events",
+    "url": "",
     "status": "past"
   },
   {
@@ -56,7 +56,7 @@
     "location_en": "Central China Normal University, Wuhan",
     "topic_zh": "高能核物理",
     "topic_en": "High-Energy Nuclear Physics",
-    "url": "https://indico.ihep.ac.cn/event/29652/page/2567-past-events",
+    "url": "",
     "status": "past"
   },
   {
@@ -68,7 +68,43 @@
     "location_en": "Central China Normal University, Wuhan",
     "topic_zh": "格点QCD",
     "topic_en": "Lattice QCD",
-    "url": "https://indico.ihep.ac.cn/event/29652/page/2567-past-events",
+    "url": "",
+    "status": "past"
+  },
+  {
+    "name_zh": "第七届格点量子场论暑期学校",
+    "name_en": "7th Lattice QFT Summer School",
+    "date": "2024-08-05",
+    "endDate": "2024-08-16",
+    "location_zh": "中国科学院理论物理研究所，北京",
+    "location_en": "Institute of Theoretical Physics, CAS, Beijing",
+    "topic_zh": "格点量子场论",
+    "topic_en": "Lattice QFT",
+    "url": "https://indico.itp.ac.cn/event/249/",
+    "status": "past"
+  },
+  {
+    "name_zh": "第六届格点量子色动力学夏令营",
+    "name_en": "6th Lattice QCD Summer Camp",
+    "date": "2023-07-17",
+    "endDate": "2023-07-21",
+    "location_zh": "中国科学院理论物理研究所，北京",
+    "location_en": "Institute of Theoretical Physics, CAS, Beijing",
+    "topic_zh": "格点QCD",
+    "topic_en": "Lattice QCD",
+    "url": "https://indico.itp.ac.cn/event/160/",
+    "status": "past"
+  },
+  {
+    "name_zh": "第五届数值量子场论训练营",
+    "name_en": "5th Numerical QFT Training Camp",
+    "date": "2022-08-22",
+    "endDate": "2022-08-26",
+    "location_zh": "中国科学院理论物理研究所，北京",
+    "location_en": "Institute of Theoretical Physics, CAS, Beijing",
+    "topic_zh": "数值量子场论",
+    "topic_en": "Numerical QFT",
+    "url": "https://indico.itp.ac.cn/event/132/",
     "status": "past"
   }
 ]

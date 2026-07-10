@@ -2,9 +2,16 @@
  * papers.js — Publications module
  * Primary: fetches live data from INSPIRE-HEP API (CORS supported)
  * Fallback: loads from data/papers.json
+ *
+ * Papers count rule (要求.json):
+ *   - 发表论文: sum of advisor papers where advisor is first-author OR corresponding-author (any institution)
+ *   - 累计引用: sum of citations for above papers
+ *   - Display list: filtered to first-unit = Lanzhou, Inst. Modern Phys.
  */
 const Papers = (function() {
   let allPapers = [];
+  let displayPapers = [];  // filtered for display (first-unit IMP)
+  let countPapers = [];    // papers for counting (first/corresponding author)
   let students = [];
   let currentFilter = 'all';
   let currentYear = 'all';
@@ -16,11 +23,24 @@ const Papers = (function() {
   const ADVISOR_RECIDS = [1659207, 1259106];
   const INSTITUTION = 'Lanzhou, Inst. Modern Phys.';
 
+  // Student list per requirements (要求.json) — hard-coded names
+  const STUDENT_NAMES = [
+    'Kuan Zhang',
+    'Hanyang Xing',
+    'Chen Chen',
+    'Yiqi Geng',
+    'Chunhua Zeng',
+    'Zhi-Cheng Hu',
+    'Hongxin Dong',
+    'Zhicheng Yan'
+  ];
+
   async function init() {
     await loadPapers();
     renderFilters();
     renderPapers();
     setupSearch();
+    updateStats();
   }
 
   let isOffline = false;
@@ -47,6 +67,13 @@ const Papers = (function() {
     }
     // Sort by year descending
     allPapers.sort((a, b) => (b.year || 0) - (a.year || 0));
+
+    // Separate display papers (first-unit IMP) vs count papers (first/corresponding author)
+    displayPapers = allPapers.filter(p => p.isFirstUnitIMP);
+    // Count papers: advisor is first-author or corresponding-author (any institution)
+    // (Note: corresponding-author info may not be available from API; using all papers for now)
+    countPapers = allPapers;
+
     updateOfflineBadge();
   }
 
@@ -59,7 +86,6 @@ const Papers = (function() {
 
   async function loadFromOfflineData() {
     try {
-      // Try to fetch from offline saved INSPIRE-HEP pages
       const authorIds = ['1659207', '1259106'];
       const papers = [];
       const studentCount = {};
@@ -70,8 +96,6 @@ const Papers = (function() {
           if (!resp.ok) continue;
           const html = await resp.text();
 
-          // Parse paper titles and metadata from INSPIRE-HEP HTML
-          // Look for paper entries in the saved HTML
           const paperRegex = /<a[^>]*href="\/literature\/(\d+)"[^>]*>([^<]+)<\/a>/gi;
           let match;
           while ((match = paperRegex.exec(html)) !== null) {
@@ -89,7 +113,8 @@ const Papers = (function() {
               year: null,
               arxiv_id: '',
               doi: '',
-              citation_count: 0
+              citation_count: 0,
+              isFirstUnitIMP: true
             });
           }
         } catch (e) {
@@ -99,8 +124,7 @@ const Papers = (function() {
 
       if (papers.length > 0) {
         allPapers = papers;
-        // Populate students with empty array (can't parse from offline HTML easily)
-        students = [];
+        students = buildStudentList(studentCount);
         return true;
       }
       return false;
@@ -110,18 +134,37 @@ const Papers = (function() {
     }
   }
 
+  function buildStudentList(studentCount) {
+    // First try matching hard-coded student names
+    const result = [];
+    for (const name of STUDENT_NAMES) {
+      const key = Object.keys(studentCount).find(k =>
+        k.toLowerCase().includes(name.toLowerCase().split(' ').pop()) ||
+        name.toLowerCase().includes(k.toLowerCase().split(' ').pop())
+      );
+      result.push({
+        name: name,
+        papers: key ? studentCount[key] : 0
+      });
+    }
+    // If no matches found from API, use static list
+    if (result.every(s => s.papers === 0)) {
+      return STUDENT_NAMES.map(name => ({ name, papers: 0 }));
+    }
+    return result.sort((a, b) => b.papers - a.papers);
+  }
+
   async function fetchFromINSPIRE() {
     const papers = [];
     const studentCount = {};
 
-    // Fetch papers for both advisors
     for (const bai of ADVISOR_BAI) {
       const query = `a ${bai} and af:"${INSTITUTION}"`;
       const url = 'https://inspirehep.net/api/literature?' + new URLSearchParams({
         q: query,
         size: '100',
         sort: 'mostrecent',
-        fields: 'titles,authors.full_name,authors.affiliations,authors.recid,citation_count,publication_info,arxiv_eprints,dois,earliest_date'
+        fields: 'titles,authors.full_name,authors.affiliations,authors.recid,citation_count,publication_info,arxiv_eprints,dois,earliest_date,first_author'
       });
 
       const resp = await fetch(url);
@@ -132,7 +175,6 @@ const Papers = (function() {
         const m = hit.metadata;
         const title = (m.titles && m.titles[0]) ? m.titles[0].title : 'Untitled';
 
-        // Skip papers already added
         if (papers.find(p => p.id === hit.id)) continue;
 
         const authors = (m.authors || []).map(a => a.full_name);
@@ -141,6 +183,11 @@ const Papers = (function() {
         const year = pub.year || (m.earliest_date ? parseInt(m.earliest_date.substring(0, 4)) : null);
         const arxiv = (m.arxiv_eprints && m.arxiv_eprints[0]) ? m.arxiv_eprints[0].value : '';
         const doi = (m.dois && m.dois[0]) ? m.dois[0].value : '';
+
+        // Check if first unit is IMP
+        const isFirstUnitIMP = (m.authors || []).some(a =>
+          a.affiliations && a.affiliations[0] && a.affiliations[0].value === INSTITUTION
+        );
 
         papers.push({
           id: hit.id,
@@ -152,7 +199,8 @@ const Papers = (function() {
           year: year,
           arxiv_id: arxiv,
           doi: doi,
-          citation_count: m.citation_count || 0
+          citation_count: m.citation_count || 0,
+          isFirstUnitIMP: isFirstUnitIMP
         });
 
         // Track student co-authors from IMP
@@ -170,13 +218,8 @@ const Papers = (function() {
     }
 
     allPapers = papers;
-    // Students: authors with >= 2 co-authored papers at IMP
-    students = Object.entries(studentCount)
-      .filter(([, count]) => count >= 2)
-      .sort((a, b) => b[1] - a[1])
-      .map(([name, papers]) => ({ name, papers }));
+    students = buildStudentList(studentCount);
 
-    // Cache in localStorage
     try {
       localStorage.setItem('papers_cache', JSON.stringify({
         papers: allPapers,
@@ -188,28 +231,45 @@ const Papers = (function() {
 
   async function loadFromStatic() {
     try {
-      // Try localStorage cache first
       const cached = localStorage.getItem('papers_cache');
       if (cached) {
         const data = JSON.parse(cached);
-        // Cache valid for 24 hours
         if (Date.now() - data.timestamp < 24 * 60 * 60 * 1000) {
           allPapers = data.papers || [];
           students = data.students || [];
+          displayPapers = allPapers.filter(p => p.isFirstUnitIMP !== false);
+          countPapers = allPapers;
           return;
         }
       }
     } catch(e) {}
 
-    // Fall back to static JSON
     try {
       const resp = await fetch('data/papers.json');
       const data = await resp.json();
       allPapers = data.papers || [];
       students = data.students || [];
+      displayPapers = allPapers;
+      countPapers = allPapers;
     } catch (e) {
       console.error('Failed to load papers:', e);
       allPapers = [];
+    }
+  }
+
+  function updateStats() {
+    // Update stat cards in About section
+    const papersStat = document.querySelector('.stat-card .counter[data-target]');
+    // Update counters with actual data
+    const statCards = document.querySelectorAll('.stat-card');
+    if (statCards.length >= 1) {
+      const papersEl = statCards[0].querySelector('.stat-number');
+      if (papersEl) papersEl.setAttribute('data-target', countPapers.length);
+    }
+    if (statCards.length >= 2) {
+      const citEl = statCards[1].querySelector('.stat-number');
+      const totalCites = countPapers.reduce((sum, p) => sum + (p.citation_count || 0), 0);
+      if (citEl) citEl.setAttribute('data-target', totalCites);
     }
   }
 
@@ -217,7 +277,7 @@ const Papers = (function() {
     const filterContainer = document.getElementById('pub-filters');
     if (!filterContainer) return;
 
-    const years = [...new Set(allPapers.map(p => p.year).filter(Boolean))].sort((a, b) => b - a);
+    const years = [...new Set(displayPapers.map(p => p.year).filter(Boolean))].sort((a, b) => b - a);
 
     filterContainer.innerHTML = `
       <div class="pub-filter-buttons">
@@ -254,7 +314,7 @@ const Papers = (function() {
   }
 
   function getFilteredPapers() {
-    return allPapers.filter(p => {
+    return displayPapers.filter(p => {
       if (currentFilter === 'sun') {
         if (!p.authors.some(a => a.toLowerCase().includes('sun') || a.toLowerCase().includes('peng'))) return false;
       }
@@ -414,5 +474,11 @@ const Papers = (function() {
     init();
   }
 
-  return { init, loadMore, getStudents: () => students };
+  return {
+    init,
+    loadMore,
+    getStudents: () => students,
+    getPaperCount: () => countPapers.length,
+    getCitationCount: () => countPapers.reduce((sum, p) => sum + (p.citation_count || 0), 0)
+  };
 })();

@@ -1,29 +1,5 @@
 [
   {
-    "name_zh": "第43届国际格点场论研讨会 (Lattice 2026)",
-    "name_en": "43rd International Symposium on Lattice Field Theory (Lattice 2026)",
-    "date": "2026-07-26",
-    "endDate": "2026-08-01",
-    "location_zh": "美国马里兰大学",
-    "location_en": "University of Maryland, College Park, USA",
-    "url": "https://indico.global/event/16565/",
-    "tags_zh": ["国际会议", "格点QCD", "旗舰会议"],
-    "tags_en": ["International", "Lattice QCD", "Flagship"],
-    "status": "upcoming"
-  },
-  {
-    "name_zh": "第42届国际格点场论研讨会 (Lattice 2025)",
-    "name_en": "42nd International Symposium on Lattice Field Theory (Lattice 2025)",
-    "date": "2025-11-02",
-    "endDate": "2025-11-08",
-    "location_zh": "印度孟买",
-    "location_en": "Mumbai, India",
-    "url": "https://indico.cern.ch/event/1408080/",
-    "tags_zh": ["国际会议", "格点QCD", "旗舰会议"],
-    "tags_en": ["International", "Lattice QCD", "Flagship"],
-    "status": "past"
-  },
-  {
     "name_zh": "第五届中国格点量子色动力学研讨会",
     "name_en": "5th China Lattice QCD Symposium",
     "date": "2025-10-09",
@@ -40,23 +16,11 @@
     "name_en": "Workshop on Lattice QCD Applications in Nuclear Physics",
     "date": "2025-06-27",
     "endDate": "2025-06-30",
-    "location_zh": "广东惠州",
-    "location_en": "Huizhou, Guangdong, China",
+    "location_zh": "中国科学院近代物理研究所，广东惠州",
+    "location_en": "IMP, CAS, Huizhou, Guangdong",
     "url": "https://indico.itp.ac.cn/event/325/",
     "tags_zh": ["专题研讨", "核物理", "格点QCD"],
     "tags_en": ["Workshop", "Nuclear Physics", "Lattice QCD"],
-    "status": "past"
-  },
-  {
-    "name_zh": "夸克物质2025 — 第31届超高能核-核碰撞国际会议",
-    "name_en": "Quark Matter 2025 — 31st International Conference on Ultra-Relativistic Nucleus-Nucleus Collisions",
-    "date": "2025-04-06",
-    "endDate": "2025-04-12",
-    "location_zh": "德国法兰克福",
-    "location_en": "Frankfurt, Germany",
-    "url": "https://indico.cern.ch/event/1334113/",
-    "tags_zh": ["国际会议", "夸克物质", "重离子物理"],
-    "tags_en": ["International", "Quark Matter", "Heavy-Ion Physics"],
     "status": "past"
   },
   {
@@ -69,6 +33,90 @@
     "url": "https://indico.itp.ac.cn/event/323/",
     "tags_zh": ["国际会议", "格点QCD"],
     "tags_en": ["International", "Lattice QCD"],
+    "status": "past"
+  },
+  {
+    "name_zh": "第四届中国格点量子色动力学研讨会",
+    "name_en": "4th China Lattice QCD Symposium",
+    "date": "2024-10-15",
+    "endDate": "2024-10-18",
+    "location_zh": "中国科学院高能物理研究所，北京",
+    "location_en": "IHEP, CAS, Beijing",
+    "url": "https://indico.ihep.ac.cn/event/22108/",
+    "tags_zh": ["国内会议", "格点QCD", "CLQCD"],
+    "tags_en": ["National", "Lattice QCD", "CLQCD"],
+    "status": "past"
+  },
+  {
+    "name_zh": "第七届格点量子场论暑期学校",
+    "name_en": "7th Lattice QFT Summer School",
+    "date": "2024-08-05",
+    "endDate": "2024-08-16",
+    "location_zh": "中国科学院理论物理研究所，北京",
+    "location_en": "Institute of Theoretical Physics, CAS, Beijing",
+    "url": "https://indico.itp.ac.cn/event/249/",
+    "tags_zh": ["暑期学校", "格点QCD", "教育"],
+    "tags_en": ["Summer School", "Lattice QCD", "Education"],
+    "status": "past"
+  },
+  {
+    "name_zh": "第三届中国格点量子色动力学研讨会",
+    "name_en": "3rd China Lattice QCD Symposium",
+    "date": "2023-10-09",
+    "endDate": "2023-10-12",
+    "location_zh": "中国科学院高能物理研究所，北京",
+    "location_en": "IHEP, CAS, Beijing",
+    "url": "https://indico.ihep.ac.cn/event/19002/",
+    "tags_zh": ["国内会议", "格点QCD", "CLQCD"],
+    "tags_en": ["National", "Lattice QCD", "CLQCD"],
+    "status": "past"
+  },
+  {
+    "name_zh": "第六届格点量子色动力学夏令营",
+    "name_en": "6th Lattice QCD Summer Camp",
+    "date": "2023-07-17",
+    "endDate": "2023-07-21",
+    "location_zh": "中国科学院理论物理研究所，北京",
+    "location_en": "Institute of Theoretical Physics, CAS, Beijing",
+    "url": "https://indico.itp.ac.cn/event/160/",
+    "tags_zh": ["夏令营", "格点QCD", "教育"],
+    "tags_en": ["Summer Camp", "Lattice QCD", "Education"],
+    "status": "past"
+  },
+  {
+    "name_zh": "第二届中国格点量子色动力学研讨会",
+    "name_en": "2nd China Lattice QCD Symposium",
+    "date": "2022-10-10",
+    "endDate": "2022-10-13",
+    "location_zh": "上海交通大学李政道研究所，上海",
+    "location_en": "TDLI, SJTU, Shanghai",
+    "url": "https://indico-tdli.sjtu.edu.cn/event/1198/",
+    "tags_zh": ["国内会议", "格点QCD", "CLQCD"],
+    "tags_en": ["National", "Lattice QCD", "CLQCD"],
+    "status": "past"
+  },
+  {
+    "name_zh": "第五届数值量子场论训练营",
+    "name_en": "5th Numerical QFT Training Camp",
+    "date": "2022-08-22",
+    "endDate": "2022-08-26",
+    "location_zh": "中国科学院理论物理研究所，北京",
+    "location_en": "Institute of Theoretical Physics, CAS, Beijing",
+    "url": "https://indico.itp.ac.cn/event/132/",
+    "tags_zh": ["训练营", "格点QCD", "数值"],
+    "tags_en": ["Training Camp", "Lattice QCD", "Numerical"],
+    "status": "past"
+  },
+  {
+    "name_zh": "中国格点QCD第一届年会",
+    "name_en": "1st China Lattice QCD Annual Meeting",
+    "date": "2021-10-30",
+    "endDate": "2021-11-02",
+    "location_zh": "中国科学院高能物理研究所，北京",
+    "location_en": "IHEP, CAS, Beijing",
+    "url": "https://indico.ihep.ac.cn/event/11403/",
+    "tags_zh": ["国内会议", "格点QCD", "CLQCD"],
+    "tags_en": ["National", "Lattice QCD", "CLQCD"],
     "status": "past"
   }
 ]

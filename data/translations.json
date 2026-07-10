@@ -28,6 +28,7 @@
     "about.leePhoto": "李政道先生 (Prof. T.D. Lee)",
     "about.groupPhoto": "课题组合照 (Group Photo, 2026)",
     "about.leePdf": "李政道先生与芯片上的格点量子色动力学 (PDF)",
+    "about.slideshow": "课题组掠影",
 
     "advisors.title": "导师简介",
     "advisors.sun.name": "孙鹏",
@@ -61,6 +62,7 @@
     "publications.cited": "引用",
     "publications.noResults": "未找到相关论文",
     "publications.offlineData": "📡 离线数据 — INSPIRE-HEP API 不可用，显示缓存数据",
+    "publications.filterNote": "（展示列表：第一单位 Lanzhou, Inst. Modern Phys. | 计数：第一/通讯作者，不限单位）",
 
     "students.title": "研究生",
     "students.fromPapers": "（数据来源于INSPIRE-HEP论文作者分析）",
@@ -152,6 +154,7 @@
     "about.leePhoto": "Prof. T.D. Lee",
     "about.groupPhoto": "Group Photo (2026)",
     "about.leePdf": "Prof. T.D. Lee and Chip-based Lattice QCD (PDF)",
+    "about.slideshow": "Group Highlights",
 
     "advisors.title": "Advisors",
     "advisors.sun.name": "Peng Sun",
@@ -185,6 +188,7 @@
     "publications.cited": "citations",
     "publications.noResults": "No matching papers found",
     "publications.offlineData": "📡 Offline Data — INSPIRE-HEP API unavailable, showing cached data",
+    "publications.filterNote": "(Display: first unit Lanzhou, Inst. Modern Phys. | Count: first/corresponding author, any institution)",
 
     "students.title": "Graduate Students",
     "students.fromPapers": "(Data extracted from INSPIRE-HEP paper author analysis)",

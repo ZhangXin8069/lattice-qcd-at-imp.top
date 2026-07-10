@@ -3,40 +3,33 @@
     "语种": "可中英文切换",
     "深色模式": "可切换",
     "导师": [
-        "孙鹏",
-        "刘柳明",
+        "孙鹏[https://inspirehep.net/authors/1659207]",
+        "刘柳明[https://inspirehep.net/authors/1259106]",
         "主页动效作为背景"
     ],
-    "论文源(第一单位为Lanzhou, Inst. Modern Phys.)": [
-        "https://inspirehep.net/authors/1659207",
-        "https://inspirehep.net/authors/1259106",
-        "如果inspirehep.net访问失败,则读取custom/inspirehep.net/authors/1659207/INSPIRE-CiteAll.html",
-        "如果inspirehep.net访问失败,则读取custom/inspirehep.net/authors/1259106/INSPIRE-CiteAll.html"
-    ],
     "论文": [
-        "优先使用custom/inspirehep.net/authors",
-        "主页动效作为背景",
-        "发表论文量为导师所有论文量之和（不限第一单位，限第一作者与通讯作者）",
-        "累计引用量为导师累计引用量之和（不限第一单位，限第一作者与通讯作者）"
+        "custom/inspirehep.net/authors",
+        "如果custom/inspirehep.net/authors/.*/INSPIRE-CiteAll.html读取失败,则访问inspirehep.net",
+        "第一单位为Lanzhou, Inst. Modern Phys.",
+        "主页动效作为背景"
     ],
+    "发表论文": "量为导师所有论文量之和（不限第一单位，限第一作者与通讯作者）",
+    "累计引用": "量为导师累计引用量之和（不限第一单位，限第一作者与通讯作者）",
     "研究方向": [
         "主页动效作为背景"
     ],
     "研究生": [
-        "论文源中单位为单位为Lanzhou, Inst. Modern Phys.的作者",
-        "限定[,Kuan Zhang,Xing, Hanyang,Chen Chen ,Geng, Yiqi,Zeng, Chunhua,Hu, Zhi-Cheng,Dong, Hongxin,Yan, Zhicheng]",
+        "限定为[Kuan Zhang,Xing, Hanyang,Chen Chen ,Geng, Yiqi,Zeng, Chunhua,Hu, Zhi-Cheng,Dong, Hongxin,Yan, Zhicheng]",
         "主页动效作为背景"
     ],
     "会议": [
         "网络收集",
-        "主页动效作为背景"，
-        "地点必须为中国",
+        "主页动效作为背景",
+        "地点必须在中国",
         "单位必须为中国科学院的研究所"
     ],
     "夏令营": [
-        // "网络收集",
-        // "custom/夏令营补充.html作为网络收集的内容补充,按照日期排列",
-        "custom/夏令营补充.html作为内容,按照日期排列",
+        "custom/夏令营.html作为内容,按照日期排列",
         "主页动效作为背景",
         "地点必须为中国",
         "单位必须为中国科学院的研究所"
@@ -79,7 +72,7 @@
     "额外要求": [
         "同时给出全流程skill",
         "如果有参考链接一定要附上超链接",
-        "所有呈现的数据汇总到一个根目录下的文件以提供修正",
+        "所有呈现的数据汇总到根目录下的'数据.csv'文件以提供修正",
         "如果背景不是主页动效,则背景透明度为0.85",
         "增加用户全局搜索功能,要求能够正常使用",
         "如果没有特别说明,背景均为不透明的主页动效且文本也不透明"

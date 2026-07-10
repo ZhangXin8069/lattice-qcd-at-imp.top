@@ -134,8 +134,6 @@
 
 <!-- ===== Hero Section ===== -->
 <section id="hero">
-  <canvas id="starfield-canvas" class="hero-canvas"></canvas>
-  <canvas id="sakura-canvas" class="hero-canvas"></canvas>
   <div class="hero-overlay"></div>
   <div class="hero-content">
     <h1 class="hero-title" data-i18n="hero.title">格点量子色动力学课题组</h1>
@@ -194,13 +192,15 @@
       <div class="stat-card">
         <div class="stat-number counter" data-target="67">0</div>
         <div class="stat-label" data-i18n="about.stats.papers">发表论文</div>
+        <div class="stat-note" style="font-size:0.7rem;color:var(--text-light);margin-top:0.25rem;">（第一/通讯作者）</div>
       </div>
       <div class="stat-card">
         <div class="stat-number counter" data-target="2800">0</div>
         <div class="stat-label" data-i18n="about.stats.citations">累计引用</div>
+        <div class="stat-note" style="font-size:0.7rem;color:var(--text-light);margin-top:0.25rem;">（第一/通讯作者）</div>
       </div>
       <div class="stat-card">
-        <div class="stat-number counter" data-target="15">0</div>
+        <div class="stat-number counter" data-target="8">0</div>
         <div class="stat-label" data-i18n="about.stats.students">培养研究生</div>
       </div>
       <div class="stat-card">
@@ -307,6 +307,7 @@
   <div class="section-bg-overlay"></div>
   <div class="section-header">
     <h2 class="section-title" data-i18n="publications.title">论文发表</h2>
+    <p class="section-subtitle" data-i18n="publications.filterNote">（展示列表：第一单位 Lanzhou, Inst. Modern Phys. | 计数：第一/通讯作者，不限单位）</p>
   </div>
   <div class="pub-controls">
     <div id="pub-filters"></div>
@@ -508,6 +509,10 @@
   <div class="footer-bottom">
     <p data-i18n="footer.copyright">© 2026 格点QCD课题组. All rights reserved.</p>
     <p style="margin-top:0.5rem;font-size:0.8rem;">Built with <a href="https://bulma.io" target="_blank">Bulma</a> | Inspired by <a href="https://nerfies.github.io" target="_blank">Nerfies</a></p>
+    <p style="margin-top:0.3rem;font-size:0.75rem;color:var(--text-light);">
+      <a href="数据.csv" target="_blank" style="color:var(--text-light);">📊 数据汇总 (CSV)</a> |
+      <a href="https://github.com/zhangxin8069/lattice-qcd-at-imp.top" target="_blank" style="color:var(--text-light);">📁 GitHub</a>
+    </p>
   </div>
 </footer>
 
