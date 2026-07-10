@@ -3,8 +3,8 @@
     "语种": "可中英文切换",
     "深色模式": "可切换",
     "导师": [
-        "孙鹏[https://inspirehep.net/authors/1659207]",
-        "刘柳明[https://inspirehep.net/authors/1259106]",
+        "孙鹏[https://people.ucas.ac.cn/~sunpengimp][https://inspirehep.net/authors/1659207]",
+        "刘柳明[https://people.ucas.ac.cn/~liuliuming][https://inspirehep.net/authors/1259106]",
         "主页动效作为背景"
     ],
     "论文": [
@@ -44,11 +44,12 @@
     "挂载平台": "Github Page",
     "总体主题": "参考/static",
     "网站与课题组图标": "custom/李政道手写\"格\"图.png",
-    "网站背景": [
+    "主页动效": [
         "深色模式参考https://web-animations.github.io/web-animations-demos/#starfield/starfield-indiv.html",
         "浅色模式参考https://web-animations.github.io/web-animations-demos/#starfield/starfield-indiv.html,改为白底樱花雨,注意斜向下飘落",
         "保持两个模式风格近似"
     ],
+    "主页背景":"主页动效作为背景",
     "关于我们": [
         "插图为lattice-qcd-at-imp.top/custom/李政道坐像.png与custom/课题组合照20260706.png组合",
         "custom/李政道先生与芯片上的格点量子色动力学.pdf展示",

@@ -48,13 +48,18 @@ lattice-qcd-at-imp.top/
 
 ### `update-website papers`
 **更新论文数据**
-1. 从 INSPIRE-HEP API 获取两位导师最新论文
-2. 过滤：展示列表仅显示第一单位为 "Lanzhou, Inst. Modern Phys." 的论文
-3. 计数：不限第一单位，限第一作者与通讯作者
-4. 如API不可用：从 `custom/inspirehep.net/authors/*/INSPIRE-CiteAll.html` 读取
-5. 最终回退：`data/papers.json` 静态数据
-6. 更新 `数据.csv` 中的论文数、引用数
-7. 更新 `data_summary.json`
+1. 从 INSPIRE-HEP API 获取两位导师最新论文（BAI: Peng.Sun.1, Liuming.Liu.1）
+2. 数据源优先级：
+   - 主：INSPIRE-HEP API (https://inspirehep.net/api/literature)
+   - 回退1：custom/inspirehep.net/authors/*/INSPIRE-CiteAll.html 离线HTML
+   - 回退2：data/papers.json 静态数据
+   - 最后：localStorage 缓存（24h内有效）
+3. 展示列表过滤：第一单位为 "Lanzhou, Inst. Modern Phys."
+4. 计数规则（发表论文与累计引用）：
+   - 不限第一单位，不限第一作者与通讯作者
+   - 两位导师论文量之和 / 引用量之和
+5. 更新 `数据.csv` 中的论文数、引用数
+6. 更新 `data_summary.json`
 
 ### `update-website add-conference`
 **添加学术会议**（必须在中国、由中国科学院研究所主办）
@@ -73,18 +78,26 @@ lattice-qcd-at-imp.top/
 
 ### `update-website advisor`
 **更新导师信息**
-1. 修改导师卡片文本和图片
-2. 更新 `index.html` 中的导师section
-3. 更新 `data/translations.json` 中的导师翻译
+1. 导师链接（按顺序）：
+   - 孙鹏: https://people.ucas.ac.cn/~sunpengimp (个人主页) + https://inspirehep.net/authors/1659207 (INSPIRE-HEP)
+   - 刘柳明: https://people.ucas.ac.cn/~liuliuming (个人主页) + https://inspirehep.net/authors/1259106 (INSPIRE-HEP)
+2. 修改 `index.html` 中的导师section（头像、信息、三个链接）
+3. 更新 `data/translations.json` 中的导师翻译（包括 advisors.homepage 键）
 4. 更新 `数据.csv`
 5. 更新 `data_summary.json`
 
 ### `update-website students`
 **更新研究生信息**
-1. 当前学生名单（来自要求.json）：
-   - Kuan Zhang, Xing Hanyang, Chen Chen, Geng Yiqi
-   - Zeng Chunhua, Hu Zhi-Cheng, Dong Hongxin, Yan Zhicheng
-2. 修改 `static/js/papers.js` 中的 STUDENT_NAMES
+1. 当前学生名单（来自要求.json，硬编码在 papers.js）：
+   - Kuan Zhang
+   - Hanyang Xing
+   - Chen Chen
+   - Yiqi Geng
+   - Chunhua Zeng
+   - Zhi-Cheng Hu
+   - Hongxin Dong
+   - Zhicheng Yan
+2. 修改 `static/js/papers.js` 中的 STUDENT_NAMES 数组
 3. 更新 `数据.csv`
 4. 更新 `data_summary.json`
 
@@ -102,11 +115,14 @@ lattice-qcd-at-imp.top/
 4. 更新 `data_summary.json`
 
 ### `update-website theme`
-**更新主题/背景设置**
-1. 深色模式：星场动画 (starfield) — canvas粒子动画
-2. 浅色模式：白底樱花雨 (sakura petals falling diagonally)
-3. 背景透明度：主页动效=不透明，非主页动效=0.85
-4. 背景音乐：MP3自动播放，随机初始曲目
+**更新主题/背景设置**（参考：https://web-animations.github.io/web-animations-demos/#starfield/starfield-indiv.html）
+1. 深色模式：星场动画 (starfield) — canvas粒子+发光+星座连线+偶发流星
+2. 浅色模式：白底樱花雨 — 五瓣樱花形状，斜向下飘落，有旋转和摇摆
+3. 主页背景：主页动效作为背景（全局canvas粒子动画覆盖所有section）
+4. 背景透明度：
+   - 主页动效作为背景 → 不透明（section background = var(--background-primary), opacity=1.0）
+   - 非主页动效（help section 用 QCD涨落图.gif）→ 0.85 opacity
+5. 背景音乐：MP3自动播放，每次刷新随机选定初始音乐，随机洗牌模式
 
 ### `update-website summary`
 **重新生成数据汇总**
@@ -144,7 +160,9 @@ papers → conferences → summer-schools → students → translations → summ
 
 - `数据.csv` 是手动修正数据的入口文件——修改后需运行 `update-website summary` 同步
 - 所有参考链接必须附上超链接（`要求.json` 额外要求）
-- 会议地点必须在中国，单位必须为中国科学院的研究所
+- 会议地点必须在中国，单位必须为中国科学院的研究所（index.js中CAS_KEYWORDS过滤）
+- 夏令营地点必须在中国，单位必须为中国科学院的研究所（index.js中CAS_KEYWORDS过滤）
 - 夏令营/讲习班按日期降序排列
+- custom/夏令营.html 作为夏令营附加内容，解析其中链接按年份排序
 - 论文展示列表仅显示第一单位为 "Lanzhou, Inst. Modern Phys." 的论文
 - 论文计数和引用计数规则：不限第一单位，限第一作者与通讯作者

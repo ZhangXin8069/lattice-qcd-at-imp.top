@@ -51,6 +51,7 @@
   }
 
   // Load conferences section
+  // Per 要求.json: 地点必须在中国, 单位必须为中国科学院的研究所
   async function loadConferences() {
     const container = document.getElementById('conferences-timeline');
     if (!container) return;
@@ -59,14 +60,21 @@
       const resp = await fetch('data/conferences.json');
       const conferences = await resp.json();
 
+      // Filter: only CAS institutes in China
+      const CAS_KEYWORDS = ['中国科学院', 'CAS', 'Chinese Academy'];
+      const filtered = conferences.filter(conf => {
+        const loc = (conf.location_zh || '') + (conf.location_en || '');
+        return CAS_KEYWORDS.some(kw => loc.includes(kw));
+      });
+
       // Sort by date descending
-      conferences.sort((a, b) => (b.date || '').localeCompare(a.date || ''));
+      filtered.sort((a, b) => (b.date || '').localeCompare(a.date || ''));
 
       const lang = (I18N && I18N.getLang) ? I18N.getLang() : 'zh';
       const upcomingHTML = [];
       const pastHTML = [];
 
-      conferences.forEach(conf => {
+      filtered.forEach(conf => {
         const name = lang === 'zh' ? conf.name_zh : conf.name_en;
         const location = lang === 'zh' ? conf.location_zh : conf.location_en;
         const tags = (lang === 'zh' ? conf.tags_zh : conf.tags_en) || [];
@@ -110,6 +118,7 @@
   }
 
   // Load summer schools section
+  // Per 要求.json: 地点必须为中国, 单位必须为中国科学院的研究所
   async function loadSummerSchools() {
     const container = document.getElementById('summer-schools-grid');
     if (!container) return;
@@ -118,12 +127,19 @@
       const resp = await fetch('data/summer-schools.json');
       const schools = await resp.json();
 
+      // Filter: only CAS institutes in China
+      const CAS_KEYWORDS = ['中国科学院', 'CAS', 'Chinese Academy'];
+      const filtered = schools.filter(school => {
+        const loc = (school.location_zh || '') + (school.location_en || '');
+        return CAS_KEYWORDS.some(kw => loc.includes(kw));
+      });
+
       // Sort by date descending
-      schools.sort((a, b) => (b.date || '').localeCompare(a.date || ''));
+      filtered.sort((a, b) => (b.date || '').localeCompare(a.date || ''));
 
       const lang = (I18N && I18N.getLang) ? I18N.getLang() : 'zh';
 
-      container.innerHTML = schools.map(school => {
+      container.innerHTML = filtered.map(school => {
         const name = lang === 'zh' ? school.name_zh : school.name_en;
         const location = lang === 'zh' ? school.location_zh : school.location_en;
         const topic = lang === 'zh' ? school.topic_zh : school.topic_en;
