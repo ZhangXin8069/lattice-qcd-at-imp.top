@@ -1,16 +1,17 @@
 /**
  * animations.js — Dynamic effects module
- * Canvas particles (starfield/sakura) as persistent full-page background,
- * scroll-triggered animations, counter animations, parallax, tilt effects
+ * Canvas particles, scroll-triggered animations, counter animations, parallax
  */
 const Animations = (function() {
 
-  // ===== Hero/Page Background: Starfield (Dark) + Sakura (Light) =====
-  // These canvases are position:fixed and cover the entire page as a persistent background
-  function initPageBackground() {
+  // ===== Hero Background: Starfield (Dark) + Sakura (Light) =====
+  function initHeroBackground() {
     const starfieldCanvas = document.getElementById('starfield-canvas');
     const sakuraCanvas = document.getElementById('sakura-canvas');
     if (!starfieldCanvas && !sakuraCanvas) return;
+
+    const hero = document.getElementById('hero');
+    if (!hero) return;
 
     let starfieldId, sakuraId;
 
@@ -26,29 +27,25 @@ const Animations = (function() {
       }
 
       function createStars() {
-        const count = Math.min(Math.floor(window.innerWidth * window.innerHeight / 2500), 400);
+        const count = Math.min(Math.floor(starfieldCanvas.width * starfieldCanvas.height / 3000), 300);
         stars = [];
         for (let i = 0; i < count; i++) {
           stars.push({
-            x: Math.random() * (starfieldCanvas.width || window.innerWidth),
-            y: Math.random() * (starfieldCanvas.height || window.innerHeight),
-            radius: Math.random() * 2.5 + 0.5,
-            baseOpacity: Math.random() * 0.55 + 0.2,
-            twinkleSpeed: Math.random() * 0.025 + 0.005,
+            x: Math.random() * starfieldCanvas.width,
+            y: Math.random() * starfieldCanvas.height,
+            radius: Math.random() * 2.2 + 0.5,
+            baseOpacity: Math.random() * 0.6 + 0.2,
+            twinkleSpeed: Math.random() * 0.02 + 0.005,
             twinklePhase: Math.random() * Math.PI * 2,
-            driftX: (Math.random() - 0.5) * 0.12,
-            driftY: (Math.random() - 0.5) * 0.06,
-            hue: Math.random() < 0.08 ? Math.random() * 60 + 30 : Math.random() * 40 + 200
+            driftX: (Math.random() - 0.5) * 0.15,
+            driftY: (Math.random() - 0.5) * 0.08,
+            hue: Math.random() < 0.1 ? Math.random() * 60 + 30 : Math.random() * 40 + 200
           });
         }
       }
 
       function drawStarfield(timestamp) {
-        const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
-        // Keep canvas visible but adjust opacity
-        starfieldCanvas.style.opacity = isDark ? '1' : '0';
-
-        if (!isDark) {
+        if (document.documentElement.getAttribute('data-theme') !== 'dark') {
           starfieldId = requestAnimationFrame(drawStarfield);
           return;
         }
@@ -56,10 +53,13 @@ const Animations = (function() {
         ctx.clearRect(0, 0, starfieldCanvas.width, starfieldCanvas.height);
         const t = timestamp * 0.001;
 
+        // Draw stars
         for (const s of stars) {
-          const twinkle = Math.sin(t * s.twinkleSpeed * 60 + s.twinklePhase) * 0.35 + 0.65;
+          // Twinkling
+          const twinkle = Math.sin(t * s.twinkleSpeed * 60 + s.twinklePhase) * 0.3 + 0.7;
           const opacity = s.baseOpacity * twinkle;
 
+          // Slow drift
           s.x += s.driftX;
           s.y += s.driftY;
           if (s.x < -10) s.x = starfieldCanvas.width + 10;
@@ -71,34 +71,33 @@ const Animations = (function() {
           const dx = mouse.x - s.x;
           const dy = mouse.y - s.y;
           const dist = Math.sqrt(dx * dx + dy * dy);
-          if (dist < 150 && dist > 0) {
-            s.x += dx / dist * 0.1;
-            s.y += dy / dist * 0.1;
+          if (dist < 120 && dist > 0) {
+            s.x += dx / dist * 0.08;
+            s.y += dy / dist * 0.08;
           }
 
           // Draw star with glow
           ctx.beginPath();
           ctx.arc(s.x, s.y, s.radius, 0, Math.PI * 2);
-          const glow = ctx.createRadialGradient(s.x, s.y, 0, s.x, s.y, s.radius * 3.5);
+          const glow = ctx.createRadialGradient(s.x, s.y, 0, s.x, s.y, s.radius * 3);
           glow.addColorStop(0, `rgba(147, 197, 253, ${opacity})`);
-          glow.addColorStop(0.5, `rgba(147, 197, 253, ${opacity * 0.3})`);
           glow.addColorStop(1, 'rgba(147, 197, 253, 0)');
           ctx.fillStyle = glow;
           ctx.fill();
-          ctx.fillStyle = `rgba(191, 219, 254, ${Math.min(opacity + 0.15, 1)})`;
+          ctx.fillStyle = `rgba(191, 219, 254, ${Math.min(opacity + 0.2, 1)})`;
           ctx.fill();
         }
 
         // Draw constellation-like lines between nearest bright stars
-        const brightStars = stars.filter(s => s.radius > 1.3);
-        ctx.strokeStyle = 'rgba(147, 197, 253, 0.03)';
+        const brightStars = stars.filter(s => s.radius > 1.4);
+        ctx.strokeStyle = 'rgba(147, 197, 253, 0.04)';
         ctx.lineWidth = 0.5;
         for (let i = 0; i < brightStars.length; i++) {
           for (let j = i + 1; j < brightStars.length; j++) {
             const dx = brightStars[i].x - brightStars[j].x;
             const dy = brightStars[i].y - brightStars[j].y;
             const dist = Math.sqrt(dx * dx + dy * dy);
-            if (dist < 140) {
+            if (dist < 130) {
               ctx.beginPath();
               ctx.moveTo(brightStars[i].x, brightStars[i].y);
               ctx.lineTo(brightStars[j].x, brightStars[j].y);
@@ -119,19 +118,19 @@ const Animations = (function() {
       resizeStarfield();
       createStars();
       starfieldCanvas.addEventListener('mousemove', handleStarMouse);
-      window.addEventListener('resize', function() {
-        resizeStarfield();
-        createStars();
-      });
+      window.addEventListener('resize', function() { resizeStarfield(); createStars(); });
 
-      // Throttle: only pause animation if page is hidden
-      document.addEventListener('visibilitychange', () => {
-        if (document.hidden) {
-          if (starfieldId) { cancelAnimationFrame(starfieldId); starfieldId = null; }
-        } else {
-          if (!starfieldId) starfieldId = requestAnimationFrame(drawStarfield);
-        }
-      });
+      // Visibility pause
+      const starObserver = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            if (!starfieldId) starfieldId = requestAnimationFrame(drawStarfield);
+          } else {
+            if (starfieldId) { cancelAnimationFrame(starfieldId); starfieldId = null; }
+          }
+        });
+      }, { threshold: 0.1 });
+      starObserver.observe(starfieldCanvas);
 
       starfieldId = requestAnimationFrame(drawStarfield);
     }
@@ -147,22 +146,22 @@ const Animations = (function() {
       }
 
       function createPetals() {
-        const count = Math.min(Math.floor((sakuraCanvas.width || window.innerWidth) * (sakuraCanvas.height || window.innerHeight) / 4500), 180);
+        const count = Math.min(Math.floor(sakuraCanvas.width * sakuraCanvas.height / 6000), 120);
         petals = [];
         for (let i = 0; i < count; i++) {
           petals.push({
-            x: Math.random() * (sakuraCanvas.width || window.innerWidth),
-            y: Math.random() * (sakuraCanvas.height || window.innerHeight),
-            size: Math.random() * 9 + 4,
-            fallSpeed: Math.random() * 0.9 + 0.3,
-            swaySpeed: Math.random() * 0.025 + 0.008,
-            swayAmp: Math.random() * 35 + 15,
+            x: Math.random() * sakuraCanvas.width,
+            y: Math.random() * sakuraCanvas.height,
+            size: Math.random() * 8 + 4,
+            fallSpeed: Math.random() * 0.8 + 0.3,
+            swaySpeed: Math.random() * 0.02 + 0.008,
+            swayAmp: Math.random() * 30 + 10,
             swayPhase: Math.random() * Math.PI * 2,
-            opacity: Math.random() * 0.35 + 0.12,
+            opacity: Math.random() * 0.4 + 0.15,
             rotation: Math.random() * Math.PI * 2,
-            rotSpeed: (Math.random() - 0.5) * 0.025,
-            hue: Math.random() * 25 + 345,
-            saturation: Math.random() * 35 + 35
+            rotSpeed: (Math.random() - 0.5) * 0.02,
+            hue: Math.random() * 30 + 345, // pink hues around 345-15
+            saturation: Math.random() * 40 + 30
           });
         }
       }
@@ -171,25 +170,23 @@ const Animations = (function() {
         ctx.save();
         ctx.translate(x, y);
         ctx.rotate(rotation);
+        // Draw petal shape (elongated ellipse)
         ctx.beginPath();
         ctx.ellipse(0, 0, size * 0.35, size * 0.7, 0, 0, Math.PI * 2);
         ctx.fillStyle = color;
         ctx.fill();
-        // Subtle vein line
+        // Add a subtle line in the middle
         ctx.beginPath();
         ctx.moveTo(0, -size * 0.5);
         ctx.lineTo(0, size * 0.3);
-        ctx.strokeStyle = 'rgba(255, 200, 200, 0.25)';
+        ctx.strokeStyle = 'rgba(255, 200, 200, 0.3)';
         ctx.lineWidth = 0.5;
         ctx.stroke();
         ctx.restore();
       }
 
       function drawSakura(timestamp) {
-        const isLight = document.documentElement.getAttribute('data-theme') === 'light';
-        sakuraCanvas.style.opacity = isLight ? '1' : '0';
-
-        if (!isLight) {
+        if (document.documentElement.getAttribute('data-theme') !== 'light') {
           sakuraId = requestAnimationFrame(drawSakura);
           return;
         }
@@ -198,20 +195,21 @@ const Animations = (function() {
         const t = timestamp * 0.001;
 
         for (const p of petals) {
-          // Diagonal fall (bottom-right with sinusoidal sway)
+          // Diagonal fall (bottom-right direction)
           p.y += p.fallSpeed;
-          p.x += p.fallSpeed * 0.55 + Math.sin(t * p.swaySpeed * 60 + p.swayPhase) * 0.25;
+          p.x += p.fallSpeed * 0.55 + Math.sin(t * p.swaySpeed * 60 + p.swayPhase) * 0.2;
 
           p.rotation += p.rotSpeed;
 
-          // Wrap around
-          if (p.y > sakuraCanvas.height + 30) {
-            p.y = -30;
+          // Reset when out of bounds
+          if (p.y > sakuraCanvas.height + 20) {
+            p.y = -20;
             p.x = Math.random() * sakuraCanvas.width;
           }
-          if (p.x > sakuraCanvas.width + 30) p.x = -30;
-          if (p.x < -30) p.x = sakuraCanvas.width + 30;
+          if (p.x > sakuraCanvas.width + 20) p.x = -20;
+          if (p.x < -20) p.x = sakuraCanvas.width + 20;
 
+          // Draw petal
           const color = `hsla(${p.hue}, ${p.saturation}%, 80%, ${p.opacity})`;
           drawPetal(ctx, p.x, p.y, p.size, p.rotation, color);
         }
@@ -223,13 +221,16 @@ const Animations = (function() {
       createPetals();
       window.addEventListener('resize', () => { resizeSakura(); createPetals(); });
 
-      document.addEventListener('visibilitychange', () => {
-        if (document.hidden) {
-          if (sakuraId) { cancelAnimationFrame(sakuraId); sakuraId = null; }
-        } else {
-          if (!sakuraId) sakuraId = requestAnimationFrame(drawSakura);
-        }
-      });
+      const sakuraObserver = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            if (!sakuraId) sakuraId = requestAnimationFrame(drawSakura);
+          } else {
+            if (sakuraId) { cancelAnimationFrame(sakuraId); sakuraId = null; }
+          }
+        });
+      }, { threshold: 0.1 });
+      sakuraObserver.observe(sakuraCanvas);
 
       sakuraId = requestAnimationFrame(drawSakura);
     }
@@ -246,9 +247,10 @@ const Animations = (function() {
         if (entry.isIntersecting) {
           entry.target.classList.add('revealed');
 
+          // Stagger children
           const children = entry.target.querySelectorAll('.reveal-child');
           children.forEach((child, index) => {
-            child.style.transitionDelay = `${index * 0.08}s`;
+            child.style.transitionDelay = `${index * 0.1}s`;
             child.classList.add('revealed');
           });
 
@@ -256,8 +258,8 @@ const Animations = (function() {
         }
       });
     }, {
-      threshold: 0.12,
-      rootMargin: '0px 0px -40px 0px'
+      threshold: 0.15,
+      rootMargin: '0px 0px -50px 0px'
     });
 
     revealElements.forEach(el => observer.observe(el));
@@ -280,6 +282,7 @@ const Animations = (function() {
           function update(now) {
             const elapsed = now - start;
             const progress = Math.min(elapsed / duration, 1);
+            // Ease out cubic
             const eased = 1 - Math.pow(1 - progress, 3);
             const current = Math.round(eased * target);
             counter.textContent = current.toLocaleString();
@@ -298,33 +301,24 @@ const Animations = (function() {
     counters.forEach(el => observer.observe(el));
   }
 
-  // ===== Parallax Effect on Scroll =====
+  // ===== Parallax Effect =====
   function initParallax() {
     const parallaxElements = document.querySelectorAll('.parallax');
 
     if (parallaxElements.length === 0) return;
 
-    let ticking = false;
     window.addEventListener('scroll', () => {
-      if (!ticking) {
-        requestAnimationFrame(() => {
-          parallaxElements.forEach(el => {
-            const speed = parseFloat(el.getAttribute('data-parallax-speed') || '0.15');
-            const rect = el.getBoundingClientRect();
-            const windowHeight = window.innerHeight;
-            if (rect.top < windowHeight && rect.bottom > 0) {
-              const offset = (windowHeight - rect.top) * speed;
-              el.style.transform = `translateY(${offset * 0.3}px)`;
-            }
-          });
-          ticking = false;
-        });
-        ticking = true;
-      }
+      parallaxElements.forEach(el => {
+        const speed = parseFloat(el.getAttribute('data-parallax-speed') || '0.3');
+        const rect = el.getBoundingClientRect();
+        const scrolled = window.pageYOffset;
+        const offset = (scrolled - rect.top) * speed;
+        el.style.transform = `translateY(${offset}px)`;
+      });
     }, { passive: true });
   }
 
-  // ===== Navbar Scroll Effect =====
+  // ===== Navbar Scroll Effect (glassmorphism) =====
   function initNavbarScroll() {
     const navbar = document.getElementById('main-navbar');
     if (!navbar) return;
@@ -373,6 +367,7 @@ const Animations = (function() {
 
       e.preventDefault();
 
+      // Close mobile menu if open
       const burger = document.getElementById('navbar-burger');
       const menu = document.getElementById('navbar-menu');
       if (burger && menu && burger.classList.contains('is-active')) {
@@ -384,7 +379,7 @@ const Animations = (function() {
     });
   }
 
-  // ===== Tilt Effect for Cards =====
+  // ===== Tilt Effect for Advisor Cards =====
   function initTiltEffect() {
     const cards = document.querySelectorAll('.tilt-card');
 
@@ -395,8 +390,8 @@ const Animations = (function() {
         const y = e.clientY - rect.top;
         const centerX = rect.width / 2;
         const centerY = rect.height / 2;
-        const rotateX = ((y - centerY) / centerY) * -6;
-        const rotateY = ((x - centerX) / centerX) * 6;
+        const rotateX = ((y - centerY) / centerY) * -5;
+        const rotateY = ((x - centerX) / centerX) * 5;
 
         card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale3d(1.02, 1.02, 1.02)`;
       });
@@ -417,78 +412,12 @@ const Animations = (function() {
     burger.addEventListener('click', () => {
       burger.classList.toggle('is-active');
       menu.classList.toggle('is-active');
-      const expanded = burger.classList.contains('is-active');
-      burger.setAttribute('aria-expanded', expanded);
     });
-  }
-
-  // ===== Floating Particles (decorative) =====
-  function initFloatingParticles() {
-    // Add subtle floating dots in sections with the .floating-particles class
-    document.querySelectorAll('.floating-particles').forEach(container => {
-      const count = 8;
-      for (let i = 0; i < count; i++) {
-        const dot = document.createElement('div');
-        dot.className = 'floating-dot';
-        dot.style.cssText = `
-          position: absolute;
-          width: ${Math.random() * 6 + 3}px;
-          height: ${Math.random() * 6 + 3}px;
-          background: var(--primary-color);
-          border-radius: 50%;
-          opacity: ${Math.random() * 0.15 + 0.05};
-          top: ${Math.random() * 100}%;
-          left: ${Math.random() * 100}%;
-          animation: float-particle ${Math.random() * 6 + 8}s ease-in-out infinite;
-          animation-delay: ${Math.random() * 5}s;
-        `;
-        container.appendChild(dot);
-      }
-    });
-  }
-
-  // ===== About Horizontal Scroll Gallery auto-scroll =====
-  function initAboutScroll() {
-    const container = document.getElementById('about-scroll');
-    if (!container) return;
-
-    let scrollInterval;
-    let scrollPos = 0;
-    const speed = 0.4; // pixels per frame
-
-    function autoScroll() {
-      if (container.matches(':hover')) {
-        scrollInterval = requestAnimationFrame(autoScroll);
-        return;
-      }
-      scrollPos += speed;
-      if (scrollPos >= container.scrollWidth - container.clientWidth) {
-        scrollPos = 0;
-      }
-      container.scrollLeft = scrollPos;
-      scrollInterval = requestAnimationFrame(autoScroll);
-    }
-
-    container.addEventListener('mouseenter', () => {
-      if (scrollInterval) cancelAnimationFrame(scrollInterval);
-    });
-    container.addEventListener('mouseleave', () => {
-      scrollPos = container.scrollLeft;
-      scrollInterval = requestAnimationFrame(autoScroll);
-    });
-    container.addEventListener('touchstart', () => {
-      if (scrollInterval) cancelAnimationFrame(scrollInterval);
-    });
-
-    // Start after delay
-    setTimeout(() => {
-      scrollInterval = requestAnimationFrame(autoScroll);
-    }, 3000);
   }
 
   // Initialize all
   function init() {
-    initPageBackground();
+    initHeroBackground();
     initScrollReveal();
     initCounters();
     initParallax();
@@ -497,8 +426,6 @@ const Animations = (function() {
     initSmoothScroll();
     initTiltEffect();
     initMobileMenu();
-    initFloatingParticles();
-    initAboutScroll();
   }
 
   // Initialize on DOM ready

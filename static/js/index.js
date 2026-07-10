@@ -50,7 +50,7 @@
     });
   }
 
-  // Load conferences section — China + CAS institutes only (per requirements)
+  // Load conferences section
   async function loadConferences() {
     const container = document.getElementById('conferences-timeline');
     if (!container) return;
@@ -100,6 +100,7 @@
         ${pastHTML.length > 0 ? `<h4 class="timeline-section-title">📅 ${pastTitle}</h4>${pastHTML.join('')}` : ''}
       `;
 
+      // Trigger reveal animations for new elements
       setTimeout(() => {
         container.querySelectorAll('.reveal-child').forEach(el => el.classList.add('revealed'));
       }, 100);
@@ -108,65 +109,14 @@
     }
   }
 
-  // Load summer schools — primary data from 夏令营补充.html (per requirements)
+  // Load summer schools section
   async function loadSummerSchools() {
     const container = document.getElementById('summer-schools-grid');
     if (!container) return;
 
     try {
-      const resp = await fetch('custom/夏令营补充.html');
-      const html = await resp.text();
-
-      // Parse links from the HTML
-      const linkRegex = /<A\s+HREF="([^"]+)"[^>]*>([^<]+)<\/A>/gi;
-      const schools = [];
-      let match;
-      while ((match = linkRegex.exec(html)) !== null) {
-        const title = match[2].trim();
-        const url = match[1];
-
-        // Extract year and date info from title
-        let year = null;
-        let dateStr = '';
-
-        // Try to extract date range patterns like "8-2022年10月10日" or "9-12 October 2025"
-        const dateRangeZh = title.match(/\((\d{1,2})[\s-]*(\d{4})年(\d{1,2})月(\d{1,2})日/);
-        const dateRangeEn = title.match(/\((\d{1,2})[\s-]*(\d{1,2})?\s*([A-Z][a-z]+)\s*(\d{4})/);
-        const yearSimpleMatch = title.match(/(\d{4})/);
-        if (yearSimpleMatch) year = parseInt(yearSimpleMatch[1], 10);
-
-        if (dateRangeZh) {
-          year = parseInt(dateRangeZh[2], 10);
-          dateStr = `${dateRangeZh[2]}-${dateRangeZh[3].padStart(2, '0')}-${dateRangeZh[4].padStart(2, '0')}`;
-        }
-
-        // Determine status
-        const status = (year && year >= 2026) ? 'upcoming' : 'past';
-
-        // Extract location (always China/CAS for our data)
-        let location = '中国科学院';
-        if (title.includes('华中师范')) location = '华中师范大学，武汉';
-        else if (title.includes('理论物理')) location = '中国科学院理论物理研究所，北京';
-        else if (title.includes('IHEP')) location = '中国科学院高能物理研究所，北京';
-        else if (title.includes('TDLI') || title.includes('李政道')) location = '李政道研究所，上海';
-
-        schools.push({
-          name_zh: title,
-          name_en: title,
-          date: dateStr || `${year || ''}-01-01`,
-          location_zh: location,
-          location_en: location,
-          topic_zh: '',
-          topic_en: '',
-          url: url,
-          status: status
-        });
-      }
-
-      if (schools.length === 0) {
-        container.innerHTML = '<p style="text-align:center;color:var(--text-light);">暂无数据</p>';
-        return;
-      }
+      const resp = await fetch('data/summer-schools.json');
+      const schools = await resp.json();
 
       // Sort by date descending
       schools.sort((a, b) => (b.date || '').localeCompare(a.date || ''));
@@ -176,11 +126,16 @@
       container.innerHTML = schools.map(school => {
         const name = lang === 'zh' ? school.name_zh : school.name_en;
         const location = lang === 'zh' ? school.location_zh : school.location_en;
+        const topic = lang === 'zh' ? school.topic_zh : school.topic_en;
+        const dateStr = school.endDate
+          ? `${school.date} – ${school.endDate}`
+          : school.date;
 
         return `
           <div class="school-card ${school.status === 'upcoming' ? 'upcoming' : ''} reveal-child">
-            ${school.date ? `<div class="school-date">${school.date}</div>` : ''}
+            <div class="school-date">${dateStr}</div>
             <div class="school-title">${name}</div>
+            <div class="school-topic">📚 ${topic}</div>
             <div class="school-location"><i class="fas fa-map-marker-alt"></i> ${location}</div>
             ${school.url ? `<a href="${school.url}" target="_blank" class="school-link">${lang === 'zh' ? '了解更多' : 'Learn More'} <i class="fas fa-external-link-alt"></i></a>` : ''}
           </div>
@@ -192,17 +147,16 @@
       }, 100);
     } catch (e) {
       console.error('Failed to load summer schools:', e);
-      container.innerHTML = '<p style="text-align:center;color:var(--text-light);">加载失败</p>';
     }
   }
 
-  // Load students section — uses hardcoded list from Papers module (per requirements)
+  // Load students section - waits for Papers module to load data
   async function loadStudents() {
     const container = document.getElementById('students-grid');
     if (!container) return;
 
-    // Wait for Papers module to finish loading
-    const maxWait = 8000;
+    // Wait a bit for Papers module to finish loading from INSPIRE-HEP
+    const maxWait = 10000;
     const start = Date.now();
     let students = [];
     while (Date.now() - start < maxWait) {
@@ -215,42 +169,17 @@
 
     const lang = (I18N && I18N.getLang) ? I18N.getLang() : 'zh';
 
-    // If no students loaded, use hardcoded list directly
     if (students.length === 0) {
-      students = [
-        { name: 'Kuan Zhang', name_zh: '张宽', papers: 0 },
-        { name: 'Hanyang Xing', name_zh: '邢瀚洋', papers: 0 },
-        { name: 'Chen Chen', name_zh: '陈晨', papers: 0 },
-        { name: 'Yiqi Geng', name_zh: '耿一琪', papers: 0 },
-        { name: 'Chunhua Zeng', name_zh: '曾春华', papers: 0 },
-        { name: 'Zhi-Cheng Hu', name_zh: '胡志成', papers: 0 },
-        { name: 'Hongxin Dong', name_zh: '董鸿鑫', papers: 0 },
-        { name: 'Zhicheng Yan', name_zh: '阎志程', papers: 0 }
-      ];
+      container.innerHTML = `<p class="student-placeholder">${lang === 'zh' ? '研究生数据加载中...' : 'Student data loading...'}</p>`;
+      return;
     }
 
-    // Color palette for avatar gradient backgrounds
-    const gradients = [
-      'linear-gradient(135deg, #667eea, #764ba2)',
-      'linear-gradient(135deg, #f093fb, #f5576c)',
-      'linear-gradient(135deg, #4facfe, #00f2fe)',
-      'linear-gradient(135deg, #43e97b, #38f9d7)',
-      'linear-gradient(135deg, #fa709a, #fee140)',
-      'linear-gradient(135deg, #a18cd1, #fbc2eb)',
-      'linear-gradient(135deg, #fccb90, #d57eeb)',
-      'linear-gradient(135deg, #e0c3fc, #8ec5fc)'
-    ];
-
-    container.innerHTML = students.map((student, index) => {
+    container.innerHTML = students.map(student => {
       const initials = student.name.split(' ').map(n => n[0]).join('').substring(0, 2).toUpperCase();
-      const displayName = lang === 'zh' && student.name_zh ? student.name_zh : student.name;
-      const gradient = gradients[index % gradients.length];
-
       return `
         <div class="student-card reveal-child">
-          <div class="student-avatar-placeholder" style="background: ${gradient};">${initials}</div>
-          <div class="student-name">${displayName}</div>
-          <div class="student-info">${student.name}</div>
+          <div class="student-avatar-placeholder">${initials}</div>
+          <div class="student-name">${student.name}</div>
           <span class="student-paper-count">${student.papers} ${lang === 'zh' ? '篇论文' : 'papers'}</span>
         </div>
       `;
@@ -274,11 +203,13 @@
 
     let debounceTimer = null;
 
+    // i18n safe helper
     function t(key, fallback) {
       try { return (typeof I18N !== 'undefined' && I18N.t) ? I18N.t(key) : fallback; }
       catch(e) { return fallback; }
     }
 
+    // Build search index fresh from current live DOM every time
     function buildSearchIndex() {
       var index = [];
       var sections = document.querySelectorAll('section[id]');
@@ -289,13 +220,17 @@
         var navItem = document.querySelector('.navbar-item[href="#' + id + '"]');
         if (navItem) sectionName = navItem.textContent.trim();
 
+        // Collect text blocks
         var textBlocks = [];
+        // Get all visible text via innerText (includes dynamic content)
         var fullText = section.innerText || section.textContent || '';
         var lines = fullText.split('\n').filter(function(l) {
-          return l.trim().length > 3;
+          var t = l.trim();
+          return t.length > 3 && t !== '©';
         });
         textBlocks = lines;
 
+        // Also extract individual cards for more precise matching
         var cards = section.querySelectorAll('.paper-card, .advisor-card, .research-card, .software-card, .student-card, .timeline-item, .school-card');
         for (var c = 0; c < cards.length; c++) {
           var cardText = cards[c].textContent.trim();
@@ -313,6 +248,7 @@
       return index;
     }
 
+    // Escape regex special chars
     function escapeRegex(str) {
       return str.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
     }
@@ -340,6 +276,7 @@
           return;
         }
 
+        // Rebuild index fresh from live DOM each search
         var searchIndex = buildSearchIndex();
         var matches = [];
 
@@ -356,6 +293,7 @@
               if (start > 0) context = '...' + context;
               if (end < text.length) context = context + '...';
 
+              // Highlight match (sanitize context first for HTML)
               var div = document.createElement('div');
               div.textContent = context;
               var safeContext = div.innerHTML;
@@ -370,7 +308,7 @@
                 sectionName: sec.sectionName,
                 context: highlighted
               });
-              break;
+              break; // 1 match per section
             }
           }
         }
@@ -391,16 +329,19 @@
       }, 150);
     }
 
+    // Event listeners
     if (toggleBtn) toggleBtn.addEventListener('click', openSearch);
     if (closeBtn) closeBtn.addEventListener('click', closeSearch);
     if (backdrop) backdrop.addEventListener('click', closeSearch);
     input.addEventListener('input', performSearch);
 
+    // Keyboard shortcuts
     document.addEventListener('keydown', function(e) {
       if (e.key === 'Escape' && modal.classList.contains('active')) {
         closeSearch();
         return;
       }
+      // Ctrl+K or / to open (only when not typing in an input)
       var activeTag = document.activeElement ? document.activeElement.tagName : '';
       var isInput = activeTag === 'INPUT' || activeTag === 'TEXTAREA' || activeTag === 'SELECT';
       if (!isInput && ((e.ctrlKey && e.key === 'k') || e.key === '/')) {
@@ -409,6 +350,7 @@
       }
     });
 
+    // Result click: close modal and navigate
     results.addEventListener('click', function(e) {
       var item = e.target.closest('.search-result-item');
       if (!item) return;
@@ -446,6 +388,49 @@
     }
   }
 
+  // Load summer schools extra content from 夏令营补充.html
+  async function loadSummerSchoolsExtra() {
+    const container = document.getElementById('summer-schools-extra');
+    if (!container) return;
+
+    try {
+      const resp = await fetch('custom/夏令营补充.html');
+      const html = await resp.text();
+
+      // Parse links from the HTML
+      const linkRegex = /<A\s+HREF="([^"]+)"[^>]*>([^<]+)<\/A>/gi;
+      const links = [];
+      let match;
+      while ((match = linkRegex.exec(html)) !== null) {
+        // Extract year for sorting
+        const title = match[2].trim();
+        const yearMatch = title.match(/(\d{4})/);
+        const year = yearMatch ? parseInt(yearMatch[1], 10) : 0;
+        links.push({ url: match[1], title: title, year: year });
+      }
+
+      if (links.length === 0) return;
+
+      // Sort by year descending
+      links.sort((a, b) => b.year - a.year);
+
+      const lang = (I18N && I18N.getLang) ? I18N.getLang() : 'zh';
+
+      container.innerHTML = `
+        <h4>${lang === 'zh' ? '更多格点QCD相关会议与讲习班' : 'More Lattice QCD Conferences & Schools'}</h4>
+        <ul class="extra-links-list">
+          ${links.map(l => `<li><a href="${l.url}" target="_blank">🔗 ${l.title}</a></li>`).join('')}
+        </ul>
+      `;
+
+      setTimeout(() => {
+        container.querySelectorAll('.reveal-child, .reveal-up').forEach(el => el.classList.add('revealed'));
+      }, 100);
+    } catch (e) {
+      console.warn('Failed to load summer schools extra content:', e);
+    }
+  }
+
   // Work reports slideshow
   function initSlideshow() {
     const wrapper = document.getElementById('slides-wrapper');
@@ -462,6 +447,7 @@
     let currentSlide = 0;
     let autoPlayInterval;
 
+    // Create dots
     for (let i = 0; i < totalSlides; i++) {
       const dot = document.createElement('button');
       dot.className = 'slide-dot' + (i === 0 ? ' active' : '');
@@ -493,6 +479,7 @@
     if (prevBtn) prevBtn.addEventListener('click', () => { prevSlide(); startAutoPlay(); });
     if (nextBtn) nextBtn.addEventListener('click', () => { nextSlide(); startAutoPlay(); });
 
+    // Touch support
     let touchStartX = 0;
     const slideshowContainer = document.getElementById('work-reports-slideshow');
     if (slideshowContainer) {
@@ -512,6 +499,7 @@
 
     startAutoPlay();
 
+    // Pause on hover
     if (slideshowContainer) {
       slideshowContainer.addEventListener('mouseenter', stopAutoPlay);
       slideshowContainer.addEventListener('mouseleave', startAutoPlay);
@@ -542,6 +530,7 @@
   document.addEventListener('langChanged', () => {
     loadConferences();
     loadSummerSchools();
+    loadSummerSchoolsExtra();
     loadStudents();
   });
 
@@ -556,6 +545,7 @@
     initClickableImages();
     loadConferences();
     loadSummerSchools();
+    loadSummerSchoolsExtra();
     loadStudents();
   }
 
