@@ -28,6 +28,7 @@
     "about.leePhoto": "李政道先生 (Prof. T.D. Lee)",
     "about.groupPhoto": "课题组合照 (Group Photo, 2026)",
     "about.leePdf": "李政道先生与芯片上的格点量子色动力学 (PDF)",
+    "about.slideshow": "课题组掠影",
 
     "advisors.title": "导师简介",
     "advisors.sun.name": "孙鹏",
@@ -54,6 +55,7 @@
     "research.area5.desc": "研究原子核环境对核子内部结构的修正效应（EMC效应），通过格点QCD从夸克和胶子自由度理解核介质中部分子分布的变化。",
 
     "publications.title": "论文发表",
+    "publications.subtitle": "导师所有论文（不限第一单位，限第一作者与通讯作者）",
     "publications.filter.all": "全部",
     "publications.filter.year": "按年份",
     "publications.search": "搜索论文...",
@@ -63,11 +65,13 @@
     "publications.offlineData": "📡 离线数据 — INSPIRE-HEP API 不可用，显示缓存数据",
 
     "students.title": "研究生",
+    "students.subtitle": "课题组在读研究生",
     "students.fromPapers": "（数据来源于INSPIRE-HEP论文作者分析）",
     "students.placeholder": "更多研究生信息收集中，如有遗漏请与我们联系。",
     "students.papers": "参与论文",
 
     "conferences.title": "学术会议",
+    "conferences.subtitle": "中国科学院相关研究所主办的国内学术会议",
     "conferences.upcoming": "即将举行",
     "conferences.past": "已举办",
     "conferences.details": "详情",
@@ -75,6 +79,7 @@
     "conferences.date": "日期",
 
     "summerSchools.title": "夏令营与讲习班",
+    "summerSchools.subtitle": "中国科学院相关研究所主办的夏令营与讲习班",
     "summerSchools.recommend": "以下为推荐研究生参加的暑期学校与讲习班：",
     "summerSchools.topic": "主题",
     "summerSchools.pastEditions": "往届回顾",
@@ -152,6 +157,7 @@
     "about.leePhoto": "Prof. T.D. Lee",
     "about.groupPhoto": "Group Photo (2026)",
     "about.leePdf": "Prof. T.D. Lee and Chip-based Lattice QCD (PDF)",
+    "about.slideshow": "Group Gallery",
 
     "advisors.title": "Advisors",
     "advisors.sun.name": "Peng Sun",
@@ -178,6 +184,7 @@
     "research.area5.desc": "Studying the modification of nucleon internal structure in the nuclear environment (EMC effect), understanding changes in parton distributions within nuclear media from quark and gluon degrees of freedom through lattice QCD.",
 
     "publications.title": "Publications",
+    "publications.subtitle": "All advisor papers (no institution restriction, first/corresponding author only)",
     "publications.filter.all": "All",
     "publications.filter.year": "By Year",
     "publications.search": "Search papers...",
@@ -187,11 +194,13 @@
     "publications.offlineData": "📡 Offline Data — INSPIRE-HEP API unavailable, showing cached data",
 
     "students.title": "Graduate Students",
+    "students.subtitle": "Current graduate students in the group",
     "students.fromPapers": "(Data extracted from INSPIRE-HEP paper author analysis)",
     "students.placeholder": "More student information being collected. Please contact us if any omissions.",
     "students.papers": "papers",
 
     "conferences.title": "Conferences",
+    "conferences.subtitle": "Domestic academic conferences organized by CAS institutes",
     "conferences.upcoming": "Upcoming",
     "conferences.past": "Past",
     "conferences.details": "Details",
@@ -199,6 +208,7 @@
     "conferences.date": "Date",
 
     "summerSchools.title": "Summer Schools & Lectures",
+    "summerSchools.subtitle": "Summer schools and lectures organized by CAS institutes",
     "summerSchools.recommend": "Recommended summer schools and lecture programs for graduate students:",
     "summerSchools.topic": "Topic",
     "summerSchools.pastEditions": "Past Editions",

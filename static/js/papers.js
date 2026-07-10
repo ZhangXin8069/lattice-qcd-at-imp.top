@@ -1,7 +1,8 @@
 /**
  * papers.js — Publications module
- * Primary: fetches live data from INSPIRE-HEP API (CORS supported)
- * Fallback: loads from data/papers.json
+ * PRIMARY: parses offline INSPIRE-HEP HTML from custom/inspirehep.net/authors/
+ * FALLBACK: fetches live data from INSPIRE-HEP API
+ * Counts ALL papers where advisor is first or corresponding author (regardless of institution)
  */
 const Papers = (function() {
   let allPapers = [];
@@ -11,10 +12,22 @@ const Papers = (function() {
   let displayCount = 10;
   let isLoading = false;
 
-  // INSPIRE-HEP BAI identifiers for advisors
-  const ADVISOR_BAI = ['Peng.Sun.1', 'Liuming.Liu.1'];
+  // INSPIRE-HEP identifiers for advisors
   const ADVISOR_RECIDS = [1659207, 1259106];
+  const ADVISOR_NAMES = ['Peng Sun', 'Liuming Liu', 'Peng.Sun.1', 'Liuming.Liu.1'];
   const INSTITUTION = 'Lanzhou, Inst. Modern Phys.';
+
+  // Hardcoded student list per requirements
+  const STUDENT_LIST = [
+    { name: 'Kuan Zhang', name_zh: '张宽' },
+    { name: 'Hanyang Xing', name_zh: '邢瀚洋' },
+    { name: 'Chen Chen', name_zh: '陈晨' },
+    { name: 'Yiqi Geng', name_zh: '耿一琪' },
+    { name: 'Chunhua Zeng', name_zh: '曾春华' },
+    { name: 'Zhi-Cheng Hu', name_zh: '胡志成' },
+    { name: 'Hongxin Dong', name_zh: '董鸿鑫' },
+    { name: 'Zhicheng Yan', name_zh: '阎志程' }
+  ];
 
   async function init() {
     await loadPapers();
@@ -28,25 +41,36 @@ const Papers = (function() {
   async function loadPapers() {
     const container = document.getElementById('publications-list');
     if (container) {
-      container.innerHTML = '<p style="text-align:center;padding:2rem;color:var(--text-light);"><i class="fas fa-spinner fa-spin"></i> Loading papers from INSPIRE-HEP...</p>';
+      container.innerHTML = '<p style="text-align:center;padding:2rem;color:var(--text-light);"><i class="fas fa-spinner fa-spin"></i> ' + (I18N && I18N.getLang ? (I18N.getLang() === 'zh' ? '正在从本地数据加载论文...' : 'Loading papers from local data...') : 'Loading papers...') + '</p>';
     }
 
+    // PRIORITY: Try offline HTML first (per requirements)
     try {
-      await fetchFromINSPIRE();
-      isOffline = false;
-    } catch (e) {
-      console.warn('INSPIRE-HEP fetch failed, trying offline data:', e.message);
       const offlineLoaded = await loadFromOfflineData();
-      if (!offlineLoaded) {
-        console.warn('Offline data not available, falling back to static data');
+      if (offlineLoaded && allPapers.length > 0) {
+        isOffline = true;
+        console.log('Papers loaded from offline data: ' + allPapers.length + ' papers');
+      } else {
+        throw new Error('Offline data empty or failed');
+      }
+    } catch (e) {
+      console.warn('Offline data failed, trying INSPIRE-HEP API:', e.message);
+      try {
+        await fetchFromINSPIRE();
+        isOffline = false;
+      } catch (e2) {
+        console.warn('INSPIRE-HEP API failed, trying static data:', e2.message);
         await loadFromStatic();
         isOffline = false;
-      } else {
-        isOffline = true;
       }
     }
+
     // Sort by year descending
     allPapers.sort((a, b) => (b.year || 0) - (a.year || 0));
+
+    // Compute student paper counts from loaded data
+    computeStudentCounts();
+
     updateOfflineBadge();
   }
 
@@ -59,38 +83,96 @@ const Papers = (function() {
 
   async function loadFromOfflineData() {
     try {
-      // Try to fetch from offline saved INSPIRE-HEP pages
-      const authorIds = ['1659207', '1259106'];
       const papers = [];
-      const studentCount = {};
 
-      for (const authorId of authorIds) {
+      for (const authorId of ADVISOR_RECIDS) {
         try {
           const resp = await fetch(`custom/inspirehep.net/authors/${authorId}/INSPIRE-CiteAll.html`);
           if (!resp.ok) continue;
           const html = await resp.text();
 
-          // Parse paper titles and metadata from INSPIRE-HEP HTML
-          // Look for paper entries in the saved HTML
-          const paperRegex = /<a[^>]*href="\/literature\/(\d+)"[^>]*>([^<]+)<\/a>/gi;
-          let match;
-          while ((match = paperRegex.exec(html)) !== null) {
-            const id = match[1];
-            const title = match[2].replace(/&amp;/g, '&').replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&#39;/g, "'").trim();
-            if (!title || title.length < 3) continue;
-            if (papers.find(p => p.id === id)) continue;
-            papers.push({
-              id: id,
-              title: title,
-              authors: [],
-              journal: '',
-              volume: '',
-              pages: '',
-              year: null,
-              arxiv_id: '',
-              doi: '',
-              citation_count: 0
-            });
+          // Parse papers from saved INSPIRE-HEP HTML
+          // Pattern: <p><b><a href="https://inspirehep.net/literature/NUMBER">TITLE</a></b></p>
+          const entries = html.split(/<br>\s*\n\s*/);
+          let currentPaper = null;
+
+          for (const block of entries) {
+            // Match paper title with literature ID
+            const titleMatch = block.match(/<a\s+href="https:\/\/inspirehep\.net\/literature\/(\d+)"[^>]*>([^<]+)<\/a>/);
+            if (titleMatch) {
+              // Save previous paper
+              if (currentPaper && currentPaper.title && currentPaper.title.length > 3) {
+                if (!papers.find(p => p.id === currentPaper.id)) {
+                  papers.push(currentPaper);
+                }
+              }
+
+              currentPaper = {
+                id: titleMatch[1],
+                title: decodeHTMLEntities(titleMatch[2].trim()),
+                authors: [],
+                journal: '',
+                volume: '',
+                pages: '',
+                year: null,
+                arxiv_id: '',
+                doi: '',
+                citation_count: 0
+              };
+
+              continue;
+            }
+
+            if (!currentPaper) continue;
+
+            // Match arxiv e-Print
+            const arxivMatch = block.match(/e-Print:.*?<a\s+href="https:\/\/arxiv\.org\/abs\/([^"]+)"[^>]*>([\d.]+)<\/a>/);
+            if (arxivMatch) {
+              currentPaper.arxiv_id = arxivMatch[2].trim();
+            }
+
+            // Match DOI
+            const doiMatch = block.match(/DOI:.*?<a\s+href="https:\/\/doi\.org\/([^"]+)"[^>]*>([\d.\/]+)<\/a>/);
+            if (doiMatch) {
+              currentPaper.doi = doiMatch[2].trim();
+            }
+
+            // Match Published in: JOURNAL (YEAR), PAGES
+            const pubMatch = block.match(/Published in:.*?<span>\s*([^<]+)\s*<\/span>/);
+            if (pubMatch) {
+              const pubText = pubMatch[1].trim();
+              // Parse journal, volume, year, pages
+              // Format: "Commun.Theor.Phys. 78 (2026) 9, 095201" or "Phys. Rev. D 111, 074506 (2025)"
+              const yearMatch = pubText.match(/\((\d{4})\)/);
+              if (yearMatch) {
+                currentPaper.year = parseInt(yearMatch[1], 10);
+              }
+
+              // Extract journal (everything before the year)
+              const journalPart = pubText.replace(/\s*\(\d{4}\).*$/, '').trim();
+              if (journalPart) {
+                currentPaper.journal = journalPart.replace(/\s+\d+\s*,?\s*\d*$/, '').trim();
+              }
+            }
+
+            // Match authors block - find all author names with links
+            const authorBlocks = block.match(/<a\s+href="https:\/\/inspirehep\.net\/authors\/\d+"[^>]*>([^<]+)<\/a>/g);
+            if (authorBlocks && authorBlocks.length > 0) {
+              const authorNames = authorBlocks.map(a => {
+                const nameMatch = a.match(/>([^<]+)<\/a>/);
+                return nameMatch ? nameMatch[1].replace(/<[^>]+>/g, '').replace(/\s*marshmallow\.missing\s*/, '').trim() : '';
+              }).filter(Boolean);
+              if (authorNames.length > 0) {
+                currentPaper.authors = authorNames;
+              }
+            }
+          }
+
+          // Don't forget the last paper
+          if (currentPaper && currentPaper.title && currentPaper.title.length > 3) {
+            if (!papers.find(p => p.id === currentPaper.id)) {
+              papers.push(currentPaper);
+            }
           }
         } catch (e) {
           console.warn(`Failed to load offline data for author ${authorId}:`, e);
@@ -99,8 +181,6 @@ const Papers = (function() {
 
       if (papers.length > 0) {
         allPapers = papers;
-        // Populate students with empty array (can't parse from offline HTML easily)
-        students = [];
         return true;
       }
       return false;
@@ -112,16 +192,15 @@ const Papers = (function() {
 
   async function fetchFromINSPIRE() {
     const papers = [];
-    const studentCount = {};
+    const authorIds = ADVISOR_RECIDS;
 
-    // Fetch papers for both advisors
-    for (const bai of ADVISOR_BAI) {
-      const query = `a ${bai} and af:"${INSTITUTION}"`;
+    // Fetch papers for both advisors — NO institution filter (per requirements)
+    for (const authorId of authorIds) {
       const url = 'https://inspirehep.net/api/literature?' + new URLSearchParams({
-        q: query,
+        q: `a recid:${authorId}`,
         size: '100',
         sort: 'mostrecent',
-        fields: 'titles,authors.full_name,authors.affiliations,authors.recid,citation_count,publication_info,arxiv_eprints,dois,earliest_date'
+        fields: 'titles,authors.full_name,authors.affiliations,authors.recid,citation_count,publication_info,arxiv_eprints,dois,earliest_date,first_author,corp_author'
       });
 
       const resp = await fetch(url);
@@ -154,59 +233,64 @@ const Papers = (function() {
           doi: doi,
           citation_count: m.citation_count || 0
         });
-
-        // Track student co-authors from IMP
-        for (const author of (m.authors || [])) {
-          if (ADVISOR_RECIDS.includes(author.recid)) continue;
-          const hasIMP = (author.affiliations || []).some(
-            a => a.value === INSTITUTION
-          );
-          if (hasIMP) {
-            const name = author.full_name;
-            studentCount[name] = (studentCount[name] || 0) + 1;
-          }
-        }
       }
     }
 
     allPapers = papers;
-    // Students: authors with >= 2 co-authored papers at IMP
-    students = Object.entries(studentCount)
-      .filter(([, count]) => count >= 2)
-      .sort((a, b) => b[1] - a[1])
-      .map(([name, papers]) => ({ name, papers }));
 
     // Cache in localStorage
     try {
       localStorage.setItem('papers_cache', JSON.stringify({
         papers: allPapers,
-        students: students,
         timestamp: Date.now()
       }));
     } catch(e) {}
   }
 
+  // Compute student paper counts from loaded papers
+  function computeStudentCounts() {
+    const counts = {};
+    for (const paper of allPapers) {
+      for (const author of paper.authors) {
+        const normalized = author.replace(/<[^>]+>/g, '').trim();
+        // Check against student list
+        for (const student of STUDENT_LIST) {
+          const firstName = student.name.split(' ')[0];
+          const lastName = student.name.split(' ').slice(1).join(' ');
+          if (normalized.includes(firstName) || normalized.includes(lastName) ||
+              (student.name_zh && normalized.includes(student.name_zh))) {
+            counts[student.name] = (counts[student.name] || 0) + 1;
+          }
+        }
+      }
+    }
+
+    // Build students array
+    students = STUDENT_LIST.map(s => ({
+      name: s.name,
+      name_zh: s.name_zh,
+      papers: counts[s.name] || 0
+    }));
+  }
+
   async function loadFromStatic() {
     try {
-      // Try localStorage cache first
       const cached = localStorage.getItem('papers_cache');
       if (cached) {
         const data = JSON.parse(cached);
-        // Cache valid for 24 hours
         if (Date.now() - data.timestamp < 24 * 60 * 60 * 1000) {
           allPapers = data.papers || [];
-          students = data.students || [];
+          computeStudentCounts();
           return;
         }
       }
     } catch(e) {}
 
-    // Fall back to static JSON
     try {
       const resp = await fetch('data/papers.json');
       const data = await resp.json();
       allPapers = data.papers || [];
-      students = data.students || [];
+      computeStudentCounts();
     } catch (e) {
       console.error('Failed to load papers:', e);
       allPapers = [];
@@ -335,6 +419,12 @@ const Papers = (function() {
     return div.innerHTML;
   }
 
+  function decodeHTMLEntities(text) {
+    const div = document.createElement('div');
+    div.innerHTML = text;
+    return div.textContent || div.innerText || '';
+  }
+
   function loadMore() {
     displayCount += 10;
     renderPapers();
@@ -372,16 +462,18 @@ const Papers = (function() {
           const displayed = filtered.slice(0, displayCount);
           container.innerHTML = displayed.map((paper) => {
             const authorStr = paper.authors.slice(0, 4).join(', ') + (paper.authors.length > 4 ? ' et al.' : '');
+            const journalStr = paper.journal + (paper.year ? ` (${paper.year})` : '');
             const links = [];
-            if (paper.arxiv_id) links.push(`<a href="https://arxiv.org/abs/${paper.arxiv_id}" target="_blank" class="paper-link">arXiv</a>`);
-            if (paper.doi) links.push(`<a href="https://doi.org/${paper.doi}" target="_blank" class="paper-link">DOI</a>`);
+            if (paper.arxiv_id) links.push(`<a href="https://arxiv.org/abs/${paper.arxiv_id}" target="_blank" class="paper-link"><i class="ai ai-arxiv"></i> arXiv</a>`);
+            if (paper.doi) links.push(`<a href="https://doi.org/${paper.doi}" target="_blank" class="paper-link"><i class="fas fa-link"></i> DOI</a>`);
+            if (paper.id) links.push(`<a href="https://inspirehep.net/literature/${paper.id}" target="_blank" class="paper-link"><i class="fas fa-external-link-alt"></i> INSPIRE</a>`);
 
             return `
               <div class="paper-card">
                 <div class="paper-year-badge">${paper.year || '—'}</div>
                 <h4 class="paper-title">${escapeHtml(paper.title)}</h4>
                 <p class="paper-authors">${escapeHtml(authorStr)}</p>
-                <p class="paper-journal">${escapeHtml(paper.journal)} (${paper.year})</p>
+                <p class="paper-journal">${escapeHtml(journalStr)}</p>
                 <div class="paper-links">${links.join(' ')}</div>
               </div>
             `;
@@ -414,5 +506,5 @@ const Papers = (function() {
     init();
   }
 
-  return { init, loadMore, getStudents: () => students };
+  return { init, loadMore, getStudents: () => students, getAllPapers: () => allPapers };
 })();

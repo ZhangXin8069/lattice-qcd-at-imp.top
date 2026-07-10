@@ -93,6 +93,10 @@
 </head>
 <body>
 
+<!-- ===== Page Background Canvas (persistent, fixed) ===== -->
+<canvas id="starfield-canvas" class="page-canvas"></canvas>
+<canvas id="sakura-canvas" class="page-canvas"></canvas>
+
 <!-- ===== Navigation ===== -->
 <nav id="main-navbar" role="navigation" aria-label="Main navigation">
   <div class="navbar-brand">
@@ -134,8 +138,6 @@
 
 <!-- ===== Hero Section ===== -->
 <section id="hero">
-  <canvas id="starfield-canvas" class="hero-canvas"></canvas>
-  <canvas id="sakura-canvas" class="hero-canvas"></canvas>
   <div class="hero-overlay"></div>
   <div class="hero-content">
     <h1 class="hero-title" data-i18n="hero.title">格点量子色动力学课题组</h1>
@@ -157,6 +159,7 @@
 
 <!-- ===== About Section ===== -->
 <section id="about" class="section reveal">
+  <div class="section-bg-overlay"></div>
   <div class="section-header">
     <h2 class="section-title" data-i18n="about.title">关于我们</h2>
   </div>
@@ -200,7 +203,7 @@
         <div class="stat-label" data-i18n="about.stats.citations">累计引用</div>
       </div>
       <div class="stat-card">
-        <div class="stat-number counter" data-target="15">0</div>
+        <div class="stat-number counter" data-target="8">0</div>
         <div class="stat-label" data-i18n="about.stats.students">培养研究生</div>
       </div>
       <div class="stat-card">
@@ -307,6 +310,7 @@
   <div class="section-bg-overlay"></div>
   <div class="section-header">
     <h2 class="section-title" data-i18n="publications.title">论文发表</h2>
+    <p class="section-subtitle" data-i18n="publications.subtitle">导师所有论文（不限第一单位，限第一作者与通讯作者）</p>
   </div>
   <div class="pub-controls">
     <div id="pub-filters"></div>
@@ -325,7 +329,7 @@
   <div class="section-bg-overlay"></div>
   <div class="section-header">
     <h2 class="section-title" data-i18n="students.title">研究生</h2>
-    <p class="section-subtitle" data-i18n="students.fromPapers">（数据来源于INSPIRE-HEP论文作者分析）</p>
+    <p class="section-subtitle" data-i18n="students.subtitle">课题组在读研究生</p>
   </div>
   <div id="students-grid" class="students-grid"></div>
   <p class="student-placeholder" data-i18n="students.placeholder">更多研究生信息收集中，如有遗漏请与我们联系。</p>
@@ -336,6 +340,7 @@
   <div class="section-bg-overlay"></div>
   <div class="section-header">
     <h2 class="section-title" data-i18n="conferences.title">学术会议</h2>
+    <p class="section-subtitle" data-i18n="conferences.subtitle">中国科学院相关研究所主办的国内学术会议</p>
   </div>
   <div id="conferences-timeline" class="timeline"></div>
 </section>
@@ -345,14 +350,14 @@
   <div class="section-bg-overlay"></div>
   <div class="section-header">
     <h2 class="section-title" data-i18n="summerSchools.title">夏令营与讲习班</h2>
-    <p class="section-subtitle" data-i18n="summerSchools.recommend">以下为推荐研究生参加的暑期学校与讲习班：</p>
+    <p class="section-subtitle" data-i18n="summerSchools.subtitle">中国科学院相关研究所主办的夏令营与讲习班</p>
   </div>
   <div id="summer-schools-grid" class="summer-schools-grid"></div>
-  <div id="summer-schools-extra" class="summer-schools-extra reveal-up"></div>
 </section>
 
 <!-- ===== Software Work Section ===== -->
 <section id="software" class="section section-alt reveal">
+  <div class="section-bg-overlay"></div>
   <div class="section-header">
     <h2 class="section-title" data-i18n="software.title">软件工作</h2>
     <p class="section-subtitle" data-i18n="software.subtitle">课题组开发的格点QCD相关软件工具</p>
@@ -415,6 +420,7 @@
 
 <!-- ===== Gallery Section ===== -->
 <section id="gallery" class="section section-alt reveal">
+  <div class="section-bg-overlay"></div>
   <div class="section-header">
     <h2 class="section-title" data-i18n="gallery.title">图库</h2>
   </div>
@@ -427,35 +433,46 @@
       <img src="custom/标准模型图.png" alt="标准模型图" loading="lazy">
       <div class="gallery-caption">标准模型图示 (Standard Model)</div>
     </div>
-    <div class="gallery-item reveal-child">
+    <div class="gallery-item reveal-child" data-src="custom/李政道手写&#34;格&#34;图.png">
       <img src="custom/李政道手写&#34;格&#34;图.png" alt="李政道手写格字" loading="lazy">
       <div class="gallery-caption">李政道先生手写"格"字 (Prof. T.D. Lee's Handwritten "Ge" Character)</div>
     </div>
     <div class="gallery-item reveal-child">
-      <div style="width:100%;height:100%;background:linear-gradient(135deg,#0ea5e9,#8b5cf6);display:flex;align-items:center;justify-content:center;color:white;font-size:1.5rem;font-weight:700;">
+      <div style="width:100%;height:100%;background:linear-gradient(135deg,#0ea5e9,#8b5cf6);display:flex;align-items:center;justify-content:center;color:white;font-size:1.2rem;font-weight:700;text-align:center;padding:1rem;">
         <span>QCD涨落视频<br>(QCD Fluctuation Video)</span>
       </div>
       <div class="gallery-caption">QCD涨落视频 — 占位符 (Placeholder)</div>
     </div>
-    <!-- Placeholder images with descriptions -->
     <div class="gallery-item reveal-child">
-      <div style="width:100%;height:100%;background:var(--gradient-primary);display:flex;align-items:center;justify-content:center;color:white;font-size:1.5rem;font-weight:700;">
+      <div style="width:100%;height:100%;background:var(--gradient-primary);display:flex;align-items:center;justify-content:center;color:white;font-size:1.2rem;font-weight:700;text-align:center;padding:1rem;">
         <span>格点QCD模拟<br>(Lattice QCD Simulation)</span>
       </div>
       <div class="gallery-caption">格点QCD数值模拟示意图 — 占位符 (Placeholder)</div>
     </div>
     <div class="gallery-item reveal-child">
-      <div style="width:100%;height:100%;background:linear-gradient(135deg,#8b5cf6,#ec4899);display:flex;align-items:center;justify-content:center;color:white;font-size:1.5rem;font-weight:700;">
-        <span>课题组照片<br>(Group Photo)</span>
+      <div style="width:100%;height:100%;background:linear-gradient(135deg,#8b5cf6,#ec4899);display:flex;align-items:center;justify-content:center;color:white;font-size:1.2rem;font-weight:700;text-align:center;padding:1rem;">
+        <span>强子结构示意<br>(Hadron Structure)</span>
       </div>
-      <div class="gallery-caption">课题组集体照 — 占位符 (Placeholder)</div>
+      <div class="gallery-caption">强子内部结构示意图 — 占位符 (Placeholder)</div>
+    </div>
+    <div class="gallery-item reveal-child">
+      <div style="width:100%;height:100%;background:linear-gradient(135deg,#f59e0b,#ef4444);display:flex;align-items:center;justify-content:center;color:white;font-size:1.2rem;font-weight:700;text-align:center;padding:1rem;">
+        <span>部分子分布函数<br>(Parton Distribution)</span>
+      </div>
+      <div class="gallery-caption">部分子分布函数示意图 — 占位符 (Placeholder)</div>
+    </div>
+    <div class="gallery-item reveal-child">
+      <div style="width:100%;height:100%;background:linear-gradient(135deg,#10b981,#06b6d4);display:flex;align-items:center;justify-content:center;color:white;font-size:1.2rem;font-weight:700;text-align:center;padding:1rem;">
+        <span>粲重子散射<br>(Charmed Baryon Scattering)</span>
+      </div>
+      <div class="gallery-caption">粲重子散射示意图 — 占位符 (Placeholder)</div>
     </div>
   </div>
 </section>
 
 <!-- ===== Help & Feedback Section ===== -->
 <section id="help" class="section reveal section-bg-img" style="background-image: url('custom/QCD涨落图.gif');">
-  <div class="section-bg-overlay"></div>
+  <div class="section-bg-overlay section-bg-overlay-help"></div>
   <div class="section-header">
     <h2 class="section-title" data-i18n="help.title">帮助反馈</h2>
     <p class="section-subtitle" data-i18n="help.subtitle">如有任何问题或建议，欢迎联系我们</p>
