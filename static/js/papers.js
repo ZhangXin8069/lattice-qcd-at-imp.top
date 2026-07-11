@@ -1,7 +1,7 @@
 /**
  * papers.js — Publications module
  * Primary: loads from custom/inspirehep.net/authors/* /INSPIRE-CiteAll.html (offline)
- * Supplement: fetches live citation counts from INSPIRE-HEP API on each refresh
+ * Update: manual via /update-website papers skill
  *
  * Papers count rule (要求.json):
  *   - 发表论文: sum of advisor papers where advisor is first-author OR corresponding-author (any institution)
@@ -73,122 +73,6 @@ const Papers = (function() {
     renderFilters();
     renderPapers();
     updateStats();
-
-    // 2) Try INSPIRE-HEP API in background to supplement citation counts and newer papers
-    fetchFromINSPIREBackground();
-  }
-
-  // Background API fetch — supplements offline data with citation counts
-  async function fetchFromINSPIREBackground() {
-    try {
-      const freshPapers = [];
-      const studentCount = {};
-
-      for (const bai of ADVISOR_BAI) {
-        const query = `a ${bai} and af:"${INSTITUTION}"`;
-        const url = 'https://inspirehep.net/api/literature?' + new URLSearchParams({
-          q: query,
-          size: '100',
-          sort: 'mostrecent',
-          fields: 'titles,authors.full_name,authors.affiliations,authors.recid,citation_count,publication_info,arxiv_eprints,dois,earliest_date,first_author'
-        });
-
-        const resp = await fetch(url);
-        if (!resp.ok) throw new Error(`INSPIRE-HEP returned ${resp.status}`);
-        const data = await resp.json();
-
-        for (const hit of (data.hits?.hits || [])) {
-          const m = hit.metadata;
-          const title = (m.titles && m.titles[0]) ? m.titles[0].title : 'Untitled';
-
-          if (freshPapers.find(p => p.id === hit.id)) continue;
-
-          const authors = (m.authors || []).map(a => a.full_name);
-          const pub = (m.publication_info && m.publication_info[0]) || {};
-          const journal = pub.journal_title || '';
-          const year = pub.year || (m.earliest_date ? parseInt(m.earliest_date.substring(0, 4)) : null);
-          const arxiv = (m.arxiv_eprints && m.arxiv_eprints[0]) ? m.arxiv_eprints[0].value : '';
-          const doi = (m.dois && m.dois[0]) ? m.dois[0].value : '';
-
-          const isFirstUnitIMP = (m.authors || []).some(a =>
-            a.affiliations && a.affiliations[0] && a.affiliations[0].value === INSTITUTION
-          );
-
-          freshPapers.push({
-            id: hit.id,
-            title: title,
-            authors: authors,
-            journal: journal,
-            volume: pub.journal_volume || '',
-            pages: pub.artid || '',
-            year: year,
-            arxiv_id: arxiv,
-            doi: doi,
-            citation_count: m.citation_count || 0,
-            isFirstUnitIMP: isFirstUnitIMP
-          });
-
-          // Track student co-authors
-          for (const author of (m.authors || [])) {
-            if (ADVISOR_RECIDS.includes(author.recid)) continue;
-            const hasIMP = (author.affiliations || []).some(a => a.value === INSTITUTION);
-            if (hasIMP) {
-              studentCount[author.full_name] = (studentCount[author.full_name] || 0) + 1;
-            }
-          }
-        }
-      }
-
-      if (freshPapers.length > 0) {
-        // Merge: keep offline papers, update citation counts from API, add new papers
-        const offlineMap = {};
-        for (const p of allPapers) {
-          offlineMap[p.id] = p;
-        }
-
-        for (const fp of freshPapers) {
-          if (offlineMap[fp.id]) {
-            // Update citation count from API
-            offlineMap[fp.id].citation_count = fp.citation_count;
-            // Also update fields that offline parsing may have missed
-            if (!offlineMap[fp.id].journal && fp.journal) offlineMap[fp.id].journal = fp.journal;
-            if (!offlineMap[fp.id].year && fp.year) offlineMap[fp.id].year = fp.year;
-            if (!offlineMap[fp.id].arxiv_id && fp.arxiv_id) offlineMap[fp.id].arxiv_id = fp.arxiv_id;
-            if (!offlineMap[fp.id].doi && fp.doi) offlineMap[fp.id].doi = fp.doi;
-            if (offlineMap[fp.id].authors.length === 0 && fp.authors.length > 0) {
-              offlineMap[fp.id].authors = fp.authors;
-            }
-          } else {
-            // New paper from API not in offline data
-            offlineMap[fp.id] = fp;
-          }
-        }
-
-        allPapers = Object.values(offlineMap);
-        allPapers.sort((a, b) => (b.year || 0) - (a.year || 0));
-        displayPapers = allPapers.filter(p => p.isFirstUnitIMP);
-        countPapers = allPapers;
-        students = buildStudentList(studentCount);
-        isOffline = false;
-
-        // Save to cache
-        try {
-          localStorage.setItem('papers_cache', JSON.stringify({
-            papers: allPapers,
-            students: students,
-            timestamp: Date.now()
-          }));
-        } catch(e) {}
-
-        // Re-render with updated data
-        renderFilters();
-        renderPapers();
-        updateStats();
-        updateOfflineBadge();
-      }
-    } catch (e) {
-      console.warn('Background INSPIRE-HEP fetch failed (offline data still shown):', e.message);
-    }
   }
 
   function updateOfflineBadge() {
