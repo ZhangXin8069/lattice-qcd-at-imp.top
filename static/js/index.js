@@ -224,11 +224,12 @@
     }
 
     container.innerHTML = students.map(student => {
-      const initials = student.name.split(' ').map(n => n[0]).join('').substring(0, 2).toUpperCase();
+      const displayName = lang === 'zh' ? (student.name_zh || student.name) : (student.name_en || student.name);
+      const initials = displayName.substring(0, 2);
       return `
         <div class="student-card reveal-child">
           <div class="student-avatar-placeholder">${initials}</div>
-          <div class="student-name">${student.name}</div>
+          <div class="student-name">${displayName}</div>
           <span class="student-paper-count">${student.papers} ${lang === 'zh' ? '篇论文' : 'papers'}</span>
         </div>
       `;

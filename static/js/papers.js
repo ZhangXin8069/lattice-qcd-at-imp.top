@@ -71,12 +71,12 @@ const Papers = (function() {
       displayPapers = allPapers.filter(p => p.isFirstUnitIMP);
       countPapers = allPapers;
 
-      // Parse student data from CSV
+      // Parse student data from CSV (captures Chinese + English names)
       students = [];
-      const stuRe = /^"研究生",\s*"学生\d+",\s*"([^"]+)",\s*"[^"]*",\s*"(\d+)篇论文"/;
+      const stuRe = /^"研究生",\s*"学生\d+",\s*"([^"]+)",\s*"([^"]+)",\s*"(\d+)篇论文"/;
       for (const line of lines) {
         const sm = line.match(stuRe);
-        if (sm) students.push({ name: sm[1], papers: parseInt(sm[2], 10) });
+        if (sm) students.push({ name_zh: sm[1], name_en: sm[2], name: sm[2], papers: parseInt(sm[3], 10) });
       }
 
       renderPapers();
