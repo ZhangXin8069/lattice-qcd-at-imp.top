@@ -1,7 +1,7 @@
 /**
  * papers.js — Publications module
- * Primary: fetches live data from INSPIRE-HEP API (CORS supported)
- * Fallback: loads from data/papers.json
+ * Primary: loads from custom/inspirehep.net/authors/* /INSPIRE-CiteAll.html (offline)
+ * Supplement: fetches live citation counts from INSPIRE-HEP API on each refresh
  *
  * Papers count rule (要求.json):
  *   - 发表论文: sum of advisor papers where advisor is first-author OR corresponding-author (any institution)
@@ -18,7 +18,7 @@ const Papers = (function() {
   let displayCount = 10;
   let isLoading = false;
 
-  // INSPIRE-HEP BAI identifiers for advisors
+  // INSPIRE-HEP identifiers
   const ADVISOR_BAI = ['Peng.Sun.1', 'Liuming.Liu.1'];
   const ADVISOR_RECIDS = [1659207, 1259106];
   const INSTITUTION = 'Lanzhou, Inst. Modern Phys.';
@@ -43,38 +43,152 @@ const Papers = (function() {
     updateStats();
   }
 
-  let isOffline = false;
+  let isOffline = true;  // default to offline until API succeeds
 
   async function loadPapers() {
     const container = document.getElementById('publications-list');
     if (container) {
-      container.innerHTML = '<p style="text-align:center;padding:2rem;color:var(--text-light);"><i class="fas fa-spinner fa-spin"></i> Loading papers from INSPIRE-HEP...</p>';
+      container.innerHTML = '<p style="text-align:center;padding:2rem;color:var(--text-light);"><i class="fas fa-spinner fa-spin"></i> Loading papers...</p>';
     }
 
-    try {
-      await fetchFromINSPIRE();
-      isOffline = false;
-    } catch (e) {
-      console.warn('INSPIRE-HEP fetch failed, trying offline data:', e.message);
-      const offlineLoaded = await loadFromOfflineData();
-      if (!offlineLoaded) {
-        console.warn('Offline data not available, falling back to static data');
+    // 1) Always load offline HTML first (primary data source)
+    const offlineLoaded = await loadFromOfflineData();
+
+    if (!offlineLoaded) {
+      // Offline files missing — try localStorage cache
+      const cacheLoaded = loadFromCache();
+      if (!cacheLoaded) {
         await loadFromStatic();
-        isOffline = false;
-      } else {
-        isOffline = true;
       }
     }
+
     // Sort by year descending
     allPapers.sort((a, b) => (b.year || 0) - (a.year || 0));
 
-    // Separate display papers (first-unit IMP) vs count papers (first/corresponding author)
+    // Separate display papers (first-unit IMP) vs count papers
     displayPapers = allPapers.filter(p => p.isFirstUnitIMP);
-    // Count papers: advisor is first-author or corresponding-author (any institution)
-    // (Note: corresponding-author info may not be available from API; using all papers for now)
     countPapers = allPapers;
 
     updateOfflineBadge();
+    renderFilters();
+    renderPapers();
+    updateStats();
+
+    // 2) Try INSPIRE-HEP API in background to supplement citation counts and newer papers
+    fetchFromINSPIREBackground();
+  }
+
+  // Background API fetch — supplements offline data with citation counts
+  async function fetchFromINSPIREBackground() {
+    try {
+      const freshPapers = [];
+      const studentCount = {};
+
+      for (const bai of ADVISOR_BAI) {
+        const query = `a ${bai} and af:"${INSTITUTION}"`;
+        const url = 'https://inspirehep.net/api/literature?' + new URLSearchParams({
+          q: query,
+          size: '100',
+          sort: 'mostrecent',
+          fields: 'titles,authors.full_name,authors.affiliations,authors.recid,citation_count,publication_info,arxiv_eprints,dois,earliest_date,first_author'
+        });
+
+        const resp = await fetch(url);
+        if (!resp.ok) throw new Error(`INSPIRE-HEP returned ${resp.status}`);
+        const data = await resp.json();
+
+        for (const hit of (data.hits?.hits || [])) {
+          const m = hit.metadata;
+          const title = (m.titles && m.titles[0]) ? m.titles[0].title : 'Untitled';
+
+          if (freshPapers.find(p => p.id === hit.id)) continue;
+
+          const authors = (m.authors || []).map(a => a.full_name);
+          const pub = (m.publication_info && m.publication_info[0]) || {};
+          const journal = pub.journal_title || '';
+          const year = pub.year || (m.earliest_date ? parseInt(m.earliest_date.substring(0, 4)) : null);
+          const arxiv = (m.arxiv_eprints && m.arxiv_eprints[0]) ? m.arxiv_eprints[0].value : '';
+          const doi = (m.dois && m.dois[0]) ? m.dois[0].value : '';
+
+          const isFirstUnitIMP = (m.authors || []).some(a =>
+            a.affiliations && a.affiliations[0] && a.affiliations[0].value === INSTITUTION
+          );
+
+          freshPapers.push({
+            id: hit.id,
+            title: title,
+            authors: authors,
+            journal: journal,
+            volume: pub.journal_volume || '',
+            pages: pub.artid || '',
+            year: year,
+            arxiv_id: arxiv,
+            doi: doi,
+            citation_count: m.citation_count || 0,
+            isFirstUnitIMP: isFirstUnitIMP
+          });
+
+          // Track student co-authors
+          for (const author of (m.authors || [])) {
+            if (ADVISOR_RECIDS.includes(author.recid)) continue;
+            const hasIMP = (author.affiliations || []).some(a => a.value === INSTITUTION);
+            if (hasIMP) {
+              studentCount[author.full_name] = (studentCount[author.full_name] || 0) + 1;
+            }
+          }
+        }
+      }
+
+      if (freshPapers.length > 0) {
+        // Merge: keep offline papers, update citation counts from API, add new papers
+        const offlineMap = {};
+        for (const p of allPapers) {
+          offlineMap[p.id] = p;
+        }
+
+        for (const fp of freshPapers) {
+          if (offlineMap[fp.id]) {
+            // Update citation count from API
+            offlineMap[fp.id].citation_count = fp.citation_count;
+            // Also update fields that offline parsing may have missed
+            if (!offlineMap[fp.id].journal && fp.journal) offlineMap[fp.id].journal = fp.journal;
+            if (!offlineMap[fp.id].year && fp.year) offlineMap[fp.id].year = fp.year;
+            if (!offlineMap[fp.id].arxiv_id && fp.arxiv_id) offlineMap[fp.id].arxiv_id = fp.arxiv_id;
+            if (!offlineMap[fp.id].doi && fp.doi) offlineMap[fp.id].doi = fp.doi;
+            if (offlineMap[fp.id].authors.length === 0 && fp.authors.length > 0) {
+              offlineMap[fp.id].authors = fp.authors;
+            }
+          } else {
+            // New paper from API not in offline data
+            offlineMap[fp.id] = fp;
+          }
+        }
+
+        allPapers = Object.values(offlineMap);
+        allPapers.sort((a, b) => (b.year || 0) - (a.year || 0));
+        displayPapers = allPapers.filter(p => p.isFirstUnitIMP);
+        countPapers = allPapers;
+        students = buildStudentList(studentCount);
+        isOffline = false;
+
+        // Save to cache
+        try {
+          localStorage.setItem('papers_cache', JSON.stringify({
+            papers: allPapers,
+            students: students,
+            timestamp: Date.now()
+          }));
+        } catch(e) {}
+
+        // Re-render with updated data
+        renderFilters();
+        renderPapers();
+        updateStats();
+        updateOfflineBadge();
+      }
+    } catch (e) {
+      console.warn('Background INSPIRE-HEP fetch failed (offline data still shown):', e.message);
+    }
   }
 
   function updateOfflineBadge() {
@@ -84,11 +198,13 @@ const Papers = (function() {
     }
   }
 
+  // ===== Primary data source: offline INSPIRE-CiteAll.html files =====
   async function loadFromOfflineData() {
     try {
       const authorIds = ['1659207', '1259106'];
       const papers = [];
       const studentCount = {};
+      const seen = new Set();
 
       for (const authorId of authorIds) {
         try {
@@ -96,26 +212,132 @@ const Papers = (function() {
           if (!resp.ok) continue;
           const html = await resp.text();
 
-          const paperRegex = /<a[^>]*href="\/literature\/(\d+)"[^>]*>([^<]+)<\/a>/gi;
-          let match;
-          while ((match = paperRegex.exec(html)) !== null) {
-            const id = match[1];
-            const title = match[2].replace(/&amp;/g, '&').replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&#39;/g, "'").trim();
-            if (!title || title.length < 3) continue;
-            if (papers.find(p => p.id === id)) continue;
-            papers.push({
-              id: id,
-              title: title,
-              authors: [],
-              journal: '',
-              volume: '',
-              pages: '',
-              year: null,
-              arxiv_id: '',
-              doi: '',
-              citation_count: 0,
-              isFirstUnitIMP: true
-            });
+          // Parse each paper entry from the HTML
+          // Pattern: <p><b><a href="/literature/ID">TITLE</a></b></p>
+          //          <p>AUTHORS with affiliations</p>
+          //          <p>e-Print: <a>ARXIV</a></p>
+          //          <p>DOI: <a>DOI</a></p>
+          //          <p>Published in: <span>JOURNAL INFO</span></p>
+          //          <br>
+
+          // Split by <br> tags to get individual paper blocks
+          const blocks = html.split(/<br\s*\/?>/i);
+          let currentPaper = null;
+          const tempPapers = [];
+
+          for (const block of blocks) {
+            // Title line: <a href="/literature/NNNNNNN">TITLE</a>
+            const titleMatch = block.match(/<a\s+href="https:\/\/inspirehep\.net\/literature\/(\d+)"[^>]*>([\s\S]*?)<\/a>/i);
+            if (titleMatch) {
+              // Save previous paper
+              if (currentPaper) tempPapers.push(currentPaper);
+
+              const id = titleMatch[1];
+              const title = titleMatch[2].replace(/<[^>]+>/g, '').replace(/&amp;/g, '&').replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&#39;/g, "'").trim();
+
+              if (!title || title.length < 3) { currentPaper = null; continue; }
+
+              currentPaper = {
+                id: id,
+                title: title,
+                authors: [],
+                journal: '',
+                volume: '',
+                pages: '',
+                year: null,
+                arxiv_id: '',
+                doi: '',
+                citation_count: 0,
+                isFirstUnitIMP: false
+              };
+              continue;
+            }
+
+            if (!currentPaper) continue;
+
+            // Author line: check for IMP affiliation
+            if (currentPaper.authors.length === 0) {
+              // Check if any author has Lanzhou, Inst. Modern Phys. affiliation
+              if (block.includes('Lanzhou, Inst. Modern Phys.')) {
+                currentPaper.isFirstUnitIMP = true;
+              }
+
+              // Extract author names from <a> tags that contain /authors/
+              const authorMatches = block.match(/<a\s+href="https:\/\/inspirehep\.net\/authors\/\d+"[^>]*>([^<]+)<\/a>/gi);
+              if (authorMatches) {
+                const names = authorMatches.map(a => {
+                  const m = a.match(/>([^<]+)</);
+                  return m ? m[1].trim() : '';
+                }).filter(n => n && !n.includes('Lanzhou') && !n.includes('Inst.') && !n.includes('UCAS') && n.length < 60);
+
+                // Track student co-authors
+                for (const name of names) {
+                  if (!ADVISOR_RECIDS.some(() => false)) {
+                    // Simple student tracking (names not matching advisor names)
+                    const isAdvisor = ['Peng Sun', 'Liuming Liu', '孙鹏', '刘柳明'].some(a =>
+                      name.toLowerCase().includes(a.toLowerCase())
+                    );
+                    if (!isAdvisor) {
+                      // Check if IMP-related (the block containing this name has IMP)
+                      const nameIdx = block.indexOf(name);
+                      const context = block.substring(Math.max(0, nameIdx - 200), Math.min(block.length, nameIdx + 300));
+                      if (context.includes('Lanzhou, Inst. Modern Phys.')) {
+                        studentCount[name] = (studentCount[name] || 0) + 1;
+                      }
+                    }
+                  }
+                }
+
+                currentPaper.authors = names;
+              }
+            }
+
+            // e-Print (arXiv)
+            const arxivMatch = block.match(/e-Print:\s*<a[^>]*href="https:\/\/arxiv\.org\/abs\/([^"]+)"[^>]*>([^<]+)<\/a>/i)
+                            || block.match(/e-Print:\s*<a[^>]*>([\d.]+)<\/a>/i);
+            if (arxivMatch && !currentPaper.arxiv_id) {
+              currentPaper.arxiv_id = arxivMatch[1].trim();
+            }
+
+            // DOI
+            const doiMatch = block.match(/DOI:\s*<a[^>]*href="https:\/\/doi\.org\/([^"]+)"[^>]*>/i);
+            if (doiMatch && !currentPaper.doi) {
+              currentPaper.doi = doiMatch[1].trim();
+            }
+
+            // Published in (journal info)
+            const pubMatch = block.match(/Published\s+in:\s*<span>([\s\S]*?)<\/span>/i);
+            if (pubMatch && !currentPaper.journal) {
+              const pubText = pubMatch[1].replace(/<[^>]+>/g, '').trim();
+              // Parse journal, volume, year, pages
+              // Format: "Journal Name Volume (Year) Issue, Pages" or "Journal Name (Year) Pages"
+              const pubYearMatch = pubText.match(/\((\d{4})\)/);
+              if (pubYearMatch) currentPaper.year = parseInt(pubYearMatch[1], 10);
+
+              // Extract journal name (everything before the volume or year)
+              const journalParts = pubText.split(/\s+\d+/);
+              if (journalParts.length > 0) {
+                currentPaper.journal = journalParts[0].trim();
+              }
+
+              // Extract volume/pages
+              const volPageMatch = pubText.match(/(\d+)\s*\(?\d{4}\)?\s*,?\s*(\d+)/);
+              if (volPageMatch) {
+                if (!currentPaper.volume) currentPaper.volume = volPageMatch[1];
+                currentPaper.pages = volPageMatch[2];
+              }
+            }
+          }
+
+          // Don't forget the last paper
+          if (currentPaper) tempPapers.push(currentPaper);
+
+          // Merge into papers list (deduplicate by id)
+          for (const p of tempPapers) {
+            if (!seen.has(p.id)) {
+              seen.add(p.id);
+              papers.push(p);
+            }
           }
         } catch (e) {
           console.warn(`Failed to load offline data for author ${authorId}:`, e);
@@ -125,6 +347,7 @@ const Papers = (function() {
       if (papers.length > 0) {
         allPapers = papers;
         students = buildStudentList(studentCount);
+        isOffline = true;
         return true;
       }
       return false;
@@ -134,8 +357,41 @@ const Papers = (function() {
     }
   }
 
+  function loadFromCache() {
+    try {
+      const cached = localStorage.getItem('papers_cache');
+      if (cached) {
+        const data = JSON.parse(cached);
+        if (Date.now() - data.timestamp < 24 * 60 * 60 * 1000) {
+          allPapers = data.papers || [];
+          students = data.students || [];
+          displayPapers = allPapers.filter(p => p.isFirstUnitIMP !== false);
+          countPapers = allPapers;
+          isOffline = false;
+          return true;
+        }
+      }
+    } catch(e) {}
+    return false;
+  }
+
+  async function loadFromStatic() {
+    try {
+      const resp = await fetch('data/papers.json');
+      const data = await resp.json();
+      allPapers = data.papers || [];
+      students = data.students || [];
+      displayPapers = allPapers;
+      countPapers = allPapers;
+      isOffline = true;
+    } catch (e) {
+      console.error('Failed to load papers:', e);
+      allPapers = [];
+    }
+  }
+
   function buildStudentList(studentCount) {
-    // First try matching hard-coded student names
+    // Match hard-coded student names against parsed student counts
     const result = [];
     for (const name of STUDENT_NAMES) {
       const key = Object.keys(studentCount).find(k =>
@@ -147,120 +403,13 @@ const Papers = (function() {
         papers: key ? studentCount[key] : 0
       });
     }
-    // If no matches found from API, use static list
     if (result.every(s => s.papers === 0)) {
       return STUDENT_NAMES.map(name => ({ name, papers: 0 }));
     }
     return result.sort((a, b) => b.papers - a.papers);
   }
 
-  async function fetchFromINSPIRE() {
-    const papers = [];
-    const studentCount = {};
-
-    for (const bai of ADVISOR_BAI) {
-      const query = `a ${bai} and af:"${INSTITUTION}"`;
-      const url = 'https://inspirehep.net/api/literature?' + new URLSearchParams({
-        q: query,
-        size: '100',
-        sort: 'mostrecent',
-        fields: 'titles,authors.full_name,authors.affiliations,authors.recid,citation_count,publication_info,arxiv_eprints,dois,earliest_date,first_author'
-      });
-
-      const resp = await fetch(url);
-      if (!resp.ok) throw new Error(`INSPIRE-HEP returned ${resp.status}`);
-      const data = await resp.json();
-
-      for (const hit of (data.hits?.hits || [])) {
-        const m = hit.metadata;
-        const title = (m.titles && m.titles[0]) ? m.titles[0].title : 'Untitled';
-
-        if (papers.find(p => p.id === hit.id)) continue;
-
-        const authors = (m.authors || []).map(a => a.full_name);
-        const pub = (m.publication_info && m.publication_info[0]) || {};
-        const journal = pub.journal_title || '';
-        const year = pub.year || (m.earliest_date ? parseInt(m.earliest_date.substring(0, 4)) : null);
-        const arxiv = (m.arxiv_eprints && m.arxiv_eprints[0]) ? m.arxiv_eprints[0].value : '';
-        const doi = (m.dois && m.dois[0]) ? m.dois[0].value : '';
-
-        // Check if first unit is IMP
-        const isFirstUnitIMP = (m.authors || []).some(a =>
-          a.affiliations && a.affiliations[0] && a.affiliations[0].value === INSTITUTION
-        );
-
-        papers.push({
-          id: hit.id,
-          title: title,
-          authors: authors,
-          journal: journal,
-          volume: pub.journal_volume || '',
-          pages: pub.artid || '',
-          year: year,
-          arxiv_id: arxiv,
-          doi: doi,
-          citation_count: m.citation_count || 0,
-          isFirstUnitIMP: isFirstUnitIMP
-        });
-
-        // Track student co-authors from IMP
-        for (const author of (m.authors || [])) {
-          if (ADVISOR_RECIDS.includes(author.recid)) continue;
-          const hasIMP = (author.affiliations || []).some(
-            a => a.value === INSTITUTION
-          );
-          if (hasIMP) {
-            const name = author.full_name;
-            studentCount[name] = (studentCount[name] || 0) + 1;
-          }
-        }
-      }
-    }
-
-    allPapers = papers;
-    students = buildStudentList(studentCount);
-
-    try {
-      localStorage.setItem('papers_cache', JSON.stringify({
-        papers: allPapers,
-        students: students,
-        timestamp: Date.now()
-      }));
-    } catch(e) {}
-  }
-
-  async function loadFromStatic() {
-    try {
-      const cached = localStorage.getItem('papers_cache');
-      if (cached) {
-        const data = JSON.parse(cached);
-        if (Date.now() - data.timestamp < 24 * 60 * 60 * 1000) {
-          allPapers = data.papers || [];
-          students = data.students || [];
-          displayPapers = allPapers.filter(p => p.isFirstUnitIMP !== false);
-          countPapers = allPapers;
-          return;
-        }
-      }
-    } catch(e) {}
-
-    try {
-      const resp = await fetch('data/papers.json');
-      const data = await resp.json();
-      allPapers = data.papers || [];
-      students = data.students || [];
-      displayPapers = allPapers;
-      countPapers = allPapers;
-    } catch (e) {
-      console.error('Failed to load papers:', e);
-      allPapers = [];
-    }
-  }
-
   function updateStats() {
-    // Update stat cards in About section
-    const papersStat = document.querySelector('.stat-card .counter[data-target]');
-    // Update counters with actual data
     const statCards = document.querySelectorAll('.stat-card');
     if (statCards.length >= 1) {
       const papersEl = statCards[0].querySelector('.stat-number');
