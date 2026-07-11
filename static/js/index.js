@@ -117,53 +117,81 @@
     }
   }
 
-  // Load summer schools section
-  // Per 要求.json: 地点必须为中国, 单位必须为中国科学院的研究所
+  // Load lectures section (merges summer-schools.json + 讲习班.html links)
   async function loadSummerSchools() {
     const container = document.getElementById('summer-schools-grid');
     if (!container) return;
 
+    const lang = (I18N && I18N.getLang) ? I18N.getLang() : 'zh';
+    const CHINA_KEYWORDS = ['中国科学院', 'CAS', 'Chinese Academy', '研究所', '大学', '学院', '北京', '上海', '武汉', '广东', '兰州'];
+    let allSchools = [];
+
+    // 1) Load structured data
     try {
       const resp = await fetch('data/summer-schools.json');
       const schools = await resp.json();
-
-      // Filter: only Chinese academic institutions (CAS institutes + universities in China)
-      const CHINA_KEYWORDS = ['中国科学院', 'CAS', 'Chinese Academy', '研究所', '大学', '学院', '华中师范', '北京', '上海', '武汉', '广东', '兰州'];
-      const filtered = schools.filter(school => {
-        const loc = (school.location_zh || '') + (school.location_en || '');
+      const filtered = schools.filter(s => {
+        const loc = (s.location_zh || '') + (s.location_en || '');
         return CHINA_KEYWORDS.some(kw => loc.includes(kw));
       });
-
-      // Sort by date descending
-      filtered.sort((a, b) => (b.date || '').localeCompare(a.date || ''));
-
-      const lang = (I18N && I18N.getLang) ? I18N.getLang() : 'zh';
-
-      container.innerHTML = filtered.map(school => {
-        const name = lang === 'zh' ? school.name_zh : school.name_en;
-        const location = lang === 'zh' ? school.location_zh : school.location_en;
-        const topic = lang === 'zh' ? school.topic_zh : school.topic_en;
-        const dateStr = school.endDate
-          ? `${school.date} – ${school.endDate}`
-          : school.date;
-
-        return `
-          <div class="school-card ${school.status === 'upcoming' ? 'upcoming' : ''} reveal-child">
-            <div class="school-date">${dateStr}</div>
-            <div class="school-title">${name}</div>
-            <div class="school-topic">📚 ${topic}</div>
-            <div class="school-location"><i class="fas fa-map-marker-alt"></i> ${location}</div>
-            ${school.url ? `<a href="${school.url}" target="_blank" class="school-link">${lang === 'zh' ? '了解更多' : 'Learn More'} <i class="fas fa-external-link-alt"></i></a>` : ''}
-          </div>
-        `;
-      }).join('');
-
-      setTimeout(() => {
-        container.querySelectorAll('.reveal-child').forEach(el => el.classList.add('revealed'));
-      }, 100);
+      allSchools = allSchools.concat(filtered);
     } catch (e) {
       console.error('Failed to load summer schools:', e);
     }
+
+    // 2) Parse extra links from 讲习班.html (using school-card template)
+    try {
+      const resp = await fetch('custom/讲习班.html');
+      const html = await resp.text();
+      const linkRegex = /<A\s+HREF="([^"]+)"[^>]*>([^<]+)<\/A>/gi;
+      let match;
+      while ((match = linkRegex.exec(html)) !== null) {
+        const title = match[2].trim();
+        const url = match[1];
+        const yearMatch = title.match(/(\d{4})/);
+        const year = yearMatch ? yearMatch[1] : '';
+        const date = year ? `${year}-01-01` : '';
+        allSchools.push({
+          name_zh: title,
+          name_en: title,
+          date: date,
+          location_zh: '',
+          location_en: '',
+          topic_zh: '',
+          topic_en: '',
+          url: url,
+          status: 'past'
+        });
+      }
+    } catch (e) {
+      console.warn('Failed to load lectures extra links:', e);
+    }
+
+    // Sort by date descending
+    allSchools.sort((a, b) => (b.date || '').localeCompare(a.date || ''));
+
+    container.innerHTML = allSchools.map(school => {
+      const name = lang === 'zh' ? school.name_zh : school.name_en;
+      const location = (lang === 'zh' ? school.location_zh : school.location_en) || '';
+      const topic = (lang === 'zh' ? school.topic_zh : school.topic_en) || '';
+      const dateStr = school.endDate
+        ? `${school.date} – ${school.endDate}`
+        : (school.date && school.date !== '0000-01-01' ? school.date : '');
+
+      return `
+        <div class="school-card ${school.status === 'upcoming' ? 'upcoming' : ''} reveal-child">
+          ${dateStr ? `<div class="school-date">${dateStr}</div>` : ''}
+          <div class="school-title">${name}</div>
+          ${topic ? `<div class="school-topic">📚 ${topic}</div>` : ''}
+          ${location ? `<div class="school-location"><i class="fas fa-map-marker-alt"></i> ${location}</div>` : ''}
+          ${school.url ? `<a href="${school.url}" target="_blank" class="school-link">${lang === 'zh' ? '了解更多' : 'Learn More'} <i class="fas fa-external-link-alt"></i></a>` : ''}
+        </div>
+      `;
+    }).join('');
+
+    setTimeout(() => {
+      container.querySelectorAll('.reveal-child').forEach(el => el.classList.add('revealed'));
+    }, 100);
   }
 
   // Load students section - waits for Papers module to load data
@@ -404,49 +432,6 @@
     }
   }
 
-  // Load lectures extra content from 讲习班.html
-  async function loadLecturesExtra() {
-    const container = document.getElementById('summer-schools-extra');
-    if (!container) return;
-
-    try {
-      const resp = await fetch('custom/讲习班.html');
-      const html = await resp.text();
-
-      // Parse links from the HTML
-      const linkRegex = /<A\s+HREF="([^"]+)"[^>]*>([^<]+)<\/A>/gi;
-      const links = [];
-      let match;
-      while ((match = linkRegex.exec(html)) !== null) {
-        // Extract year for sorting
-        const title = match[2].trim();
-        const yearMatch = title.match(/(\d{4})/);
-        const year = yearMatch ? parseInt(yearMatch[1], 10) : 0;
-        links.push({ url: match[1], title: title, year: year });
-      }
-
-      if (links.length === 0) return;
-
-      // Sort by year descending
-      links.sort((a, b) => b.year - a.year);
-
-      const lang = (I18N && I18N.getLang) ? I18N.getLang() : 'zh';
-
-      container.innerHTML = `
-        <h4>${lang === 'zh' ? '更多格点QCD相关会议与讲习班' : 'More Lattice QCD Conferences & Schools'}</h4>
-        <ul class="extra-links-list">
-          ${links.map(l => `<li><a href="${l.url}" target="_blank">🔗 ${l.title}</a></li>`).join('')}
-        </ul>
-      `;
-
-      setTimeout(() => {
-        container.querySelectorAll('.reveal-child, .reveal-up').forEach(el => el.classList.add('revealed'));
-      }, 100);
-    } catch (e) {
-      console.warn('Failed to load summer schools extra content:', e);
-    }
-  }
-
   // Work reports slideshow
   function initSlideshow() {
     const wrapper = document.getElementById('slides-wrapper');
@@ -546,7 +531,6 @@
   document.addEventListener('langChanged', () => {
     loadConferences();
     loadSummerSchools();
-    loadLecturesExtra();
     loadStudents();
   });
 
@@ -561,7 +545,6 @@
     initClickableImages();
     loadConferences();
     loadSummerSchools();
-    loadLecturesExtra();
     loadStudents();
   }
 
