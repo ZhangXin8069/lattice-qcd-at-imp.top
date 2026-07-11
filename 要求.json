@@ -5,17 +5,27 @@
     "导师": [
         "孙鹏[https://people.ucas.ac.cn/~sunpengimp][https://inspirehep.net/authors/1659207]",
         "刘柳明[https://people.ucas.ac.cn/~liuliuming][https://inspirehep.net/authors/1259106]",
+        "导师介绍参考custom/孙鹏介绍.md和custom/刘柳明介绍.md",
+        "邮箱明文显示（pengsun@impcas.ac.cn, liuming@impcas.ac.cn）",
         "主页动效作为背景"
     ],
     "论文": [
-        "custom/inspirehep.net/authors",
-        "如果custom/inspirehep.net/authors/.*/INSPIRE-CiteAll.html读取失败,则访问inspirehep.net",
-        "第一单位为Lanzhou, Inst. Modern Phys.",
+        "数据来源：根目录数据.csv中'论文详情'行（唯一数据源）",
+        "格式：论文详情,ID,标题,年份,arXiv,DOI,期刊,isFirstUnitIMP",
+        "第一单位为Lanzhou, Inst. Modern Phys.（展示列表仅显示isFirstUnitIMP=true的论文）",
+        "发表论文量：全部论文数（不限第一单位）",
+        "累计引用量：全部论文引用之和（不限第一单位）",
+        "论文数据通过/update-website papers skill手动更新",
         "主页动效作为背景"
     ],
     "发表论文": "量为导师所有论文量之和（不限第一单位，限第一作者与通讯作者）",
     "累计引用": "量为导师累计引用量之和（不限第一单位，限第一作者与通讯作者）",
     "研究方向": [
+        "粲重子散射",
+        "部分子分布函数",
+        "核子自旋结构",
+        "格点QCD算法",
+        "核效应",
         "主页动效作为背景"
     ],
     "研究生": [
@@ -23,23 +33,37 @@
         "主页动效作为背景"
     ],
     "会议": [
-        "网络收集",
+        "数据来源：data/conferences.json",
         "主页动效作为背景",
         "地点必须在中国",
-        "单位必须为中国科学院的研究所"
+        "单位必须为中国科学院的研究所",
+        "仅包含学术研讨会/年会，不包含暑期学校/训练营"
     ],
     "讲习班": [
-        "custom/讲习班.html作为内容,按照日期排列",
+        "数据来源：data/summer-schools.json + custom/讲习班.html链接合并",
+        "统一使用school-card模板展示",
+        "排除标题含'研讨会/年会/Symposium/Annual Meeting/Lattice 20'的条目（归类到会议）",
+        "排除华中师范大学举办的讲习班",
         "主页动效作为背景",
         "地点必须为中国",
         "单位必须为中国科学院的研究所"
     ],
     "配图": "尽可能丰富,如果获取不到图片则留下带有相应描述的占位符",
-    "动态效果": "尽可能多,可参考/static",
+    "动态效果": [
+        "Hero: Canvas粒子动画（深色=星场，浅色=樱花雨斜向下飘落）",
+        "仅活跃主题运行动画循环（MutationObserver监听切换）",
+        "滚动触发reveal动画",
+        "计数器动画（easeOutCubic）",
+        "卡片hover效果（深色模式发光）",
+        "不使用will-change在文字元素上（避免模糊）"
+    ],
     "背景音乐": [
-        "/*.mp3",
-        "自动播放",
-        "每次刷新网页时随机选定初始音乐"
+        "custom/菊次郎的夏天(轻灵版).mp3",
+        "custom/菊次郎的夏天(经典版).mp3",
+        "custom/菊次郎的夏天(治愈版).mp3",
+        "自动播放（延迟500ms + 用户首次交互重试）",
+        "每次刷新网页时随机选定初始音乐",
+        "默认洗牌模式"
     ],
     "挂载平台": "Github Page",
     "总体主题": "参考/static",
@@ -49,9 +73,9 @@
         "浅色模式参考https://web-animations.github.io/web-animations-demos/#starfield/starfield-indiv.html,改为白底樱花雨,注意斜向下飘落",
         "保持两个模式风格近似"
     ],
-    "主页背景":"主页动效作为背景",
+    "主页背景": "主页动效作为背景",
     "关于我们": [
-        "插图为lattice-qcd-at-imp.top/custom/李政道坐像.png与custom/课题组合照20260706.png组合",
+        "插图为custom/李政道坐像.png与custom/课题组合照20260706.png组合",
         "custom/李政道先生与芯片上的格点量子色动力学.pdf展示",
         "自动幻灯片展示(横排滚动):",
         "custom/孙鹏讲习图.png",
@@ -71,10 +95,13 @@
         "zhangxin8069@qq.com"
     ],
     "额外要求": [
-        "同时给出全流程skill",
-        "如果有参考链接一定要附上超链接",
         "所有呈现的数据汇总到根目录下的'数据.csv'文件以提供修正",
-        "增加用户全局搜索功能,要求能够正常使用",
-        "如果没有特别说明,背景均为不透明的主页动效且文本也不透明"
+        "如果有参考链接一定要附上超链接",
+        "增加用户全局搜索功能(Ctrl+K或/快捷键)",
+        "背景规则：普通section=实色不透明，hero=canvas+渐变遮罩，help=QCD涨落图.gif+0.85遮罩",
+        "section-bg-overlay仅help区域使用（0.85），其他区域透明（z-index:-1）",
+        "论文数据唯一来源为数据.csv",
+        "全流程build skill：/build-website",
+        "内容更新skill：/update-website"
     ]
 }
