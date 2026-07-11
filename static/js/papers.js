@@ -15,18 +15,6 @@ const Papers = (function() {
   let students = [];
   let displayCount = 10;
 
-  // Student list per requirements (要求.json)
-  const STUDENT_NAMES = [
-    'Kuan Zhang',
-    'Hanyang Xing',
-    'Chen Chen',
-    'Yiqi Geng',
-    'Chunhua Zeng',
-    'Zhi-Cheng Hu',
-    'Hongxin Dong',
-    'Zhicheng Yan'
-  ];
-
   async function init() {
     await loadPapers();
     renderPapers();
@@ -82,7 +70,14 @@ const Papers = (function() {
       allPapers.sort((a, b) => (b.year || 0) - (a.year || 0));
       displayPapers = allPapers.filter(p => p.isFirstUnitIMP);
       countPapers = allPapers;
-      students = STUDENT_NAMES.map(name => ({ name, papers: 0 }));
+
+      // Parse student data from CSV
+      students = [];
+      const stuRe = /^"研究生",\s*"学生\d+",\s*"([^"]+)",\s*"[^"]*",\s*"(\d+)篇论文"/;
+      for (const line of lines) {
+        const sm = line.match(stuRe);
+        if (sm) students.push({ name: sm[1], papers: parseInt(sm[2], 10) });
+      }
 
       renderPapers();
       updateStats();
