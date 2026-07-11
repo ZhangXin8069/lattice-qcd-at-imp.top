@@ -112,7 +112,7 @@ body {
   z-index: 1000;
   display: flex;
   align-items: center;
-  background: rgba(255, 255, 255, 0.85);
+  background: rgba(255, 255, 255, 0.35);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
   border-bottom: 1px solid transparent;
@@ -121,7 +121,7 @@ body {
 }
 
 [data-theme="dark"] #main-navbar {
-  background: rgba(15, 23, 42, 0.85);
+  background: rgba(15, 23, 42, 0.35);
 }
 
 #main-navbar.scrolled {
@@ -1366,13 +1366,13 @@ body {
   background: transparent;
 }
 
-/* Help section: bg is NOT 主页动效 → opacity 0.85 per requirement */
+/* Help section: bg is NOT 主页动效 → opacity 0.35 */
 [data-theme="light"] #help .section-bg-overlay {
-  background: rgba(255, 255, 255, 0.85);
+  background: rgba(255, 255, 255, 0.35);
 }
 
 [data-theme="dark"] #help .section-bg-overlay {
-  background: rgba(15, 23, 42, 0.85);
+  background: rgba(15, 23, 42, 0.35);
 }
 
 .section-bg-img {

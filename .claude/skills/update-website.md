@@ -121,7 +121,7 @@ lattice-qcd-at-imp.top/
 3. 主页背景：主页动效作为背景（全局canvas粒子动画覆盖所有section）
 4. 背景透明度：
    - 主页动效作为背景 → 不透明（section background = var(--background-primary), opacity=1.0）
-   - 非主页动效（help section 用 QCD涨落图.gif）→ 0.85 opacity
+   - 非主页动效（help section 用 QCD涨落图.gif）→ 0.35 opacity
 5. 背景音乐：MP3自动播放，每次刷新随机选定初始音乐，随机洗牌模式
 
 ### `update-website summary`

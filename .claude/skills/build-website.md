@@ -152,14 +152,14 @@ lattice-qcd-at-imp.top/
 
 | 区域 | CSS选择器 | 关键属性 |
 |---|---|---|
-| Navbar | `#main-navbar` | `position:fixed, backdrop-filter:blur(12px), bg:rgba(255,255,255,0.85)` |
+| Navbar | `#main-navbar` | `position:fixed, backdrop-filter:blur(12px), bg:rgba(255,255,255,0.35)` |
 | Hero | `#hero` | `height:100vh, background:transparent, z-index:1` |
 | Hero Canvas | `.hero-canvas` | `position:fixed, z-index:0, pointer-events:none` |
 | Hero Overlay | `.hero-overlay` | `radial-gradient(ellipse, transparent→var(--background-primary) 70%), z-index:2` |
 | Section | `.section` | `padding:5rem 1.5rem, bg:var(--background-primary), z-index:1` |
 | Section Alt | `.section-alt` | `bg:var(--background-secondary)` |
 | Section Overlay | `.section-bg-overlay` | `position:absolute, z-index:-1, bg:transparent` |
-| Help Overlay | `#help .section-bg-overlay` | `bg:rgba(.,0.85)` — 非主页动效专用 |
+| Help Overlay | `#help .section-bg-overlay` | `bg:rgba(.,0.35)` — 非主页动效专用 |
 | Cards | `.advisor-card, .research-card, .paper-card, .software-card, .student-card, .school-card` | 白底、圆角、阴影、hover提升效果 |
 | Dark Card Glow | `[data-theme="dark"] .*-card:hover` | `box-shadow:0 0 20px rgba(96,165,250,0.15)` |
 | Reveal动画 | `.reveal, .reveal-left, .reveal-right, .reveal-up, .reveal-child` | `opacity:0, transform, transition` → `.revealed`激活 |
@@ -488,7 +488,7 @@ git push -u origin main
 | Hero | Canvas 星空/樱花 | 渐变遮罩 | `.hero-overlay` radial-gradient |
 | 普通 Section | 主页动效（Canvas） | 实色不透明 | `.section {bg:var(--background-primary)}` |
 | Section Alt | 主页动效 | 实色不透明 | `.section-alt {bg:var(--background-secondary)}` |
-| Help | QCD涨落图.gif | 0.85遮罩 | `#help .section-bg-overlay {rgba(.,0.85)}` |
+| Help | QCD涨落图.gif | 0.35遮罩 | `#help .section-bg-overlay {rgba(.,0.85)}` |
 | Section Overlay | — | 透明 | `z-index:-1, bg:transparent` |
 
 ### 8.2 数据过滤规则
