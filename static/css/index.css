@@ -2262,12 +2262,6 @@ body {
   transition: transform 0.1s ease;
 }
 
-/* Hero canvas GPU acceleration */
-.hero-canvas {
-  will-change: transform;
-  transform: translateZ(0);
-}
-
 /* Parallax */
 .parallax {
   will-change: transform;
