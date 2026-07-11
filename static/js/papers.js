@@ -6,36 +6,32 @@ const Papers = (function() {
   let allPapers = [];
   let students = [];
 
-  async function init() {
-    await loadPapers();
-    setupSearch();
+  function t(key) {
+    try { return (typeof I18N !== 'undefined' && I18N.t) ? I18N.t(key) : key; }
+    catch(e) { return key; }
   }
 
-  async function loadPapers() {
+  function init() {
+    loadPapers();
+  }
+
+  function loadPapers() {
     const container = document.getElementById('publications-list');
-    if (container) {
-      container.innerHTML = '<p style="text-align:center;padding:2rem;color:var(--text-light);"><i class="fas fa-spinner fa-spin"></i> Loading papers...</p>';
-    }
+    if (container) container.innerHTML = '<p style="text-align:center;padding:2rem;"><i class="fas fa-spinner fa-spin"></i> Loading...</p>';
 
-    try {
-      const resp = await fetch('data/papers.json');
-      if (!resp.ok) throw new Error('papers.json not found');
-      const data = await resp.json();
-
-      allPapers = (data.papers || []).sort((a, b) => (b.year || 0) - (a.year || 0));
-      students = data.students || [];
-
-      if (allPapers.length === 0) {
-        if (container) container.innerHTML = '<p style="text-align:center;padding:2rem;color:var(--text-light);">论文数据不可用</p>';
-        return;
-      }
-
-      renderPapers();
-      updateStats();
-    } catch (e) {
-      console.error('Failed to load papers:', e);
-      if (container) container.innerHTML = '<p style="text-align:center;padding:2rem;color:var(--text-light);">论文数据加载失败</p>';
-    }
+    fetch('data/papers.json')
+      .then(r => { if (!r.ok) throw new Error('HTTP ' + r.status); return r.json(); })
+      .then(data => {
+        allPapers = (data.papers || []).sort((a, b) => (b.year || 0) - (a.year || 0));
+        students = data.students || [];
+        if (!allPapers.length) { if (container) container.innerHTML = '<p style="text-align:center;padding:2rem;">无数据</p>'; return; }
+        renderPapers();
+        updateStats();
+      })
+      .catch(e => {
+        console.error('papers.js:', e);
+        if (container) container.innerHTML = '<p style="text-align:center;padding:2rem;">加载失败: ' + e.message + '</p>';
+      });
   }
 
   function updateStats() {
@@ -78,7 +74,7 @@ const Papers = (function() {
         ${p.journal?`<p class="paper-journal">${esc(p.journal)}</p>`:''}
         <div class="paper-meta">
           <div class="paper-links">${links.join(' ')}</div>
-          <div class="paper-citations"><span class="citation-badge">${p.citation_count||0}</span> ${I18N.t('publications.cited')}</div>
+          <div class="paper-citations"><span class="citation-badge">${p.citation_count||0}</span> ${t('publications.cited')}</div>
         </div>
       </div>`;
     }).join('');
@@ -117,7 +113,7 @@ const Papers = (function() {
             ${p.journal?`<p class="paper-journal">${esc(p.journal)}</p>`:''}
             <div class="paper-meta">
               <div class="paper-links">${links.join(' ')}</div>
-              <div class="paper-citations"><span class="citation-badge">${p.citation_count||0}</span> ${I18N.t('publications.cited')}</div>
+              <div class="paper-citations"><span class="citation-badge">${p.citation_count||0}</span> ${t('publications.cited')}</div>
             </div>
           </div>`;
         }).join('');
@@ -126,12 +122,7 @@ const Papers = (function() {
   }
 
   document.addEventListener('langChanged', () => renderPapers());
-
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', init);
-  } else {
-    init();
-  }
+  init();
 
   return {
     init,
