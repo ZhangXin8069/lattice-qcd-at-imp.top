@@ -58,7 +58,6 @@
 /* Theme transition */
 body {
   transition: background-color 0.4s ease, color 0.4s ease;
-  background: transparent;
 }
 
 /* Bulma dark mode overrides */
@@ -111,26 +110,26 @@ body {
   left: 0;
   right: 0;
   z-index: 1000;
-  background: rgba(255, 255, 255, 0.7);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
+  background: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
   border-bottom: 1px solid transparent;
   transition: var(--transition);
   height: var(--navbar-height);
 }
 
 [data-theme="dark"] #main-navbar {
-  background: rgba(15, 23, 42, 0.7);
+  background: rgba(15, 23, 42, 0.85);
 }
 
 #main-navbar.scrolled {
-  background: rgba(255, 255, 255, 0.92);
+  background: rgba(255, 255, 255, 0.95);
   border-bottom-color: var(--border-color);
   box-shadow: var(--shadow-md);
 }
 
 [data-theme="dark"] #main-navbar.scrolled {
-  background: rgba(15, 23, 42, 0.92);
+  background: rgba(15, 23, 42, 0.95);
   border-bottom-color: var(--border-color);
 }
 
@@ -300,17 +299,6 @@ body {
   }
 }
 
-/* ----- Global Background Canvas ----- */
-.global-bg-canvas {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100vw;
-  height: 100vh;
-  z-index: 0;
-  pointer-events: none;
-}
-
 /* ----- Hero Section ----- */
 #hero {
   position: relative;
@@ -324,10 +312,23 @@ body {
   z-index: 1;
 }
 
-/* Legacy hero canvases — hidden, global canvas takes over */
 .hero-canvas {
-  display: none !important;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: 0;
+  pointer-events: none;
 }
+
+/* Starfield (dark) visible, Sakura (light) hidden by default */
+#starfield-canvas { display: block; }
+#sakura-canvas { display: none; }
+[data-theme="dark"] #starfield-canvas { display: block; }
+[data-theme="dark"] #sakura-canvas { display: none; }
+[data-theme="light"] #starfield-canvas { display: none; }
+[data-theme="light"] #sakura-canvas { display: block; }
 
 .hero-overlay {
   position: absolute;
@@ -335,12 +336,8 @@ body {
   left: 0;
   width: 100%;
   height: 100%;
-  background: radial-gradient(ellipse at center, transparent 0%, rgba(255, 255, 255, 0.6) 55%, var(--background-primary) 85%);
+  background: radial-gradient(ellipse at center, transparent 0%, var(--background-primary) 70%);
   z-index: 2;
-}
-
-[data-theme="dark"] .hero-overlay {
-  background: radial-gradient(ellipse at center, transparent 0%, rgba(15, 23, 42, 0.6) 55%, var(--background-primary) 85%);
 }
 
 .hero-content {
@@ -432,28 +429,15 @@ body {
   #hero { min-height: 500px; }
 }
 
-/* ----- Section Common -----
- * Per 要求.json:
- *   - 主页动效作为背景 → opaque (不透明) section background and text
- *   - 非主页动效 (help section) → 0.85 opacity
- */
+/* ----- Section Common ----- */
 .section {
   padding: 5rem 1.5rem;
   position: relative;
   z-index: 1;
-  background: rgba(255, 255, 255, 0.88);
-}
-
-[data-theme="dark"] .section {
-  background: rgba(15, 23, 42, 0.88);
 }
 
 .section-alt {
-  background: rgba(248, 250, 252, 0.88);
-}
-
-[data-theme="dark"] .section-alt {
-  background: rgba(30, 41, 59, 0.88);
+  background: var(--background-secondary);
 }
 
 .section-header {
@@ -1359,19 +1343,17 @@ body {
   pointer-events: none;
 }
 
-/* Canvas-backed sections: transparent overlay (canvas shows through, text is opaque via section background) */
-.section-bg-overlay {
-  background: transparent;
+/* Default overlay: for sections with 主页动效 (canvas) background — lower opacity so animation shows through */
+[data-theme="light"] .section-bg-overlay {
+  background: rgba(255, 255, 255, 0.35);
 }
 
-/* Help section: bg is NOT 主页动效 (uses QCD涨落图.gif) → opacity 0.85 per requirement */
-#help.section-bg-img {
-  background-size: cover;
-  background-position: center;
-  background-attachment: fixed;
+[data-theme="dark"] .section-bg-overlay {
+  background: rgba(15, 23, 42, 0.35);
 }
 
-#help .section-bg-overlay {
+/* Help section: bg is NOT 主页动效 → opacity 0.85 per requirement */
+[data-theme="light"] #help .section-bg-overlay {
   background: rgba(255, 255, 255, 0.85);
 }
 
@@ -1832,60 +1814,12 @@ body {
   border: none;
 }
 
-/* ----- Enhanced Card Glow (Both Modes) ----- */
-.advisor-card,
-.research-card,
-.paper-card,
-.software-card,
-.student-card,
-.school-card {
-  --card-glow: 0;
-  transition: var(--transition), box-shadow 0.3s ease;
-}
-
-.advisor-card:hover,
-.research-card:hover,
-.paper-card:hover,
-.software-card:hover,
-.student-card:hover,
-.school-card:hover {
-  box-shadow: 0 0 25px rgba(37, 99, 235, 0.12), var(--shadow-xl);
-  transform: translateY(-4px);
-}
-
+/* ----- Enhanced Card Glow (Dark Mode) ----- */
 [data-theme="dark"] .advisor-card:hover,
 [data-theme="dark"] .research-card:hover,
 [data-theme="dark"] .paper-card:hover,
-[data-theme="dark"] .software-card:hover,
-[data-theme="dark"] .student-card:hover,
-[data-theme="dark"] .school-card:hover {
-  box-shadow: 0 0 30px rgba(96, 165, 250, 0.2), var(--shadow-xl);
-}
-
-/* Card subtle glow pulse (optional) */
-.advisor-card::after,
-.research-card::after,
-.software-card::after {
-  content: '';
-  position: absolute;
-  inset: -1px;
-  border-radius: inherit;
-  z-index: -1;
-  opacity: 0;
-  transition: opacity 0.4s ease;
-  background: var(--gradient-primary);
-}
-
-.advisor-card:hover::after,
-.research-card:hover::after,
-.software-card:hover::after {
-  opacity: 0.08;
-}
-
-[data-theme="dark"] .advisor-card:hover::after,
-[data-theme="dark"] .research-card:hover::after,
-[data-theme="dark"] .software-card:hover::after {
-  opacity: 0.12;
+[data-theme="dark"] .software-card:hover {
+  box-shadow: 0 0 20px rgba(96, 165, 250, 0.15), var(--shadow-xl);
 }
 
 /* ----- Clickable Image ----- */
