@@ -1346,15 +1346,8 @@ body {
   height: 100%;
   z-index: -1;
   pointer-events: none;
-}
-
-/* Default overlay: sections without canvas background → 0.85 opacity per requirement */
-[data-theme="light"] .section-bg-overlay {
-  background: rgba(255, 255, 255, 0.85);
-}
-
-[data-theme="dark"] .section-bg-overlay {
-  background: rgba(15, 23, 42, 0.85);
+  /* Default: transparent — regular sections use solid .section background */
+  background: transparent;
 }
 
 /* Help section: bg is NOT 主页动效 → opacity 0.85 per requirement */
