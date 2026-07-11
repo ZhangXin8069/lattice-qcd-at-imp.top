@@ -16,8 +16,6 @@ const Papers = (function() {
   let currentFilter = 'all';
   let currentYear = 'all';
   let displayCount = 10;
-  let isLoading = false;
-
   // INSPIRE-HEP identifiers
   const ADVISOR_BAI = ['Peng.Sun.1', 'Liuming.Liu.1'];
   const ADVISOR_RECIDS = [1659207, 1259106];
@@ -43,23 +41,21 @@ const Papers = (function() {
     updateStats();
   }
 
-  let isOffline = true;  // default to offline until API succeeds
-
   async function loadPapers() {
     const container = document.getElementById('publications-list');
     if (container) {
       container.innerHTML = '<p style="text-align:center;padding:2rem;color:var(--text-light);"><i class="fas fa-spinner fa-spin"></i> Loading papers...</p>';
     }
 
-    // 1) Always load offline HTML first (primary data source)
+    // Load offline HTML as the ONLY data source
     const offlineLoaded = await loadFromOfflineData();
 
     if (!offlineLoaded) {
-      // Offline files missing — try localStorage cache
-      const cacheLoaded = loadFromCache();
-      if (!cacheLoaded) {
-        await loadFromStatic();
-      }
+      allPapers = [];
+      displayPapers = [];
+      countPapers = [];
+      if (container) container.innerHTML = '<p style="text-align:center;padding:2rem;color:var(--text-light);">论文离线数据不可用，请运行 /update-website papers 更新数据。</p>';
+      return;
     }
 
     // Sort by year descending
@@ -69,17 +65,9 @@ const Papers = (function() {
     displayPapers = allPapers.filter(p => p.isFirstUnitIMP);
     countPapers = allPapers;
 
-    updateOfflineBadge();
     renderFilters();
     renderPapers();
     updateStats();
-  }
-
-  function updateOfflineBadge() {
-    const badge = document.getElementById('pub-offline-badge');
-    if (badge) {
-      badge.style.display = isOffline ? 'block' : 'none';
-    }
   }
 
   // ===== Primary data source: offline INSPIRE-CiteAll.html files =====
@@ -231,46 +219,12 @@ const Papers = (function() {
       if (papers.length > 0) {
         allPapers = papers;
         students = buildStudentList(studentCount);
-        isOffline = true;
         return true;
       }
       return false;
     } catch (e) {
       console.warn('Offline data parsing failed:', e);
       return false;
-    }
-  }
-
-  function loadFromCache() {
-    try {
-      const cached = localStorage.getItem('papers_cache');
-      if (cached) {
-        const data = JSON.parse(cached);
-        if (Date.now() - data.timestamp < 24 * 60 * 60 * 1000) {
-          allPapers = data.papers || [];
-          students = data.students || [];
-          displayPapers = allPapers.filter(p => p.isFirstUnitIMP !== false);
-          countPapers = allPapers;
-          isOffline = false;
-          return true;
-        }
-      }
-    } catch(e) {}
-    return false;
-  }
-
-  async function loadFromStatic() {
-    try {
-      const resp = await fetch('data/papers.json');
-      const data = await resp.json();
-      allPapers = data.papers || [];
-      students = data.students || [];
-      displayPapers = allPapers;
-      countPapers = allPapers;
-      isOffline = true;
-    } catch (e) {
-      console.error('Failed to load papers:', e);
-      allPapers = [];
     }
   }
 
