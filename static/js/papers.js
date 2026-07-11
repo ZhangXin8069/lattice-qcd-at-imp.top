@@ -13,7 +13,6 @@ const Papers = (function() {
   let displayPapers = [];  // filtered for display (first-unit IMP)
   let countPapers = [];    // papers for counting
   let students = [];
-  let currentFilter = 'all';
   let currentYear = 'all';
   let displayCount = 10;
 
@@ -119,11 +118,6 @@ const Papers = (function() {
     const years = [...new Set(displayPapers.map(p => p.year).filter(Boolean))].sort((a, b) => b - a);
 
     filterContainer.innerHTML = `
-      <div class="pub-filter-buttons">
-        <button class="pub-filter-btn is-active" data-filter="all">${I18N.t('publications.filter.all')}</button>
-        <button class="pub-filter-btn" data-filter="sun">Peng Sun</button>
-        <button class="pub-filter-btn" data-filter="liu">Liuming Liu</button>
-      </div>
       <div class="pub-year-filter">
         <select id="pub-year-select" aria-label="${I18N.t('publications.filter.year')}">
           <option value="all">${I18N.t('publications.filter.year')}</option>
@@ -131,16 +125,6 @@ const Papers = (function() {
         </select>
       </div>
     `;
-
-    filterContainer.querySelectorAll('.pub-filter-btn').forEach(btn => {
-      btn.addEventListener('click', () => {
-        filterContainer.querySelectorAll('.pub-filter-btn').forEach(b => b.classList.remove('is-active'));
-        btn.classList.add('is-active');
-        currentFilter = btn.getAttribute('data-filter');
-        displayCount = 10;
-        renderPapers();
-      });
-    });
 
     const yearSelect = document.getElementById('pub-year-select');
     if (yearSelect) {
@@ -153,17 +137,9 @@ const Papers = (function() {
   }
 
   function getFilteredPapers() {
-    return displayPapers.filter(p => {
-      if (currentFilter === 'sun') {
-        // Papers already include both advisors; show all in display
-        return true;
-      }
-      if (currentFilter === 'liu') {
-        return true;
-      }
-      if (currentYear !== 'all' && p.year !== parseInt(currentYear, 10)) return false;
-      return true;
-    });
+    if (currentYear === 'all') return displayPapers;
+    const year = parseInt(currentYear, 10);
+    return displayPapers.filter(p => p.year === year);
   }
 
   function renderPapers() {

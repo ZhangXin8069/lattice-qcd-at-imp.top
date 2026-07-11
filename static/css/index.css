@@ -110,6 +110,8 @@ body {
   left: 0;
   right: 0;
   z-index: 1000;
+  display: flex;
+  align-items: center;
   background: rgba(255, 255, 255, 0.85);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
@@ -136,8 +138,8 @@ body {
 .navbar-brand {
   display: flex;
   align-items: center;
-  height: var(--navbar-height);
   padding-left: 1.5rem;
+  flex-shrink: 0;
 }
 
 .navbar-logo {
@@ -672,21 +674,21 @@ body {
   font-size: 1.5rem;
   font-weight: 700;
   color: var(--text-primary);
-  margin-bottom: 0.25rem;
+  margin-bottom: 0.5rem;
 }
 
 .advisor-role {
   font-size: 0.95rem;
   color: var(--primary-color);
   font-weight: 600;
-  margin-bottom: 1rem;
+  margin-bottom: 1.25rem;
 }
 
 .advisor-bio {
   font-size: 0.95rem;
   color: var(--text-secondary);
   line-height: 1.7;
-  margin-bottom: 1rem;
+  margin-bottom: 1.25rem;
   text-align: left;
 }
 
@@ -695,7 +697,7 @@ body {
   flex-wrap: wrap;
   gap: 0.4rem;
   justify-content: center;
-  margin-bottom: 1.2rem;
+  margin-bottom: 1.4rem;
 }
 
 .advisor-tag {
@@ -716,7 +718,7 @@ body {
 .advisor-email-row {
   display: flex;
   justify-content: center;
-  margin-top: 0.25rem;
+  margin-top: 0.5rem;
 }
 
 .advisor-link {
