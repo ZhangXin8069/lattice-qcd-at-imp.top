@@ -21,7 +21,7 @@ lattice-qcd-at-imp.top/
 │   └── translations.json   # 中英文翻译字典
 ├── custom/
 │   ├── inspirehep.net/authors/  # INSPIRE-HEP离线缓存
-│   ├── 夏令营.html              # 讲习班参考链接
+│   ├── 讲习班.html              # 讲习班参考链接
 │   ├── *.mp3                    # 背景音乐
 │   ├── *.png/*.gif              # 图片资源
 │   └── *.pdf                    # PDF文档
@@ -72,7 +72,7 @@ lattice-qcd-at-imp.top/
 **添加讲习班**（来源于局域网收集，按日期排列）
 1. 提示输入：中英文名称、日期、地点（中国）、主题、链接
 2. 添加到 `data/summer-schools.json`
-3. 更新 `custom/夏令营.html` 补充链接
+3. 更新 `custom/讲习班.html` 补充链接
 4. 更新 `数据.csv`
 5. 更新 `data_summary.json`
 
@@ -163,6 +163,6 @@ papers → conferences → summer-schools → students → translations → summ
 - 会议地点必须在中国，单位必须为中国科学院的研究所（index.js中CHINA_KEYWORDS过滤）
 - 讲习班地点必须在中国，单位必须为中国科学院的研究所（index.js中CHINA_KEYWORDS过滤）
 - 讲习班按日期降序排列
-- custom/夏令营.html 作为讲习班附加内容，解析其中链接按年份排序
+- custom/讲习班.html 作为讲习班附加内容，解析其中链接按年份排序
 - 论文展示列表仅显示第一单位为 "Lanzhou, Inst. Modern Phys." 的论文
 - 论文计数和引用计数规则：不限第一单位，限第一作者与通讯作者

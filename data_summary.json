@@ -60,7 +60,7 @@
     {"name": "Zhicheng Yan", "name_zh": "Yan, Zhicheng"}
   ],
   "conferences": "data/conferences.json — 仅限中国境内、中国科学院研究所主办的会议",
-  "lectures": "data/summer-schools.json — 来源于 custom/夏令营.html，按日期排列",
+  "lectures": "data/summer-schools.json — 来源于 custom/讲习班.html，按日期排列",
   "software_work": {
     "pyqcu": {
       "name": "PyQCU",

@@ -404,13 +404,13 @@
     }
   }
 
-  // Load lectures extra content from 夏令营.html
+  // Load lectures extra content from 讲习班.html
   async function loadLecturesExtra() {
     const container = document.getElementById('summer-schools-extra');
     if (!container) return;
 
     try {
-      const resp = await fetch('custom/夏令营.html');
+      const resp = await fetch('custom/讲习班.html');
       const html = await resp.text();
 
       // Parse links from the HTML
