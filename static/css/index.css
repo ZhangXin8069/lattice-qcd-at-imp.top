@@ -434,6 +434,11 @@ body {
   padding: 5rem 1.5rem;
   position: relative;
   z-index: 1;
+  background-color: var(--background-primary);
+}
+
+[data-theme="dark"] .section {
+  background-color: var(--background-primary);
 }
 
 .section-alt {
@@ -1343,13 +1348,13 @@ body {
   pointer-events: none;
 }
 
-/* Default overlay: for sections with 主页动效 (canvas) background — lower opacity so animation shows through */
+/* Default overlay: sections without canvas background → 0.85 opacity per requirement */
 [data-theme="light"] .section-bg-overlay {
-  background: rgba(255, 255, 255, 0.35);
+  background: rgba(255, 255, 255, 0.85);
 }
 
 [data-theme="dark"] .section-bg-overlay {
-  background: rgba(15, 23, 42, 0.35);
+  background: rgba(15, 23, 42, 0.85);
 }
 
 /* Help section: bg is NOT 主页动效 → opacity 0.85 per requirement */
@@ -2257,6 +2262,12 @@ body {
   transition: transform 0.1s ease;
 }
 
+/* Hero canvas GPU acceleration */
+.hero-canvas {
+  will-change: transform;
+  transform: translateZ(0);
+}
+
 /* Parallax */
 .parallax {
   will-change: transform;
@@ -2270,6 +2281,12 @@ body {
 @keyframes fadeInUp {
   from { opacity: 0; transform: translateY(30px); }
   to { opacity: 1; transform: translateY(0); }
+}
+
+/* GPU-accelerated transitions */
+.reveal, .reveal-left, .reveal-right, .reveal-up, .reveal-child,
+.advisor-card, .research-card, .paper-card, .software-card, .student-card, .school-card {
+  will-change: transform, opacity;
 }
 
 /* ----- Misc ----- */

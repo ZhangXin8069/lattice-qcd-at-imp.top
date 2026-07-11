@@ -46,7 +46,7 @@ const Animations = (function() {
 
       function drawStarfield(timestamp) {
         if (document.documentElement.getAttribute('data-theme') !== 'dark') {
-          starfieldId = requestAnimationFrame(drawStarfield);
+          starfieldId = null;
           return;
         }
 
@@ -187,7 +187,7 @@ const Animations = (function() {
 
       function drawSakura(timestamp) {
         if (document.documentElement.getAttribute('data-theme') !== 'light') {
-          sakuraId = requestAnimationFrame(drawSakura);
+          sakuraId = null;
           return;
         }
 
@@ -234,6 +234,17 @@ const Animations = (function() {
 
       sakuraId = requestAnimationFrame(drawSakura);
     }
+
+    // Theme change: restart the correct animation loop when switching themes
+    new MutationObserver(() => {
+      const theme = document.documentElement.getAttribute('data-theme');
+      if (starfieldCanvas) {
+        if (theme === 'dark' && !starfieldId) starfieldId = requestAnimationFrame(drawStarfield);
+      }
+      if (sakuraCanvas) {
+        if (theme === 'light' && !sakuraId) sakuraId = requestAnimationFrame(drawSakura);
+      }
+    }).observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] });
   }
 
   // ===== Scroll-Triggered Reveal Animations =====
@@ -267,7 +278,7 @@ const Animations = (function() {
 
   // ===== Counter Animations =====
   function initCounters() {
-    const counters = document.querySelectorAll('.counter[data-target]');
+    const counters = document.querySelectorAll('.stat-number[data-target], .counter[data-target]');
 
     if (counters.length === 0) return;
 

@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-07-06T00:00:00Z",
+  "last_updated": "2026-07-11T00:00:00Z",
   "papers": [
     {
       "id": "3168031",
@@ -8,7 +8,8 @@
       "journal": "arXiv preprint",
       "year": 2025,
       "arxiv_id": "2510.26425",
-      "citation_count": 1
+      "citation_count": 1,
+      "isFirstUnitIMP": true
     },
     {
       "id": "2972879",
@@ -17,7 +18,8 @@
       "journal": "arXiv preprint",
       "year": 2025,
       "arxiv_id": "2512.24315",
-      "citation_count": 0
+      "citation_count": 0,
+      "isFirstUnitIMP": true
     },
     {
       "id": "2945001",
@@ -28,7 +30,8 @@
       "pages": "074506",
       "year": 2025,
       "doi": "10.1103/PhysRevD.111.074506",
-      "citation_count": 12
+      "citation_count": 12,
+      "isFirstUnitIMP": true
     },
     {
       "id": "2934001",
@@ -39,7 +42,8 @@
       "pages": "063107",
       "year": 2025,
       "doi": "10.1088/1674-1137/adc11f",
-      "citation_count": 8
+      "citation_count": 8,
+      "isFirstUnitIMP": true
     },
     {
       "id": "2910001",
@@ -48,7 +52,8 @@
       "journal": "Phys. Rev. D",
       "volume": "111",
       "year": 2025,
-      "citation_count": 5
+      "citation_count": 5,
+      "isFirstUnitIMP": true
     },
     {
       "id": "2895001",
@@ -56,7 +61,8 @@
       "authors": ["Liuming Liu", "Peng Sun", "Yi-Bo Yang"],
       "journal": "JHEP",
       "year": 2025,
-      "citation_count": 10
+      "citation_count": 10,
+      "isFirstUnitIMP": true
     },
     {
       "id": "2870001",
@@ -66,7 +72,8 @@
       "volume": "38",
       "pages": "129",
       "year": 2021,
-      "citation_count": 15
+      "citation_count": 15,
+      "isFirstUnitIMP": true
     },
     {
       "id": "1800001",
@@ -76,7 +83,8 @@
       "volume": "16",
       "pages": "64601",
       "year": 2021,
-      "citation_count": 154
+      "citation_count": 154,
+      "isFirstUnitIMP": false
     },
     {
       "id": "1500001",
@@ -87,7 +95,8 @@
       "pages": "054516",
       "year": 2017,
       "doi": "10.1103/PhysRevD.96.054516",
-      "citation_count": 45
+      "citation_count": 45,
+      "isFirstUnitIMP": true
     },
     {
       "id": "1300001",
@@ -97,7 +106,8 @@
       "volume": "89",
       "pages": "034501",
       "year": 2014,
-      "citation_count": 120
+      "citation_count": 120,
+      "isFirstUnitIMP": true
     },
     {
       "id": "1200001",
@@ -107,7 +117,8 @@
       "volume": "87",
       "pages": "014502",
       "year": 2013,
-      "citation_count": 169
+      "citation_count": 169,
+      "isFirstUnitIMP": true
     },
     {
       "id": "1100001",
@@ -117,13 +128,18 @@
       "volume": "07",
       "pages": "126",
       "year": 2012,
-      "citation_count": 221
+      "citation_count": 221,
+      "isFirstUnitIMP": true
     }
   ],
   "students": [
+    {"name": "Kuan Zhang", "papers": 0, "start_year": 2025},
+    {"name": "Hanyang Xing", "papers": 1, "start_year": 2024},
     {"name": "Chen Chen", "papers": 3, "start_year": 2023},
     {"name": "Yiqi Geng", "papers": 2, "start_year": 2023},
+    {"name": "Chunhua Zeng", "papers": 0, "start_year": 2025},
+    {"name": "Zhi-Cheng Hu", "papers": 0, "start_year": 2025},
     {"name": "Hongxin Dong", "papers": 2, "start_year": 2024},
-    {"name": "Hanyang Xing", "papers": 1, "start_year": 2024}
+    {"name": "Zhicheng Yan", "papers": 0, "start_year": 2025}
   ]
 }

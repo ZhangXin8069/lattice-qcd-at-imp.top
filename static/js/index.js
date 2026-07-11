@@ -60,11 +60,11 @@
       const resp = await fetch('data/conferences.json');
       const conferences = await resp.json();
 
-      // Filter: only CAS institutes in China
-      const CAS_KEYWORDS = ['中国科学院', 'CAS', 'Chinese Academy'];
+      // Filter: only Chinese academic institutions (CAS institutes + universities in China)
+      const CHINA_KEYWORDS = ['中国科学院', 'CAS', 'Chinese Academy', '研究所', '大学', '学院', '上海交通大学', '华中师范', '北京', '上海', '武汉', '广东', '兰州'];
       const filtered = conferences.filter(conf => {
         const loc = (conf.location_zh || '') + (conf.location_en || '');
-        return CAS_KEYWORDS.some(kw => loc.includes(kw));
+        return CHINA_KEYWORDS.some(kw => loc.includes(kw));
       });
 
       // Sort by date descending
@@ -127,11 +127,11 @@
       const resp = await fetch('data/summer-schools.json');
       const schools = await resp.json();
 
-      // Filter: only CAS institutes in China
-      const CAS_KEYWORDS = ['中国科学院', 'CAS', 'Chinese Academy'];
+      // Filter: only Chinese academic institutions (CAS institutes + universities in China)
+      const CHINA_KEYWORDS = ['中国科学院', 'CAS', 'Chinese Academy', '研究所', '大学', '学院', '华中师范', '北京', '上海', '武汉', '广东', '兰州'];
       const filtered = schools.filter(school => {
         const loc = (school.location_zh || '') + (school.location_en || '');
-        return CAS_KEYWORDS.some(kw => loc.includes(kw));
+        return CHINA_KEYWORDS.some(kw => loc.includes(kw));
       });
 
       // Sort by date descending

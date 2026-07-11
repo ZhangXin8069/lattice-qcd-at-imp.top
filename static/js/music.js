@@ -36,15 +36,14 @@ const MusicPlayer = (function() {
 
     // Attempt auto-play on load
     const tryAutoPlay = () => {
-      if (hasInteracted) return;
-      hasInteracted = true;
       audio.src = tracks[currentTrack].file;
       audio.load();
       audio.play().then(() => {
         isPlaying = true;
+        hasInteracted = true;
         updateUI();
       }).catch(() => {
-        // Browser blocked auto-play, will wait for user
+        // Browser blocked auto-play, will wait for user interaction
         isPlaying = false;
         updateUI();
       });
@@ -55,9 +54,9 @@ const MusicPlayer = (function() {
       tryAutoPlay();
     }, 500);
 
-    // Also listen for first user interaction
+    // Listen for first user interaction to retry if auto-play was blocked
     const enableAudio = () => {
-      if (!hasInteracted) {
+      if (!isPlaying) {
         tryAutoPlay();
       }
       document.removeEventListener('click', enableAudio);
