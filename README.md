@@ -17,7 +17,7 @@
 - 🔬 **研究方向** — 粲重子散射、部分子分布函数、核子自旋结构等
 - 👨‍🎓 **研究生** — 从论文作者中自动识别研究生
 - 📅 **学术会议** — 格点QCD相关会议信息
-- 🏫 **夏令营与讲习班** — 华大QCD讲习班等暑期学校信息
+- 🏫 **讲习班** — 华大QCD讲习班、暑期学校、训练营等信息
 - 🖼️ **图库** — 研究相关图片与视频展示
 - 🎵 **背景音乐** — 可控的背景音乐播放器
 - ✨ **动态效果** — Canvas粒子动画、滚动触发动画、视差效果等
@@ -43,7 +43,7 @@ lattice-qcd-at-imp.top/
 │   ├── translations.json        # 中英文翻译字典
 │   ├── papers.json              # 论文数据（INSPIRE-HEP不可用时的fallback）
 │   ├── conferences.json         # 会议数据
-│   └── summer-schools.json      # 夏令营数据
+│   └── summer-schools.json      # 讲习班数据
 ├── static/
 │   ├── css/
 │   │   ├── index.css            # 主样式（含深色模式、动画）
@@ -79,7 +79,7 @@ lattice-qcd-at-imp.top/
 ```
 /update-website papers        # 更新论文数据
 /update-website add-conference # 添加会议
-/update-website add-summer-school # 添加夏令营
+/update-website add-summer-school # 添加讲习班
 /update-website advisor       # 更新导师信息
 /update-website translations  # 更新翻译
 /update-website all           # 全量更新

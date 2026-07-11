@@ -404,8 +404,8 @@
     }
   }
 
-  // Load summer schools extra content from 夏令营.html
-  async function loadSummerSchoolsExtra() {
+  // Load lectures extra content from 夏令营.html
+  async function loadLecturesExtra() {
     const container = document.getElementById('summer-schools-extra');
     if (!container) return;
 
@@ -546,7 +546,7 @@
   document.addEventListener('langChanged', () => {
     loadConferences();
     loadSummerSchools();
-    loadSummerSchoolsExtra();
+    loadLecturesExtra();
     loadStudents();
   });
 
@@ -561,7 +561,7 @@
     initClickableImages();
     loadConferences();
     loadSummerSchools();
-    loadSummerSchoolsExtra();
+    loadLecturesExtra();
     loadStudents();
   }
 

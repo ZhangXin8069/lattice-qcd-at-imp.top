@@ -48,18 +48,6 @@
     "status": "past"
   },
   {
-    "name_zh": "第七届格点量子场论暑期学校",
-    "name_en": "7th Lattice QFT Summer School",
-    "date": "2024-08-05",
-    "endDate": "2024-08-16",
-    "location_zh": "中国科学院理论物理研究所，北京",
-    "location_en": "Institute of Theoretical Physics, CAS, Beijing",
-    "url": "https://indico.itp.ac.cn/event/249/",
-    "tags_zh": ["暑期学校", "格点QCD", "教育"],
-    "tags_en": ["Summer School", "Lattice QCD", "Education"],
-    "status": "past"
-  },
-  {
     "name_zh": "第三届中国格点量子色动力学研讨会",
     "name_en": "3rd China Lattice QCD Symposium",
     "date": "2023-10-09",
@@ -72,18 +60,6 @@
     "status": "past"
   },
   {
-    "name_zh": "第六届格点量子色动力学夏令营",
-    "name_en": "6th Lattice QCD Summer Camp",
-    "date": "2023-07-17",
-    "endDate": "2023-07-21",
-    "location_zh": "中国科学院理论物理研究所，北京",
-    "location_en": "Institute of Theoretical Physics, CAS, Beijing",
-    "url": "https://indico.itp.ac.cn/event/160/",
-    "tags_zh": ["夏令营", "格点QCD", "教育"],
-    "tags_en": ["Summer Camp", "Lattice QCD", "Education"],
-    "status": "past"
-  },
-  {
     "name_zh": "第二届中国格点量子色动力学研讨会",
     "name_en": "2nd China Lattice QCD Symposium",
     "date": "2022-10-10",
@@ -93,18 +69,6 @@
     "url": "https://indico-tdli.sjtu.edu.cn/event/1198/",
     "tags_zh": ["国内会议", "格点QCD", "CLQCD"],
     "tags_en": ["National", "Lattice QCD", "CLQCD"],
-    "status": "past"
-  },
-  {
-    "name_zh": "第五届数值量子场论训练营",
-    "name_en": "5th Numerical QFT Training Camp",
-    "date": "2022-08-22",
-    "endDate": "2022-08-26",
-    "location_zh": "中国科学院理论物理研究所，北京",
-    "location_en": "Institute of Theoretical Physics, CAS, Beijing",
-    "url": "https://indico.itp.ac.cn/event/132/",
-    "tags_zh": ["训练营", "格点QCD", "数值"],
-    "tags_en": ["Training Camp", "Lattice QCD", "Numerical"],
     "status": "past"
   },
   {

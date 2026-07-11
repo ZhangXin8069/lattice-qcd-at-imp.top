@@ -60,7 +60,7 @@
     {"name": "Zhicheng Yan", "name_zh": "Yan, Zhicheng"}
   ],
   "conferences": "data/conferences.json — 仅限中国境内、中国科学院研究所主办的会议",
-  "summer_schools": "data/summer-schools.json — 来源于 custom/夏令营.html，按日期排列",
+  "lectures": "data/summer-schools.json — 来源于 custom/夏令营.html，按日期排列",
   "software_work": {
     "pyqcu": {
       "name": "PyQCU",
@@ -109,7 +109,7 @@
   "features": {
     "search": "全局搜索 (Ctrl+K 或 / 快捷键)",
     "music": "自动播放、随机初始曲目、洗牌模式",
-    "background_opacity": "主页动效 section 不透明 / 非主页动效(help) 0.85",
+    "background_opacity": "主页动效 section 不透明 / 非主页动效(help) 0.85",,
     "section_backgrounds": "所有section使用canvas粒子动画作为背景（深色=星场，浅色=樱花雨）"
   },
   "theme": {

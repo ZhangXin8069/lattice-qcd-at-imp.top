@@ -17,11 +17,11 @@ lattice-qcd-at-imp.top/
 ├── data/
 │   ├── papers.json         # 论文静态备份（离线回退）
 │   ├── conferences.json    # 学术会议列表（中国CAS研究所）
-│   ├── summer-schools.json # 夏令营/讲习班列表
+│   ├── summer-schools.json # 讲习班列表
 │   └── translations.json   # 中英文翻译字典
 ├── custom/
 │   ├── inspirehep.net/authors/  # INSPIRE-HEP离线缓存
-│   ├── 夏令营.html              # 夏令营原始数据
+│   ├── 夏令营.html              # 讲习班参考链接
 │   ├── *.mp3                    # 背景音乐
 │   ├── *.png/*.gif              # 图片资源
 │   └── *.pdf                    # PDF文档
@@ -40,7 +40,7 @@ lattice-qcd-at-imp.top/
 ## 数据流
 
 1. **论文**: INSPIRE-HEP API → localStorage缓存 → custom/离线HTML → data/papers.json
-2. **会议/夏令营**: data/*.json 静态文件 → JS动态渲染
+2. **会议/讲习班**: data/*.json 静态文件 → JS动态渲染
 3. **翻译**: data/translations.json → i18n.js applyTranslations()
 4. **汇总**: 所有数据源 → 数据.csv（手动修正） → data_summary.json（机器可读）
 
@@ -69,7 +69,7 @@ lattice-qcd-at-imp.top/
 4. 更新 `data_summary.json`
 
 ### `update-website add-summer-school`
-**添加夏令营/讲习班**（来源于局域网收集，按日期排列）
+**添加讲习班**（来源于局域网收集，按日期排列）
 1. 提示输入：中英文名称、日期、地点（中国）、主题、链接
 2. 添加到 `data/summer-schools.json`
 3. 更新 `custom/夏令营.html` 补充链接
@@ -160,9 +160,9 @@ papers → conferences → summer-schools → students → translations → summ
 
 - `数据.csv` 是手动修正数据的入口文件——修改后需运行 `update-website summary` 同步
 - 所有参考链接必须附上超链接（`要求.json` 额外要求）
-- 会议地点必须在中国，单位必须为中国科学院的研究所（index.js中CAS_KEYWORDS过滤）
-- 夏令营地点必须在中国，单位必须为中国科学院的研究所（index.js中CAS_KEYWORDS过滤）
-- 夏令营/讲习班按日期降序排列
-- custom/夏令营.html 作为夏令营附加内容，解析其中链接按年份排序
+- 会议地点必须在中国，单位必须为中国科学院的研究所（index.js中CHINA_KEYWORDS过滤）
+- 讲习班地点必须在中国，单位必须为中国科学院的研究所（index.js中CHINA_KEYWORDS过滤）
+- 讲习班按日期降序排列
+- custom/夏令营.html 作为讲习班附加内容，解析其中链接按年份排序
 - 论文展示列表仅显示第一单位为 "Lanzhou, Inst. Modern Phys." 的论文
 - 论文计数和引用计数规则：不限第一单位，限第一作者与通讯作者
