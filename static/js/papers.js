@@ -37,7 +37,7 @@ const Papers = (function() {
       // Format: "论文详情", id, title, authors, year, arxiv, doi, journal, citation_count, isFirstUnitIMP
       const papers = [];
       const re = /^"论文详情",\s*"(\d+)",\s*"((?:[^"]|"")*)",\s*"((?:[^"]|"")*)",\s*"(\d*)",\s*"((?:[^"]|"")*)",\s*"((?:[^"]|"")*)",\s*"((?:[^"]|"")*)",\s*"(\d*)",\s*"(true|false)"\s*$/;
-      const lines = text.split('\n');
+      const lines = text.split(/\r?\n/);
 
       for (const line of lines) {
         const m = line.match(re);
