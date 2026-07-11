@@ -713,6 +713,12 @@ body {
   justify-content: center;
 }
 
+.advisor-email-row {
+  display: flex;
+  justify-content: center;
+  margin-top: 0.25rem;
+}
+
 .advisor-link {
   display: inline-flex;
   align-items: center;
