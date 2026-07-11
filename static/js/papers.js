@@ -45,56 +45,30 @@ const Papers = (function() {
 
     try {
       const resp = await fetch('数据.csv');
-      if (!resp.ok) throw new Error('CSV not found');
+      if (!resp.ok) throw new Error('CSV not found: ' + resp.status);
       const text = await resp.text();
 
-      // Parse CSV: lines starting with "论文详情" are paper records
-      // Format: "论文详情", "ID", "Title", "Year", "arXiv", "DOI", "Journal", "isFirstUnitIMP"
+      // Parse CSV: match lines starting with "论文详情" and extract quoted fields
       const papers = [];
+      const re = /^"论文详情",\s*"(\d+)",\s*"((?:[^"]|"")*)",\s*"(\d*)",\s*"((?:[^"]|"")*)",\s*"((?:[^"]|"")*)",\s*"((?:[^"]|"")*)",\s*"(true|false)"\s*$/;
       const lines = text.split('\n');
 
       for (const line of lines) {
-        if (!line.startsWith('"论文详情"')) continue;
-
-        // Simple CSV parser for quoted fields
-        const fields = [];
-        let inQuote = false;
-        let current = '';
-        for (let i = 0; i < line.length; i++) {
-          const c = line[i];
-          if (c === '"') {
-            if (inQuote && line[i + 1] === '"') {
-              current += '"';
-              i++;
-            } else {
-              inQuote = !inQuote;
-            }
-          } else if (c === ',' && !inQuote) {
-            fields.push(current.trim());
-            current = '';
-          } else {
-            current += c;
-          }
-        }
-        fields.push(current.trim());
-
-        // fields[0]="论文详情", [1]=id, [2]=title, [3]=year, [4]=arxiv, [5]=doi, [6]=journal, [7]=isFirstUnitIMP
-        if (fields.length < 8) continue;
-
-        const isIMP = fields[7] === 'true';
+        const m = line.match(re);
+        if (!m) continue;
 
         papers.push({
-          id: fields[1],
-          title: fields[2],
-          year: fields[3] ? parseInt(fields[3], 10) : null,
-          arxiv_id: fields[4],
-          doi: fields[5],
-          journal: fields[6],
+          id: m[1],
+          title: m[2].replace(/""/g, '"'),
+          year: m[3] ? parseInt(m[3], 10) : null,
+          arxiv_id: m[4].replace(/""/g, '"'),
+          doi: m[5].replace(/""/g, '"'),
+          journal: m[6].replace(/""/g, '"'),
           authors: [],
           volume: '',
           pages: '',
           citation_count: 0,
-          isFirstUnitIMP: isIMP
+          isFirstUnitIMP: m[7] === 'true'
         });
       }
 
