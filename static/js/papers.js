@@ -60,7 +60,7 @@ const Papers = (function() {
       div.textContent = authors; var authHtml = div.innerHTML;
       div.textContent = p.journal||''; var jn = div.innerHTML;
 
-      return '<div class="paper-card reveal-child" style="transition-delay:'+i*0.02+'s">'+
+      return '<div class="paper-card reveal-child revealed" style="transition-delay:'+i*0.02+'s">'+
         '<div class="paper-year-badge">'+(p.year||'-')+'</div>'+
         '<h4 class="paper-title">'+title+'</h4>'+
         (authors?'<p class="paper-authors">'+authHtml+'</p>':'')+
@@ -101,7 +101,7 @@ const Papers = (function() {
         div.textContent = p.title; var title = div.innerHTML;
         div.textContent = authors; var authHtml = div.innerHTML;
         div.textContent = p.journal||''; var jn = div.innerHTML;
-        return '<div class="paper-card reveal-child" style="transition-delay:'+i*0.02+'s">'+
+        return '<div class="paper-card reveal-child revealed" style="transition-delay:'+i*0.02+'s">'+
           '<div class="paper-year-badge">'+(p.year||'-')+'</div>'+
           '<h4 class="paper-title">'+title+'</h4>'+
           (authors?'<p class="paper-authors">'+authHtml+'</p>':'')+
