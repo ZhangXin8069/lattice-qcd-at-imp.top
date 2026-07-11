@@ -2270,12 +2270,6 @@ body {
   to { opacity: 1; transform: translateY(0); }
 }
 
-/* GPU-accelerated transitions */
-.reveal, .reveal-left, .reveal-right, .reveal-up, .reveal-child,
-.advisor-card, .research-card, .paper-card, .software-card, .student-card, .school-card {
-  will-change: transform, opacity;
-}
-
 /* ----- Misc ----- */
 .container {
   max-width: 1200px;
