@@ -439,19 +439,19 @@ body {
 .section {
   padding: 5rem 1.5rem;
   position: relative;
-  background-color: rgba(255, 255, 255, 0.88);
+  background-color: rgba(255, 255, 255, 0.2);
 }
 
 [data-theme="dark"] .section {
-  background-color: rgba(15, 23, 42, 0.88);
+  background-color: rgba(15, 23, 42, 0.2);
 }
 
 .section-alt {
-  background: rgba(255, 255, 255, 0.88);
+  background: rgba(255, 255, 255, 0.2);
 }
 
 [data-theme="dark"] .section-alt {
-  background: rgba(15, 23, 42, 0.88);
+  background: rgba(15, 23, 42, 0.2);
 }
 
 .section-header {

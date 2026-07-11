@@ -13,7 +13,6 @@ const Papers = (function() {
   let displayPapers = [];  // filtered for display (first-unit IMP)
   let countPapers = [];    // papers for counting
   let students = [];
-  let displayCount = 10;
 
   async function init() {
     await loadPapers();
@@ -67,7 +66,7 @@ const Papers = (function() {
 
       allPapers = papers;
       allPapers.sort((a, b) => (b.year || 0) - (a.year || 0));
-      displayPapers = allPapers.filter(p => p.isFirstUnitIMP);
+      displayPapers = allPapers;
       countPapers = allPapers;
 
       // Parse student data from CSV (captures Chinese + English names)
@@ -108,20 +107,15 @@ const Papers = (function() {
     const noResults = document.getElementById('pub-no-results');
     if (!container) return;
 
-    const filtered = displayPapers;
-    const displayed = filtered.slice(0, displayCount);
-
-    if (filtered.length === 0) {
+    if (displayPapers.length === 0) {
       container.innerHTML = '';
       if (noResults) noResults.style.display = 'block';
-      const loadMoreBtn = document.getElementById('pub-load-more');
-      if (loadMoreBtn) loadMoreBtn.style.display = 'none';
       return;
     }
 
     if (noResults) noResults.style.display = 'none';
 
-    container.innerHTML = displayed.map((paper, index) => {
+    container.innerHTML = displayPapers.map((paper, index) => {
       const authorDisplay = paper.authorStr
         ? paper.authorStr.split('; ').slice(0, 3).join('; ') + (paper.authorStr.split('; ').length > 3 ? ' et al.' : '')
         : '';
@@ -152,16 +146,6 @@ const Papers = (function() {
         </div>
       `;
     }).join('');
-
-    const loadMoreBtn = document.getElementById('pub-load-more');
-    if (loadMoreBtn) {
-      if (displayCount < filtered.length) {
-        loadMoreBtn.style.display = 'block';
-        loadMoreBtn.textContent = I18N.t('publications.loadMore');
-      } else {
-        loadMoreBtn.style.display = 'none';
-      }
-    }
   }
 
   function escapeHtml(text) {
@@ -170,69 +154,51 @@ const Papers = (function() {
     return div.innerHTML;
   }
 
-  function loadMore() {
-    displayCount += 10;
-    renderPapers();
-    document.getElementById('publications').scrollIntoView({ behavior: 'smooth', block: 'start' });
-  }
-
   function setupSearch() {
     const searchInput = document.getElementById('pub-search');
-    const loadMoreBtn = document.getElementById('pub-load-more');
+    if (!searchInput) return;
 
-    if (searchInput) {
-      searchInput.addEventListener('input', (e) => {
-        const query = e.target.value.toLowerCase();
-        if (!query) {
-          displayCount = 10;
-          renderPapers();
-          return;
-        }
+    searchInput.addEventListener('input', (e) => {
+      const query = e.target.value.toLowerCase();
+      if (!query) { renderPapers(); return; }
 
-        const filtered = displayPapers.filter(p =>
-          (p.title && p.title.toLowerCase().includes(query)) ||
-          (p.journal && p.journal.toLowerCase().includes(query))
-        );
+      const filtered = displayPapers.filter(p =>
+        (p.title && p.title.toLowerCase().includes(query)) ||
+        (p.journal && p.journal.toLowerCase().includes(query))
+      );
 
-        const container = document.getElementById('publications-list');
-        const noResults = document.getElementById('pub-no-results');
+      const container = document.getElementById('publications-list');
+      const noResults = document.getElementById('pub-no-results');
 
-        if (filtered.length === 0) {
-          container.innerHTML = '';
-          if (noResults) noResults.style.display = 'block';
-          if (loadMoreBtn) loadMoreBtn.style.display = 'none';
-        } else {
-          if (noResults) noResults.style.display = 'none';
-          const displayed = filtered.slice(0, displayCount);
-          container.innerHTML = displayed.map((paper) => {
-            const links = [];
-            if (paper.arxiv_id) links.push(`<a href="https://arxiv.org/abs/${paper.arxiv_id}" target="_blank" class="paper-link">arXiv</a>`);
-            if (paper.doi) links.push(`<a href="https://doi.org/${paper.doi}" target="_blank" class="paper-link">DOI</a>`);
+      if (filtered.length === 0) {
+        container.innerHTML = '';
+        if (noResults) noResults.style.display = 'block';
+      } else {
+        if (noResults) noResults.style.display = 'none';
+        container.innerHTML = filtered.map((paper, index) => {
+          const authorDisplay = paper.authorStr
+            ? paper.authorStr.split('; ').slice(0, 3).join('; ') + (paper.authorStr.split('; ').length > 3 ? ' et al.' : '')
+            : '';
+          const links = [];
+          if (paper.arxiv_id) links.push(`<a href="https://arxiv.org/abs/${paper.arxiv_id}" target="_blank" class="paper-link"><i class="ai ai-arxiv"></i> arXiv:${paper.arxiv_id}</a>`);
+          if (paper.doi) links.push(`<a href="https://doi.org/${paper.doi}" target="_blank" class="paper-link"><i class="fas fa-link"></i> DOI</a>`);
+          if (paper.id) links.push(`<a href="https://inspirehep.net/literature/${paper.id}" target="_blank" class="paper-link"><i class="fas fa-external-link-alt"></i> INSPIRE</a>`);
 
-            return `
-              <div class="paper-card">
-                <div class="paper-year-badge">${paper.year || '-'}</div>
-                <h4 class="paper-title">${escapeHtml(paper.title)}</h4>
-                ${paper.journal ? `<p class="paper-journal">${escapeHtml(paper.journal)}</p>` : ''}
+          return `
+            <div class="paper-card reveal-child" style="transition-delay: ${index * 0.02}s">
+              <div class="paper-year-badge">${paper.year || '-'}</div>
+              <h4 class="paper-title">${escapeHtml(paper.title)}</h4>
+              ${authorDisplay ? `<p class="paper-authors">${escapeHtml(authorDisplay)}</p>` : ''}
+              ${paper.journal ? `<p class="paper-journal">${escapeHtml(paper.journal)}</p>` : ''}
+              <div class="paper-meta">
                 <div class="paper-links">${links.join(' ')}</div>
+                <div class="paper-citations"><span class="citation-badge">${paper.citation_count || 0}</span> ${I18N.t('publications.cited')}</div>
               </div>
-            `;
-          }).join('');
-
-          if (loadMoreBtn) {
-            if (displayCount < filtered.length) {
-              loadMoreBtn.style.display = 'block';
-            } else {
-              loadMoreBtn.style.display = 'none';
-            }
-          }
-        }
-      });
-    }
-
-    if (loadMoreBtn) {
-      loadMoreBtn.addEventListener('click', loadMore);
-    }
+            </div>
+          `;
+        }).join('');
+      }
+    });
   }
 
   document.addEventListener('langChanged', () => {
@@ -247,7 +213,6 @@ const Papers = (function() {
 
   return {
     init,
-    loadMore,
     getStudents: () => students,
     getPaperCount: () => countPapers.length,
     getCitationCount: () => countPapers.reduce((sum, p) => sum + (p.citation_count || 0), 0)
