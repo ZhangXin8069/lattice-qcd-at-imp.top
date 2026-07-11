@@ -1466,14 +1466,20 @@ body {
 /* ----- Software Section ----- */
 .software-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  grid-template-columns: repeat(3, 1fr);
   gap: 1.5rem;
   max-width: 1100px;
   margin: 0 auto;
 }
 
+@media screen and (max-width: 768px) {
+  .software-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
 .software-card {
-  padding: 2rem;
+  padding: 1.5rem;
   background: var(--background-primary);
   border-radius: var(--border-radius-lg);
   border: 1px solid var(--border-color);
