@@ -47,8 +47,9 @@
     "count_rule": "不限第一单位，限第一作者与通讯作者（两位导师之和）",
     "citation_rule": "不限第一单位，限第一作者与通讯作者（两位导师引用之和）"
   },
-  "papers_count": 67,
-  "citation_count": 2800,
+  "papers_count": 146,
+  "citation_count": 0,
+  "papers_imp_count": 37,
   "students": [
     {"name": "Kuan Zhang", "name_zh": "Kuan Zhang"},
     {"name": "Hanyang Xing", "name_zh": "Xing, Hanyang"},

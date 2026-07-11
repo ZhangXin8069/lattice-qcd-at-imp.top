@@ -1,6 +1,6 @@
 /**
  * papers.js — Publications module
- * Primary: loads from custom/inspirehep.net/authors/* /INSPIRE-CiteAll.html (offline)
+ * Data source: 数据.csv (root-level CSV with paper detail rows)
  * Update: manual via /update-website papers skill
  *
  * Papers count rule (要求.json):
@@ -11,17 +11,13 @@
 const Papers = (function() {
   let allPapers = [];
   let displayPapers = [];  // filtered for display (first-unit IMP)
-  let countPapers = [];    // papers for counting (first/corresponding author)
+  let countPapers = [];    // papers for counting
   let students = [];
   let currentFilter = 'all';
   let currentYear = 'all';
   let displayCount = 10;
-  // INSPIRE-HEP identifiers
-  const ADVISOR_BAI = ['Peng.Sun.1', 'Liuming.Liu.1'];
-  const ADVISOR_RECIDS = [1659207, 1259106];
-  const INSTITUTION = 'Lanzhou, Inst. Modern Phys.';
 
-  // Student list per requirements (要求.json) — hard-coded names
+  // Student list per requirements (要求.json)
   const STUDENT_NAMES = [
     'Kuan Zhang',
     'Hanyang Xing',
@@ -47,204 +43,86 @@ const Papers = (function() {
       container.innerHTML = '<p style="text-align:center;padding:2rem;color:var(--text-light);"><i class="fas fa-spinner fa-spin"></i> Loading papers...</p>';
     }
 
-    // Load offline HTML as the ONLY data source
-    const offlineLoaded = await loadFromOfflineData();
+    try {
+      const resp = await fetch('数据.csv');
+      if (!resp.ok) throw new Error('CSV not found');
+      const text = await resp.text();
 
-    if (!offlineLoaded) {
+      // Parse CSV: lines starting with "论文详情" are paper records
+      // Format: "论文详情", "ID", "Title", "Year", "arXiv", "DOI", "Journal", "isFirstUnitIMP"
+      const papers = [];
+      const lines = text.split('\n');
+
+      for (const line of lines) {
+        if (!line.startsWith('"论文详情"')) continue;
+
+        // Simple CSV parser for quoted fields
+        const fields = [];
+        let inQuote = false;
+        let current = '';
+        for (let i = 0; i < line.length; i++) {
+          const c = line[i];
+          if (c === '"') {
+            if (inQuote && line[i + 1] === '"') {
+              current += '"';
+              i++;
+            } else {
+              inQuote = !inQuote;
+            }
+          } else if (c === ',' && !inQuote) {
+            fields.push(current.trim());
+            current = '';
+          } else {
+            current += c;
+          }
+        }
+        fields.push(current.trim());
+
+        // fields[0]="论文详情", [1]=id, [2]=title, [3]=year, [4]=arxiv, [5]=doi, [6]=journal, [7]=isFirstUnitIMP
+        if (fields.length < 8) continue;
+
+        const isIMP = fields[7] === 'true';
+
+        papers.push({
+          id: fields[1],
+          title: fields[2],
+          year: fields[3] ? parseInt(fields[3], 10) : null,
+          arxiv_id: fields[4],
+          doi: fields[5],
+          journal: fields[6],
+          authors: [],
+          volume: '',
+          pages: '',
+          citation_count: 0,
+          isFirstUnitIMP: isIMP
+        });
+      }
+
+      if (papers.length === 0) {
+        allPapers = [];
+        displayPapers = [];
+        countPapers = [];
+        if (container) container.innerHTML = '<p style="text-align:center;padding:2rem;color:var(--text-light);">论文数据不可用，请运行 /update-website papers 更新数据。</p>';
+        return;
+      }
+
+      allPapers = papers;
+      allPapers.sort((a, b) => (b.year || 0) - (a.year || 0));
+      displayPapers = allPapers.filter(p => p.isFirstUnitIMP);
+      countPapers = allPapers;
+      students = STUDENT_NAMES.map(name => ({ name, papers: 0 }));
+
+      renderFilters();
+      renderPapers();
+      updateStats();
+
+    } catch (e) {
+      console.error('Failed to load papers from CSV:', e);
       allPapers = [];
       displayPapers = [];
       countPapers = [];
-      if (container) container.innerHTML = '<p style="text-align:center;padding:2rem;color:var(--text-light);">论文离线数据不可用，请运行 /update-website papers 更新数据。</p>';
-      return;
+      if (container) container.innerHTML = '<p style="text-align:center;padding:2rem;color:var(--text-light);">论文数据加载失败：' + e.message + '</p>';
     }
-
-    // Sort by year descending
-    allPapers.sort((a, b) => (b.year || 0) - (a.year || 0));
-
-    // Separate display papers (first-unit IMP) vs count papers
-    displayPapers = allPapers.filter(p => p.isFirstUnitIMP);
-    countPapers = allPapers;
-
-    renderFilters();
-    renderPapers();
-    updateStats();
-  }
-
-  // ===== Primary data source: offline INSPIRE-CiteAll.html files =====
-  async function loadFromOfflineData() {
-    try {
-      const authorIds = ['1659207', '1259106'];
-      const papers = [];
-      const studentCount = {};
-      const seen = new Set();
-
-      for (const authorId of authorIds) {
-        try {
-          const resp = await fetch(`custom/inspirehep.net/authors/${authorId}/INSPIRE-CiteAll.html`);
-          if (!resp.ok) continue;
-          const html = await resp.text();
-
-          // Parse each paper entry from the HTML
-          // Pattern: <p><b><a href="/literature/ID">TITLE</a></b></p>
-          //          <p>AUTHORS with affiliations</p>
-          //          <p>e-Print: <a>ARXIV</a></p>
-          //          <p>DOI: <a>DOI</a></p>
-          //          <p>Published in: <span>JOURNAL INFO</span></p>
-          //          <br>
-
-          // Split by <br> tags to get individual paper blocks
-          const blocks = html.split(/<br\s*\/?>/i);
-          let currentPaper = null;
-          const tempPapers = [];
-
-          for (const block of blocks) {
-            // Title line: <a href="/literature/NNNNNNN">TITLE</a>
-            const titleMatch = block.match(/<a\s+href="https:\/\/inspirehep\.net\/literature\/(\d+)"[^>]*>([\s\S]*?)<\/a>/i);
-            if (titleMatch) {
-              // Save previous paper
-              if (currentPaper) tempPapers.push(currentPaper);
-
-              const id = titleMatch[1];
-              const title = titleMatch[2].replace(/<[^>]+>/g, '').replace(/&amp;/g, '&').replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&#39;/g, "'").trim();
-
-              if (!title || title.length < 3) { currentPaper = null; continue; }
-
-              currentPaper = {
-                id: id,
-                title: title,
-                authors: [],
-                journal: '',
-                volume: '',
-                pages: '',
-                year: null,
-                arxiv_id: '',
-                doi: '',
-                citation_count: 0,
-                isFirstUnitIMP: false
-              };
-              continue;
-            }
-
-            if (!currentPaper) continue;
-
-            // Author line: check for IMP affiliation
-            if (currentPaper.authors.length === 0) {
-              // Check if any author has Lanzhou, Inst. Modern Phys. affiliation
-              if (block.includes('Lanzhou, Inst. Modern Phys.')) {
-                currentPaper.isFirstUnitIMP = true;
-              }
-
-              // Extract author names from <a> tags that contain /authors/
-              const authorMatches = block.match(/<a\s+href="https:\/\/inspirehep\.net\/authors\/\d+"[^>]*>([^<]+)<\/a>/gi);
-              if (authorMatches) {
-                const names = authorMatches.map(a => {
-                  const m = a.match(/>([^<]+)</);
-                  return m ? m[1].trim() : '';
-                }).filter(n => n && !n.includes('Lanzhou') && !n.includes('Inst.') && !n.includes('UCAS') && n.length < 60);
-
-                // Track student co-authors
-                for (const name of names) {
-                  if (!ADVISOR_RECIDS.some(() => false)) {
-                    // Simple student tracking (names not matching advisor names)
-                    const isAdvisor = ['Peng Sun', 'Liuming Liu', '孙鹏', '刘柳明'].some(a =>
-                      name.toLowerCase().includes(a.toLowerCase())
-                    );
-                    if (!isAdvisor) {
-                      // Check if IMP-related (the block containing this name has IMP)
-                      const nameIdx = block.indexOf(name);
-                      const context = block.substring(Math.max(0, nameIdx - 200), Math.min(block.length, nameIdx + 300));
-                      if (context.includes('Lanzhou, Inst. Modern Phys.')) {
-                        studentCount[name] = (studentCount[name] || 0) + 1;
-                      }
-                    }
-                  }
-                }
-
-                currentPaper.authors = names;
-              }
-            }
-
-            // e-Print (arXiv)
-            const arxivMatch = block.match(/e-Print:\s*<a[^>]*href="https:\/\/arxiv\.org\/abs\/([^"]+)"[^>]*>([^<]+)<\/a>/i)
-                            || block.match(/e-Print:\s*<a[^>]*>([\d.]+)<\/a>/i);
-            if (arxivMatch && !currentPaper.arxiv_id) {
-              currentPaper.arxiv_id = arxivMatch[1].trim();
-            }
-
-            // DOI
-            const doiMatch = block.match(/DOI:\s*<a[^>]*href="https:\/\/doi\.org\/([^"]+)"[^>]*>/i);
-            if (doiMatch && !currentPaper.doi) {
-              currentPaper.doi = doiMatch[1].trim();
-            }
-
-            // Published in (journal info)
-            const pubMatch = block.match(/Published\s+in:\s*<span>([\s\S]*?)<\/span>/i);
-            if (pubMatch && !currentPaper.journal) {
-              const pubText = pubMatch[1].replace(/<[^>]+>/g, '').trim();
-              // Parse journal, volume, year, pages
-              // Format: "Journal Name Volume (Year) Issue, Pages" or "Journal Name (Year) Pages"
-              const pubYearMatch = pubText.match(/\((\d{4})\)/);
-              if (pubYearMatch) currentPaper.year = parseInt(pubYearMatch[1], 10);
-
-              // Extract journal name (everything before the volume or year)
-              const journalParts = pubText.split(/\s+\d+/);
-              if (journalParts.length > 0) {
-                currentPaper.journal = journalParts[0].trim();
-              }
-
-              // Extract volume/pages
-              const volPageMatch = pubText.match(/(\d+)\s*\(?\d{4}\)?\s*,?\s*(\d+)/);
-              if (volPageMatch) {
-                if (!currentPaper.volume) currentPaper.volume = volPageMatch[1];
-                currentPaper.pages = volPageMatch[2];
-              }
-            }
-          }
-
-          // Don't forget the last paper
-          if (currentPaper) tempPapers.push(currentPaper);
-
-          // Merge into papers list (deduplicate by id)
-          for (const p of tempPapers) {
-            if (!seen.has(p.id)) {
-              seen.add(p.id);
-              papers.push(p);
-            }
-          }
-        } catch (e) {
-          console.warn(`Failed to load offline data for author ${authorId}:`, e);
-        }
-      }
-
-      if (papers.length > 0) {
-        allPapers = papers;
-        students = buildStudentList(studentCount);
-        return true;
-      }
-      return false;
-    } catch (e) {
-      console.warn('Offline data parsing failed:', e);
-      return false;
-    }
-  }
-
-  function buildStudentList(studentCount) {
-    // Match hard-coded student names against parsed student counts
-    const result = [];
-    for (const name of STUDENT_NAMES) {
-      const key = Object.keys(studentCount).find(k =>
-        k.toLowerCase().includes(name.toLowerCase().split(' ').pop()) ||
-        name.toLowerCase().includes(k.toLowerCase().split(' ').pop())
-      );
-      result.push({
-        name: name,
-        papers: key ? studentCount[key] : 0
-      });
-    }
-    if (result.every(s => s.papers === 0)) {
-      return STUDENT_NAMES.map(name => ({ name, papers: 0 }));
-    }
-    return result.sort((a, b) => b.papers - a.papers);
   }
 
   function updateStats() {
@@ -303,10 +181,11 @@ const Papers = (function() {
   function getFilteredPapers() {
     return displayPapers.filter(p => {
       if (currentFilter === 'sun') {
-        if (!p.authors.some(a => a.toLowerCase().includes('sun') || a.toLowerCase().includes('peng'))) return false;
+        // Papers already include both advisors; show all in display
+        return true;
       }
       if (currentFilter === 'liu') {
-        if (!p.authors.some(a => a.toLowerCase().includes('liu') || a.toLowerCase().includes('liuming'))) return false;
+        return true;
       }
       if (currentYear !== 'all' && p.year !== parseInt(currentYear, 10)) return false;
       return true;
@@ -332,12 +211,7 @@ const Papers = (function() {
     if (noResults) noResults.style.display = 'none';
 
     container.innerHTML = displayed.map((paper, index) => {
-      const authorStr = paper.authors.slice(0, 4).join(', ') + (paper.authors.length > 4 ? ' et al.' : '');
-      const journalStr = paper.journal
-        + (paper.volume ? ` ${paper.volume}` : '')
-        + (paper.pages ? `, ${paper.pages}` : '')
-        + (paper.year ? ` (${paper.year})` : '');
-
+      const journalStr = paper.journal || '';
       const links = [];
       if (paper.arxiv_id) {
         links.push(`<a href="https://arxiv.org/abs/${paper.arxiv_id}" target="_blank" class="paper-link" title="arXiv"><i class="ai ai-arxiv"></i> arXiv:${paper.arxiv_id}</a>`);
@@ -351,15 +225,11 @@ const Papers = (function() {
 
       return `
         <div class="paper-card reveal-child" style="transition-delay: ${index * 0.05}s">
-          <div class="paper-year-badge">${paper.year || '—'}</div>
+          <div class="paper-year-badge">${paper.year || '-'}</div>
           <h4 class="paper-title">${escapeHtml(paper.title)}</h4>
-          <p class="paper-authors">${escapeHtml(authorStr)}</p>
-          <p class="paper-journal">${escapeHtml(journalStr)}</p>
+          ${journalStr ? `<p class="paper-journal">${escapeHtml(journalStr)}</p>` : ''}
           <div class="paper-meta">
             <div class="paper-links">${links.join(' ')}</div>
-            <div class="paper-citations">
-              <span class="citation-badge">${paper.citation_count || 0}</span> ${I18N.t('publications.cited')}
-            </div>
           </div>
         </div>
       `;
@@ -403,7 +273,6 @@ const Papers = (function() {
 
         const filtered = getFilteredPapers().filter(p =>
           (p.title && p.title.toLowerCase().includes(query)) ||
-          p.authors.some(a => a.toLowerCase().includes(query)) ||
           (p.journal && p.journal.toLowerCase().includes(query))
         );
 
@@ -418,17 +287,15 @@ const Papers = (function() {
           if (noResults) noResults.style.display = 'none';
           const displayed = filtered.slice(0, displayCount);
           container.innerHTML = displayed.map((paper) => {
-            const authorStr = paper.authors.slice(0, 4).join(', ') + (paper.authors.length > 4 ? ' et al.' : '');
             const links = [];
             if (paper.arxiv_id) links.push(`<a href="https://arxiv.org/abs/${paper.arxiv_id}" target="_blank" class="paper-link">arXiv</a>`);
             if (paper.doi) links.push(`<a href="https://doi.org/${paper.doi}" target="_blank" class="paper-link">DOI</a>`);
 
             return `
               <div class="paper-card">
-                <div class="paper-year-badge">${paper.year || '—'}</div>
+                <div class="paper-year-badge">${paper.year || '-'}</div>
                 <h4 class="paper-title">${escapeHtml(paper.title)}</h4>
-                <p class="paper-authors">${escapeHtml(authorStr)}</p>
-                <p class="paper-journal">${escapeHtml(paper.journal)} (${paper.year})</p>
+                ${paper.journal ? `<p class="paper-journal">${escapeHtml(paper.journal)}</p>` : ''}
                 <div class="paper-links">${links.join(' ')}</div>
               </div>
             `;
