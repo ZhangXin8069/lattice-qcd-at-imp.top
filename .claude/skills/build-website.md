@@ -38,12 +38,12 @@ lattice-qcd-at-imp.top/
 │   └── papers.json                        # 论文静态备份（离线回退）
 │
 ├── custom/                                 # 自定义资源目录
-│   ├── inspirehep.net/authors/            # INSPIRE-HEP离线论文数据
-│   │   ├── 1659207/INSPIRE-CiteAll.html   # 孙鹏论文列表
-│   │   └── 1259106/INSPIRE-CiteAll.html   # 刘柳明论文列表
+│   ├── inspirehep.net/authors/            # INSPIRE-HEP离线论文数据（参考用）
+│   │   ├── 1659207/INSPIRE-CiteAll.html
+│   │   └── 1259106/INSPIRE-CiteAll.html
 │   ├── 孙鹏介绍.md                         # 孙鹏导师介绍
 │   ├── 刘柳明介绍.md                       # 刘柳明导师介绍
-│   ├── 讲习班.html                         # 讲习班参考链接（Netscape书签格式）
+│   ├── 讲习班.html                         # 讲习班参考链接（已废弃，数据在JSON中）
 │   ├── 孙鹏头像.png / 刘柳明头像.png        # 导师头像
 │   ├── 孙鹏讲习图.png / 刘柳明讲习图.png    # 讲习幻灯片图
 │   ├── 张鑫讲习图.png / 张鑫 20260706gitee贡献度.png
@@ -106,12 +106,11 @@ lattice-qcd-at-imp.top/
 │  └──────┬───────┘  └────────────────┘  └───────┬───────┘   │
 │         │                                      │            │
 │         ▼                                      ▼            │
-│  ┌─────────────────────┐         ┌──────────────────────┐  │
-│  │ custom/inspirehep   │         │ data/conferences.json │  │
-│  │ .net/authors/*/     │         │ data/summer-schools   │  │
-│  │ INSPIRE-CiteAll     │         │ .json                 │  │
-│  │ .html (offline)     │         │ custom/讲习班.html     │  │
-│  └─────────────────────┘         │ data/translations.json │  │
+│  ┌─────────────────┐             ┌──────────────────────┐  │
+│  │ data/papers.json│             │ data/conferences.json │  │
+│  │ (论文+学生数据)  │             │ data/summer-schools   │  │
+│  └─────────────────┘             │ .json (讲习班)         │  │
+│                                  │ data/translations.json │  │
 │                                  └──────────────────────┘  │
 ├─────────────────────────────────────────────────────────────┤
 │  CSS:                                                       │
@@ -156,10 +155,10 @@ lattice-qcd-at-imp.top/
 | Hero | `#hero` | `height:100vh, background:transparent, z-index:1` |
 | Hero Canvas | `.hero-canvas` | `position:fixed, z-index:0, pointer-events:none` |
 | Hero Overlay | `.hero-overlay` | `radial-gradient(ellipse, transparent→var(--background-primary) 70%), z-index:2` |
-| Section | `.section` | `padding:5rem 1.5rem, bg:var(--background-primary), z-index:1` |
-| Section Alt | `.section-alt` | `bg:var(--background-secondary)` |
+| Section | `.section` | `padding:5rem 1.5rem, z-index:1, bg:transparent` |
+| Section Alt | `.section-alt` | `bg:transparent, z-index:1` |
 | Section Overlay | `.section-bg-overlay` | `position:absolute, z-index:-1, bg:transparent` |
-| Help Overlay | `#help .section-bg-overlay` | `bg:rgba(.,0.35)` — 非主页动效专用 |
+| Help Overlay | `#help .section-bg-overlay` | `bg:rgba(.,0.35)` |
 | Cards | `.advisor-card, .research-card, .paper-card, .software-card, .student-card, .school-card` | 白底、圆角、阴影、hover提升效果 |
 | Dark Card Glow | `[data-theme="dark"] .*-card:hover` | `box-shadow:0 0 20px rgba(96,165,250,0.15)` |
 | Reveal动画 | `.reveal, .reveal-left, .reveal-right, .reveal-up, .reveal-child` | `opacity:0, transform, transition` → `.revealed`激活 |
@@ -203,19 +202,17 @@ lattice-qcd-at-imp.top/
 
 ### 5.4 `papers.js` — 论文模块
 
-**数据源优先级**: `custom/inspirehep.net/authors/{1659207,1259106}/INSPIRE-CiteAll.html` → localStorage缓存(24h) → `data/papers.json`
+**数据源**: `data/papers.json`（唯一数据源，JSON格式）
 
-**解析逻辑**:
-1. 读取 offline HTML，按 `<br>` 分割为论文块
-2. 每块提取: 标题、作者列表、arXiv ID、DOI、期刊/卷/页/年份、`isFirstUnitIMP`
-3. `isFirstUnitIMP` 判定: 作者行包含 `Lanzhou, Inst. Modern Phys.`
-4. 展示列表: `displayPapers` = `allPapers.filter(p => p.isFirstUnitIMP)`
-5. 计数列表: `countPapers` = `allPapers`（全部论文）
-6. 学生列表: 硬编码8人名单，匹配论文作者
+**数据结构**:
+```json
+{ "papers": [{ "id", "title", "authors", "year", "arxiv_id", "doi", "journal", "citation_count", "isFirstUnitIMP" }],
+  "students": [{ "name_zh", "name_en", "papers" }] }
+```
 
-**功能**: 按导师筛选、按年份筛选、标题/作者/期刊搜索、"加载更多"分页
+**功能**: 搜索（标题/期刊关键词）、"加载更多"分页（初始20篇，每次+20）、无筛选按钮
 
-**更新方式**: 手动运行 `/update-website papers` skill 更新 offline HTML 文件
+**更新方式**: 运行 `/update-website papers` 从 INSPIRE-HEP 更新 papers.json
 
 ### 5.5 `animations.js` — 动画模块
 
@@ -238,7 +235,7 @@ lattice-qcd-at-imp.top/
 
 **动态数据加载**:
 - `loadConferences()`: 读取 `data/conferences.json`，按地点过滤中国学术机构，按日期降序，分"即将举行/已举办"
-- `loadSummerSchools()`: 读取 `data/summer-schools.json` + 解析 `custom/讲习班.html` 链接，合并为统一列表，过滤掉研讨会关键词，使用 `school-card` 模板
+- `loadSummerSchools()`: 读取 `data/summer-schools.json`，使用 `school-card` 模板渲染
 - `loadStudents()`: 轮询 `Papers.getStudents()`（最多10秒），渲染学生卡片
 
 **全局搜索**: 
@@ -486,16 +483,15 @@ git push -u origin main
 | 区域 | 背景类型 | 透明度 | 实现 |
 |---|---|---|---|
 | Hero | Canvas 星空/樱花 | 渐变遮罩 | `.hero-overlay` radial-gradient |
-| 普通 Section | 主页动效（Canvas） | 实色不透明 | `.section {bg:var(--background-primary)}` |
-| Section Alt | 主页动效 | 实色不透明 | `.section-alt {bg:var(--background-secondary)}` |
-| Help | QCD涨落图.gif | 0.35遮罩 | `#help .section-bg-overlay {rgba(.,0.85)}` |
-| Section Overlay | — | 透明 | `z-index:-1, bg:transparent` |
+| 普通 Section | transparent（Canvas透出） | 无 | `.section {bg:transparent, z-index:1}` |
+| Help | QCD涨落图.gif | 0.35遮罩 | `#help .section-bg-overlay {rgba(.,0.35)}` |
+| Navbar | 毛玻璃 | 0.35 | `rgba(.,0.35) + blur(12px)` |
 
 ### 8.2 数据过滤规则
 
-- **会议**: 地点包含中国学术机构关键词 → `['中国科学院', 'CAS', '研究所', '大学', '学院', '北京', '上海', '武汉', '广东', '兰州']`
-- **讲习班**: 同会议过滤 + 解析`讲习班.html`时排除标题含`研讨会/年会/Symposium/Annual Meeting/Lattice 20`的条目
-- **论文展示**: 仅显示 `isFirstUnitIMP === true` 的论文
+- **会议**: `data/conferences.json`，仅学术研讨会/年会
+- **讲习班**: `data/summer-schools.json`，仅暑期学校/训练营（不含华师）
+- **论文展示**: 全部146篇，无筛选，加载更多分页
 - **论文计数**: 全部论文（不限制第一单位）
 
 ### 8.3 动画设计

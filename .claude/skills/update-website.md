@@ -49,17 +49,9 @@ lattice-qcd-at-imp.top/
 ### `update-website papers`
 **更新论文数据**
 1. 从 INSPIRE-HEP API 获取两位导师最新论文（BAI: Peng.Sun.1, Liuming.Liu.1）
-2. 数据源优先级：
-   - 主：INSPIRE-HEP API (https://inspirehep.net/api/literature)
-   - 回退1：custom/inspirehep.net/authors/*/INSPIRE-CiteAll.html 离线HTML
-   - 回退2：data/papers.json 静态数据
-   - 最后：localStorage 缓存（24h内有效）
-3. 展示列表过滤：第一单位为 "Lanzhou, Inst. Modern Phys."
-4. 计数规则（发表论文与累计引用）：
-   - 不限第一单位，不限第一作者与通讯作者
-   - 两位导师论文量之和 / 引用量之和
-5. 更新 `数据.csv` 中的论文数、引用数
-6. 更新 `data_summary.json`
+2. 生成 `data/papers.json`（包含论文详情+学生数据）
+3. 同步更新 `数据.csv` 论文汇总
+4. 更新 `data_summary.json`
 
 ### `update-website add-conference`
 **添加学术会议**（必须在中国、由中国科学院研究所主办）
@@ -69,12 +61,11 @@ lattice-qcd-at-imp.top/
 4. 更新 `data_summary.json`
 
 ### `update-website add-summer-school`
-**添加讲习班**（来源于局域网收集，按日期排列）
-1. 提示输入：中英文名称、日期、地点（中国）、主题、链接
+**添加讲习班**
+1. 提示输入：中英文名称、日期、地点（中国科学院研究所）、主题、链接
 2. 添加到 `data/summer-schools.json`
-3. 更新 `custom/讲习班.html` 补充链接
-4. 更新 `数据.csv`
-5. 更新 `data_summary.json`
+3. 更新 `数据.csv`
+4. 更新 `data_summary.json`
 
 ### `update-website advisor`
 **更新导师信息**
@@ -121,7 +112,7 @@ lattice-qcd-at-imp.top/
 3. 主页背景：主页动效作为背景（全局canvas粒子动画覆盖所有section）
 4. 背景透明度：
    - 主页动效作为背景 → 不透明（section background = var(--background-primary), opacity=1.0）
-   - 非主页动效（help section 用 QCD涨落图.gif）→ 0.35 opacity
+   - 非主页动效（help section 用 QCD涨落图.gif）→ 0.35 opacity, navbar → 0.35
 5. 背景音乐：MP3自动播放，每次刷新随机选定初始音乐，随机洗牌模式
 
 ### `update-website summary`
@@ -163,6 +154,7 @@ papers → conferences → summer-schools → students → translations → summ
 - 会议地点必须在中国，单位必须为中国科学院的研究所（index.js中CHINA_KEYWORDS过滤）
 - 讲习班地点必须在中国，单位必须为中国科学院的研究所（index.js中CHINA_KEYWORDS过滤）
 - 讲习班按日期降序排列
-- custom/讲习班.html 作为讲习班附加内容，解析其中链接按年份排序
-- 论文展示列表仅显示第一单位为 "Lanzhou, Inst. Modern Phys." 的论文
+- 讲习班数据仅来源于 data/summer-schools.json（不加载讲习班.html）
+- 论文数据仅来源于 data/papers.json
+- 论文展示：全部146篇，加载更多分页（初始20篇）
 - 论文计数和引用计数规则：不限第一单位，限第一作者与通讯作者

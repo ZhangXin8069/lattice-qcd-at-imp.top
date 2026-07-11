@@ -117,62 +117,22 @@
     }
   }
 
-  // Load lectures section (merges summer-schools.json + 讲习班.html links)
+  // Load lectures section (data/summer-schools.json only)
   async function loadSummerSchools() {
     const container = document.getElementById('summer-schools-grid');
     if (!container) return;
 
     const lang = (I18N && I18N.getLang) ? I18N.getLang() : 'zh';
-    const CHINA_KEYWORDS = ['中国科学院', 'CAS', 'Chinese Academy', '研究所', '大学', '学院', '北京', '上海', '武汉', '广东', '兰州'];
     let allSchools = [];
 
-    // 1) Load structured data
     try {
       const resp = await fetch('data/summer-schools.json');
-      const schools = await resp.json();
-      const filtered = schools.filter(s => {
-        const loc = (s.location_zh || '') + (s.location_en || '');
-        return CHINA_KEYWORDS.some(kw => loc.includes(kw));
-      });
-      allSchools = allSchools.concat(filtered);
+      allSchools = await resp.json();
     } catch (e) {
       console.error('Failed to load summer schools:', e);
+      return;
     }
 
-    // 2) Parse extra links from 讲习班.html (using school-card template)
-    try {
-      const resp = await fetch('custom/讲习班.html');
-      const html = await resp.text();
-      const linkRegex = /<A\s+HREF="([^"]+)"[^>]*>([^<]+)<\/A>/gi;
-      let match;
-      while ((match = linkRegex.exec(html)) !== null) {
-        const title = match[2].trim();
-        const url = match[1];
-
-        // Skip conference entries (研讨会/年会/Lattice conference)
-        const CONF_KEYWORDS = ['研讨会', '年会', 'Lattice 20', 'Symposium', 'Annual Meeting'];
-        if (CONF_KEYWORDS.some(kw => title.includes(kw))) continue;
-
-        const yearMatch = title.match(/(\d{4})/);
-        const year = yearMatch ? yearMatch[1] : '';
-        const date = year ? `${year}-01-01` : '';
-        allSchools.push({
-          name_zh: title,
-          name_en: title,
-          date: date,
-          location_zh: '',
-          location_en: '',
-          topic_zh: '',
-          topic_en: '',
-          url: url,
-          status: 'past'
-        });
-      }
-    } catch (e) {
-      console.warn('Failed to load lectures extra links:', e);
-    }
-
-    // Sort by date descending
     allSchools.sort((a, b) => (b.date || '').localeCompare(a.date || ''));
 
     container.innerHTML = allSchools.map(school => {
