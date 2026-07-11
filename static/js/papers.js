@@ -8,8 +8,6 @@ const Papers = (function() {
 
   async function init() {
     await loadPapers();
-    renderPapers();
-    updateStats();
     setupSearch();
   }
 
