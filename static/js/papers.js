@@ -34,27 +34,26 @@ const Papers = (function() {
       const text = await resp.text();
 
       // Parse CSV: match lines starting with "论文详情"
-      // Format: "论文详情", id, title, year, arxiv, doi, journal, citation_count, isFirstUnitIMP
+      // Format: "论文详情", id, title, authors, year, arxiv, doi, journal, citation_count, isFirstUnitIMP
       const papers = [];
-      const re = /^"论文详情",\s*"(\d+)",\s*"((?:[^"]|"")*)",\s*"(\d*)",\s*"((?:[^"]|"")*)",\s*"((?:[^"]|"")*)",\s*"((?:[^"]|"")*)",\s*"(\d*)",\s*"(true|false)"\s*$/;
+      const re = /^"论文详情",\s*"(\d+)",\s*"((?:[^"]|"")*)",\s*"((?:[^"]|"")*)",\s*"(\d*)",\s*"((?:[^"]|"")*)",\s*"((?:[^"]|"")*)",\s*"((?:[^"]|"")*)",\s*"(\d*)",\s*"(true|false)"\s*$/;
       const lines = text.split('\n');
 
       for (const line of lines) {
         const m = line.match(re);
         if (!m) continue;
 
+        const authorStr = m[3].replace(/""/g, '"');
         papers.push({
           id: m[1],
           title: m[2].replace(/""/g, '"'),
-          year: m[3] ? parseInt(m[3], 10) : null,
-          arxiv_id: m[4].replace(/""/g, '"'),
-          doi: m[5].replace(/""/g, '"'),
-          journal: m[6].replace(/""/g, '"'),
-          authors: [],
-          volume: '',
-          pages: '',
-          citation_count: m[7] ? parseInt(m[7], 10) : 0,
-          isFirstUnitIMP: m[8] === 'true'
+          authorStr: authorStr,
+          year: m[4] ? parseInt(m[4], 10) : null,
+          arxiv_id: m[5].replace(/""/g, '"'),
+          doi: m[6].replace(/""/g, '"'),
+          journal: m[7].replace(/""/g, '"'),
+          citation_count: m[8] ? parseInt(m[8], 10) : 0,
+          isFirstUnitIMP: m[9] === 'true'
         });
       }
 
@@ -123,6 +122,9 @@ const Papers = (function() {
     if (noResults) noResults.style.display = 'none';
 
     container.innerHTML = displayed.map((paper, index) => {
+      const authorDisplay = paper.authorStr
+        ? paper.authorStr.split('; ').slice(0, 3).join('; ') + (paper.authorStr.split('; ').length > 3 ? ' et al.' : '')
+        : '';
       const journalStr = paper.journal || '';
       const links = [];
       if (paper.arxiv_id) {
@@ -139,9 +141,13 @@ const Papers = (function() {
         <div class="paper-card reveal-child" style="transition-delay: ${index * 0.05}s">
           <div class="paper-year-badge">${paper.year || '-'}</div>
           <h4 class="paper-title">${escapeHtml(paper.title)}</h4>
+          ${authorDisplay ? `<p class="paper-authors">${escapeHtml(authorDisplay)}</p>` : ''}
           ${journalStr ? `<p class="paper-journal">${escapeHtml(journalStr)}</p>` : ''}
           <div class="paper-meta">
             <div class="paper-links">${links.join(' ')}</div>
+            <div class="paper-citations">
+              <span class="citation-badge">${paper.citation_count || 0}</span> ${I18N.t('publications.cited')}
+            </div>
           </div>
         </div>
       `;
