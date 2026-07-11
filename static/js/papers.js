@@ -45,9 +45,10 @@ const Papers = (function() {
       if (!resp.ok) throw new Error('CSV not found: ' + resp.status);
       const text = await resp.text();
 
-      // Parse CSV: match lines starting with "论文详情" and extract quoted fields
+      // Parse CSV: match lines starting with "论文详情"
+      // Format: "论文详情", id, title, year, arxiv, doi, journal, citation_count, isFirstUnitIMP
       const papers = [];
-      const re = /^"论文详情",\s*"(\d+)",\s*"((?:[^"]|"")*)",\s*"(\d*)",\s*"((?:[^"]|"")*)",\s*"((?:[^"]|"")*)",\s*"((?:[^"]|"")*)",\s*"(true|false)"\s*$/;
+      const re = /^"论文详情",\s*"(\d+)",\s*"((?:[^"]|"")*)",\s*"(\d*)",\s*"((?:[^"]|"")*)",\s*"((?:[^"]|"")*)",\s*"((?:[^"]|"")*)",\s*"(\d*)",\s*"(true|false)"\s*$/;
       const lines = text.split('\n');
 
       for (const line of lines) {
@@ -64,8 +65,8 @@ const Papers = (function() {
           authors: [],
           volume: '',
           pages: '',
-          citation_count: 0,
-          isFirstUnitIMP: m[7] === 'true'
+          citation_count: m[7] ? parseInt(m[7], 10) : 0,
+          isFirstUnitIMP: m[8] === 'true'
         });
       }
 
