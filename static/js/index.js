@@ -148,6 +148,11 @@
       while ((match = linkRegex.exec(html)) !== null) {
         const title = match[2].trim();
         const url = match[1];
+
+        // Skip conference entries (研讨会/年会/Lattice conference)
+        const CONF_KEYWORDS = ['研讨会', '年会', 'Lattice 20', 'Symposium', 'Annual Meeting'];
+        if (CONF_KEYWORDS.some(kw => title.includes(kw))) continue;
+
         const yearMatch = title.match(/(\d{4})/);
         const year = yearMatch ? yearMatch[1] : '';
         const date = year ? `${year}-01-01` : '';
