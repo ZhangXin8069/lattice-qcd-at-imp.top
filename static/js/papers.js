@@ -13,7 +13,6 @@ const Papers = (function() {
   let displayPapers = [];  // filtered for display (first-unit IMP)
   let countPapers = [];    // papers for counting
   let students = [];
-  let currentYear = 'all';
   let displayCount = 10;
 
   // Student list per requirements (要求.json)
@@ -30,7 +29,6 @@ const Papers = (function() {
 
   async function init() {
     await loadPapers();
-    renderFilters();
     renderPapers();
     setupSearch();
     updateStats();
@@ -85,7 +83,6 @@ const Papers = (function() {
       countPapers = allPapers;
       students = STUDENT_NAMES.map(name => ({ name, papers: 0 }));
 
-      renderFilters();
       renderPapers();
       updateStats();
 
@@ -111,43 +108,12 @@ const Papers = (function() {
     }
   }
 
-  function renderFilters() {
-    const filterContainer = document.getElementById('pub-filters');
-    if (!filterContainer) return;
-
-    const years = [...new Set(displayPapers.map(p => p.year).filter(Boolean))].sort((a, b) => b - a);
-
-    filterContainer.innerHTML = `
-      <div class="pub-year-filter">
-        <select id="pub-year-select" aria-label="${I18N.t('publications.filter.year')}">
-          <option value="all">${I18N.t('publications.filter.year')}</option>
-          ${years.map(y => `<option value="${y}">${y}</option>`).join('')}
-        </select>
-      </div>
-    `;
-
-    const yearSelect = document.getElementById('pub-year-select');
-    if (yearSelect) {
-      yearSelect.addEventListener('change', () => {
-        currentYear = yearSelect.value;
-        displayCount = 10;
-        renderPapers();
-      });
-    }
-  }
-
-  function getFilteredPapers() {
-    if (currentYear === 'all') return displayPapers;
-    const year = parseInt(currentYear, 10);
-    return displayPapers.filter(p => p.year === year);
-  }
-
   function renderPapers() {
     const container = document.getElementById('publications-list');
     const noResults = document.getElementById('pub-no-results');
     if (!container) return;
 
-    const filtered = getFilteredPapers();
+    const filtered = displayPapers;
     const displayed = filtered.slice(0, displayCount);
 
     if (filtered.length === 0) {
@@ -221,7 +187,7 @@ const Papers = (function() {
           return;
         }
 
-        const filtered = getFilteredPapers().filter(p =>
+        const filtered = displayPapers.filter(p =>
           (p.title && p.title.toLowerCase().includes(query)) ||
           (p.journal && p.journal.toLowerCase().includes(query))
         );
@@ -268,7 +234,6 @@ const Papers = (function() {
   }
 
   document.addEventListener('langChanged', () => {
-    renderFilters();
     renderPapers();
   });
 
