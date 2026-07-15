@@ -1463,7 +1463,12 @@ body {
 
 .about-images-row-single {
   grid-template-columns: 1fr;
-  max-width: 500px;
+  max-width: 900px;
+}
+
+.about-images-row-single .about-image-card img {
+  height: auto;
+  object-fit: contain;
 }
 
 /* ----- Software Section ----- */

@@ -37,7 +37,7 @@
     ];
 
     grid.innerHTML = images.map(src => `
-      <div class="gallery-item reveal-child" data-src="${src}">
+      <div class="gallery-item" data-src="${src}">
         <img src="${src}" alt="图库图片" loading="lazy">
       </div>
     `).join('');
