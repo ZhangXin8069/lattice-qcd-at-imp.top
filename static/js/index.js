@@ -24,18 +24,42 @@
     }, { passive: true });
   }
 
+  // Populate gallery from custom/图库/ directory
+  function populateGallery() {
+    const grid = document.getElementById('gallery-grid');
+    if (!grid) return;
+
+    const images = [
+      'custom/图库/bcd42e2f82dcfde2697080a0677106db.jpg',
+      'custom/图库/c34c298e399991b0837b2b691c15bd0f.jpg',
+      'custom/图库/IMG_20260707_014035.jpg',
+      'custom/图库/mmexport1783355467944.jpg'
+    ];
+
+    grid.innerHTML = images.map(src => `
+      <div class="gallery-item reveal-child" data-src="${src}">
+        <img src="${src}" alt="图库图片" loading="lazy">
+      </div>
+    `).join('');
+  }
+
   // Gallery lightbox
   function initLightbox() {
     const lightbox = document.getElementById('lightbox');
     const lightboxImg = document.getElementById('lightbox-img');
     if (!lightbox || !lightboxImg) return;
 
-    document.querySelectorAll('.gallery-item[data-src]').forEach(item => {
-      item.addEventListener('click', () => {
-        lightboxImg.src = item.getAttribute('data-src');
-        lightbox.classList.add('active');
+    // Event delegation for dynamically created gallery items
+    const galleryGrid = document.getElementById('gallery-grid');
+    if (galleryGrid) {
+      galleryGrid.addEventListener('click', (e) => {
+        const item = e.target.closest('.gallery-item[data-src]');
+        if (item) {
+          lightboxImg.src = item.getAttribute('data-src');
+          lightbox.classList.add('active');
+        }
       });
-    });
+    }
 
     lightbox.addEventListener('click', (e) => {
       if (e.target === lightbox || e.target.classList.contains('lightbox-close')) {
@@ -507,6 +531,7 @@
     initGlobalSearch();
     initScrollToTop();
     initLightbox();
+    populateGallery();
     initSlideshow();
     initClickableImages();
     loadConferences();
