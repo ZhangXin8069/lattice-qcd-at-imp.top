@@ -219,9 +219,9 @@ const MusicPlayer = (function() {
     const shuffleBtn = document.getElementById('music-shuffle');
 
     if (playBtn) {
-      const icon = playBtn.querySelector('i');
+      const icon = playBtn.querySelector('svg, i');
       if (icon) {
-        icon.className = isPlaying ? 'fas fa-pause' : 'fas fa-play';
+        icon.setAttribute('class', isPlaying ? 'fas fa-pause' : 'fas fa-play');
       }
     }
 

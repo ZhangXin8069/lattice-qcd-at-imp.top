@@ -60,14 +60,14 @@ const Theme = (function() {
     const btn = document.getElementById('theme-toggle');
     if (!btn) return;
 
-    const icon = btn.querySelector('i');
+    const icon = btn.querySelector('svg, i');
     if (icon) {
       if (currentTheme === 'dark') {
-        icon.className = 'fas fa-sun';
+        icon.setAttribute('class', 'fas fa-sun');
         btn.setAttribute('aria-label', 'Switch to light mode');
         btn.setAttribute('title', I18N ? I18N.t('theme.light') : 'Light Mode');
       } else {
-        icon.className = 'fas fa-moon';
+        icon.setAttribute('class', 'fas fa-moon');
         btn.setAttribute('aria-label', 'Switch to dark mode');
         btn.setAttribute('title', I18N ? I18N.t('theme.dark') : 'Dark Mode');
       }

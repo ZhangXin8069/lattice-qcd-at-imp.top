@@ -1,0 +1,10 @@
+== diff 会话 2026-08-13-07-51-12 ==
+[范围] 工作区改动 (git diff) + 未跟踪文件 (git status)
+[命令] git status --short; git diff; git diff --stat; git diff --check; git diff --summary
+[统计] 已跟踪修改 3 文件 +26/-26; 未跟踪: 16 图(custom/) + fontawesome-subset.js + tools/(5 工具) + 会话日志 3
+[问题]
+  1. fa-circle-nodes (index.html:313) 不在 fontawesome-subset.js 的 30 个 ICONS 中 -> 无法渲染
+  2. static/css/fontawesome.all.min.css 引用 ../webfonts/* 字体文件, 仓库中全部缺失 -> webfont 回退路径不可用
+  3. 21 个旧 .png 已被新格式替换且 index.html 不再引用, 但仍在 git 跟踪中(待用户决定清理)
+  4. music.js/theme.js: svg 元素 className 直接赋值会静默失败, 改 setAttribute 正确; querySelector('svg, i') 匹配 subset 替换产物, 正确
+[结论] 改动意图: 图片 webp/jpg 化 + FontAwesome 全量库换 30 图标内联 SVG 子集 (1.16MB -> ~50KB), 方向正确; 缺口 fa-circle-nodes 需补

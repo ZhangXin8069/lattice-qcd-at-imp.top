@@ -1,0 +1,184 @@
+timestamp=2026-08-12T23:49:40.926Z level=INFO run=44a0614b message="loading tui config" path=/root/.config/opencode/tui.json
+timestamp=2026-08-12T23:49:40.928Z level=INFO run=44a0614b message="applying tui config" path=/root/.config/opencode/tui.json order=1
+timestamp=2026-08-12T23:49:41.647Z level=INFO run=3411d4cd message="creating instance" directory=/root/lattice-qcd-at-imp.top
+timestamp=2026-08-12T23:49:41.648Z level=INFO run=3411d4cd message=fromDirectory directory=/root/lattice-qcd-at-imp.top
+timestamp=2026-08-12T23:49:41.698Z level=INFO run=3411d4cd message=bootstrapping directory=/root/lattice-qcd-at-imp.top
+timestamp=2026-08-12T23:49:41.703Z level=INFO run=3411d4cd message=loading path=/root/.config/opencode/config.json
+timestamp=2026-08-12T23:49:41.704Z level=INFO run=3411d4cd message=loading path=/root/.config/opencode/opencode.json
+timestamp=2026-08-12T23:49:41.704Z level=INFO run=3411d4cd message=loading path=/root/.config/opencode/opencode.jsonc
+timestamp=2026-08-12T23:49:41.726Z level=DEBUG run=3411d4cd message="loading config from /root/.opencode/opencode.json"
+timestamp=2026-08-12T23:49:41.726Z level=INFO run=3411d4cd message=loading path=/root/.opencode/opencode.json
+timestamp=2026-08-12T23:49:41.727Z level=DEBUG run=3411d4cd message="loading config from /root/.opencode/opencode.jsonc"
+timestamp=2026-08-12T23:49:41.727Z level=INFO run=3411d4cd message=loading path=/root/.opencode/opencode.jsonc
+timestamp=2026-08-12T23:49:41.849Z level=DEBUG run=3411d4cd message="loaded custom config from OPENCODE_CONFIG_CONTENT"
+timestamp=2026-08-12T23:49:44.621Z level=WARN run=3411d4cd message="background dependency install failed" dir=/root/.config/opencode error="Cause([Fail(NpmInstallFailedError (cause: Error: could not resolve))])"
+[0m[31mTESTPLUGIN_LOADED[0m
+timestamp=2026-08-12T23:49:44.676Z level=ERROR run=3411d4cd message="failed to load plugin" path=file:///root/.config/opencode/plugins/teststatus.js error="undefined is not an object (evaluating 'api.slots.register')"
+timestamp=2026-08-12T23:49:44.676Z level=ERROR run=3411d4cd message="failed to load plugin" path=file:///root/.config/opencode/plugins/minimal.js error="Plugin file:///root/.config/opencode/plugins/minimal.js must default export an object with server()"
+timestamp=2026-08-12T23:49:44.676Z level=ERROR run=3411d4cd message="failed to load plugin" path=file:///root/.config/opencode/plugins/statusbar.js error="Plugin file:///root/.config/opencode/plugins/statusbar.js must default export an object with server()"
+timestamp=2026-08-12T23:49:44.677Z level=INFO run=3411d4cd message="all LSPs are disabled"
+timestamp=2026-08-12T23:49:44.679Z level=INFO run=3411d4cd message="all formatters are disabled"
+timestamp=2026-08-12T23:49:44.679Z level=INFO run=3411d4cd message=init
+timestamp=2026-08-12T23:49:45.408Z level=INFO run=3411d4cd message=init count=39
+timestamp=2026-08-12T23:49:45.497Z level=INFO run=3411d4cd message="watcher backend" directory=/root/lattice-qcd-at-imp.top platform=linux backend=inotify
+timestamp=2026-08-12T23:49:45.503Z level=INFO run=3411d4cd message="project copy refresh started" projectID=267d3710cd769bf8230158ab00d7926dfedc0f05
+timestamp=2026-08-12T23:49:45.512Z level=INFO run=3411d4cd message=created id=ses_0079e3857ffeNP3TSYYVKfdHBi slug=eager-star version=1.18.17 projectID=267d3710cd769bf8230158ab00d7926dfedc0f05 directory=/root/lattice-qcd-at-imp.top path="" workspaceID=undefined parentID=undefined title="New session - 2026-08-12T23:49:45.512Z" agent=build model.id=deepseek-v4-flash model.providerID=opencode-go model.variant=max metadata=undefined permission=undefined cost=0 tokens.input=0 tokens.output=0 tokens.reasoning=0 tokens.cache.read=0 tokens.cache.write=0 time.created=1786578585512 time.updated=1786578585512
+timestamp=2026-08-12T23:49:45.654Z level=INFO run=3411d4cd message=loop session.id=ses_0079e3857ffeNP3TSYYVKfdHBi step=0
+timestamp=2026-08-12T23:49:45.697Z level=INFO run=3411d4cd message=stream providerID=opencode-go modelID=deepseek-v4-flash session.id=ses_0079e3857ffeNP3TSYYVKfdHBi small=true agent=title mode=primary
+timestamp=2026-08-12T23:49:45.717Z level=INFO run=3411d4cd message="llm runtime selected" llm.runtime=ai-sdk llm.provider=opencode-go llm.model=deepseek-v4-flash
+timestamp=2026-08-12T23:49:45.853Z level=INFO run=3411d4cd message="project copy refresh done" projectID=267d3710cd769bf8230158ab00d7926dfedc0f05 updated=[] removed=[]
+timestamp=2026-08-12T23:49:45.859Z level=INFO run=3411d4cd message="booting location services" directory=/root/lattice-qcd-at-imp.top workspaceID=undefined
+timestamp=2026-08-12T23:49:46.260Z level=INFO run=3411d4cd message=tracking hash=c5dd56945a432c0d0c1cec3f2fba494b4cc6f6dd cwd=/root/lattice-qcd-at-imp.top git=/root/.local/share/opencode/snapshot/267d3710cd769bf8230158ab00d7926dfedc0f05/22e2cb5cdf0018bff055fb1953e713fee8354f76
+timestamp=2026-08-12T23:49:46.289Z level=INFO run=3411d4cd message="shell tool using shell" shell=/usr/bin/bash
+timestamp=2026-08-12T23:49:46.334Z level=INFO run=3411d4cd message="watcher backend" directory=/root/lattice-qcd-at-imp.top platform=linux backend=inotify
+timestamp=2026-08-12T23:49:46.337Z level=INFO run=3411d4cd message="project copy refresh started" projectID=267d3710cd769bf8230158ab00d7926dfedc0f05
+timestamp=2026-08-12T23:49:46.793Z level=INFO run=3411d4cd message="project copy refresh done" projectID=267d3710cd769bf8230158ab00d7926dfedc0f05 updated=[] removed=[]
+timestamp=2026-08-12T23:49:46.807Z level=INFO run=3411d4cd message="booting location services" directory=/root/lattice-qcd-at-imp.top workspaceID=undefined
+timestamp=2026-08-12T23:49:46.810Z level=INFO run=3411d4cd message=process session.id=ses_0079e3857ffeNP3TSYYVKfdHBi messageID=msg_ff861c839001h233sZMo7YzrHz
+timestamp=2026-08-12T23:49:46.811Z level=INFO run=3411d4cd message=stream providerID=opencode-go modelID=deepseek-v4-flash session.id=ses_0079e3857ffeNP3TSYYVKfdHBi small=false agent=build mode=primary
+timestamp=2026-08-12T23:49:46.818Z level=INFO run=3411d4cd message="llm runtime selected" llm.runtime=ai-sdk llm.provider=opencode-go llm.model=deepseek-v4-flash
+timestamp=2026-08-12T23:49:51.599Z level=INFO run=3411d4cd message=tracking hash=ae673881692ccf32ec4f54da3e4cce34ff6b9474 cwd=/root/lattice-qcd-at-imp.top git=/root/.local/share/opencode/snapshot/267d3710cd769bf8230158ab00d7926dfedc0f05/22e2cb5cdf0018bff055fb1953e713fee8354f76
+timestamp=2026-08-12T23:49:51.643Z level=INFO run=3411d4cd message=loop session.id=ses_0079e3857ffeNP3TSYYVKfdHBi step=1
+timestamp=2026-08-12T23:49:51.644Z level=INFO run=3411d4cd message="exiting loop" session.id=ses_0079e3857ffeNP3TSYYVKfdHBi
+timestamp=2026-08-12T23:49:59.942Z level=INFO run=3411d4cd message=loop session.id=ses_0079e3857ffeNP3TSYYVKfdHBi step=0
+timestamp=2026-08-12T23:49:59.964Z level=INFO run=3411d4cd message=tracking hash=cdd97e628f46efbb053517a9d24cd86ce3e5a466 cwd=/root/lattice-qcd-at-imp.top git=/root/.local/share/opencode/snapshot/267d3710cd769bf8230158ab00d7926dfedc0f05/22e2cb5cdf0018bff055fb1953e713fee8354f76
+timestamp=2026-08-12T23:49:59.989Z level=INFO run=3411d4cd message=process session.id=ses_0079e3857ffeNP3TSYYVKfdHBi messageID=msg_ff8620008001ENuxI9njq8hy0j
+timestamp=2026-08-12T23:49:59.990Z level=INFO run=3411d4cd message=stream providerID=opencode-go modelID=deepseek-v4-flash session.id=ses_0079e3857ffeNP3TSYYVKfdHBi small=false agent=build mode=primary
+timestamp=2026-08-12T23:49:59.992Z level=INFO run=3411d4cd message="llm runtime selected" llm.runtime=ai-sdk llm.provider=opencode-go llm.model=deepseek-v4-flash
+timestamp=2026-08-12T23:50:02.815Z level=INFO run=3411d4cd message=evaluated permission=skill pattern=diff action.permission=* action.action=allow action.pattern=*
+timestamp=2026-08-12T23:50:02.934Z level=INFO run=3411d4cd message=tracking hash=f436ad011c56032ebc735586090f0cb34c66e9fc cwd=/root/lattice-qcd-at-imp.top git=/root/.local/share/opencode/snapshot/267d3710cd769bf8230158ab00d7926dfedc0f05/22e2cb5cdf0018bff055fb1953e713fee8354f76
+timestamp=2026-08-12T23:50:02.972Z level=INFO run=3411d4cd message=loop session.id=ses_0079e3857ffeNP3TSYYVKfdHBi step=1
+timestamp=2026-08-12T23:50:03.012Z level=INFO run=3411d4cd message=tracking hash=83687f82736da35a2ba83688dc220f4a6b84e8d8 cwd=/root/lattice-qcd-at-imp.top git=/root/.local/share/opencode/snapshot/267d3710cd769bf8230158ab00d7926dfedc0f05/22e2cb5cdf0018bff055fb1953e713fee8354f76
+timestamp=2026-08-12T23:50:03.027Z level=INFO run=3411d4cd message=process session.id=ses_0079e3857ffeNP3TSYYVKfdHBi messageID=msg_ff8620bde001FNcf1DJfFvQ0ve
+timestamp=2026-08-12T23:50:03.028Z level=INFO run=3411d4cd message=stream providerID=opencode-go modelID=deepseek-v4-flash session.id=ses_0079e3857ffeNP3TSYYVKfdHBi small=false agent=build mode=primary
+timestamp=2026-08-12T23:50:03.029Z level=INFO run=3411d4cd message="llm runtime selected" llm.runtime=ai-sdk llm.provider=opencode-go llm.model=deepseek-v4-flash
+timestamp=2026-08-12T23:50:07.738Z level=INFO run=3411d4cd message=evaluated permission=bash pattern="git status --short" action.permission=* action.action=allow action.pattern=*
+timestamp=2026-08-12T23:50:07.738Z level=INFO run=3411d4cd message=evaluated permission=bash pattern="echo \"---- diff stat ----\"" action.permission=* action.action=allow action.pattern=*
+timestamp=2026-08-12T23:50:07.739Z level=INFO run=3411d4cd message=evaluated permission=bash pattern="git diff --stat" action.permission=* action.action=allow action.pattern=*
+timestamp=2026-08-12T23:50:07.739Z level=INFO run=3411d4cd message=evaluated permission=bash pattern="echo \"---- cached stat ----\"" action.permission=* action.action=allow action.pattern=*
+timestamp=2026-08-12T23:50:07.739Z level=INFO run=3411d4cd message=evaluated permission=bash pattern="git diff --cached --stat" action.permission=* action.action=allow action.pattern=*
+timestamp=2026-08-12T23:50:07.739Z level=INFO run=3411d4cd message=evaluated permission=bash pattern="echo \"---- recent log ----\"" action.permission=* action.action=allow action.pattern=*
+timestamp=2026-08-12T23:50:07.740Z level=INFO run=3411d4cd message=evaluated permission=bash pattern="git log --oneline -5" action.permission=* action.action=allow action.pattern=*
+timestamp=2026-08-12T23:50:07.824Z level=INFO run=3411d4cd message=tracking hash=e0d0986ddbc225a5f284581c7cf5d2f879b6b69a cwd=/root/lattice-qcd-at-imp.top git=/root/.local/share/opencode/snapshot/267d3710cd769bf8230158ab00d7926dfedc0f05/22e2cb5cdf0018bff055fb1953e713fee8354f76
+timestamp=2026-08-12T23:50:07.875Z level=INFO run=3411d4cd message=loop session.id=ses_0079e3857ffeNP3TSYYVKfdHBi step=2
+timestamp=2026-08-12T23:50:07.927Z level=INFO run=3411d4cd message=tracking hash=6e96c392d7be99e9f84eb04ec6d629c453885db6 cwd=/root/lattice-qcd-at-imp.top git=/root/.local/share/opencode/snapshot/267d3710cd769bf8230158ab00d7926dfedc0f05/22e2cb5cdf0018bff055fb1953e713fee8354f76
+timestamp=2026-08-12T23:50:07.933Z level=INFO run=3411d4cd message=process session.id=ses_0079e3857ffeNP3TSYYVKfdHBi messageID=msg_ff8621f04001MsdCVG1htq6Wn8
+timestamp=2026-08-12T23:50:07.934Z level=INFO run=3411d4cd message=stream providerID=opencode-go modelID=deepseek-v4-flash session.id=ses_0079e3857ffeNP3TSYYVKfdHBi small=false agent=build mode=primary
+timestamp=2026-08-12T23:50:07.936Z level=INFO run=3411d4cd message="llm runtime selected" llm.runtime=ai-sdk llm.provider=opencode-go llm.model=deepseek-v4-flash
+timestamp=2026-08-12T23:50:10.534Z level=INFO run=3411d4cd message=evaluated permission=bash pattern="git diff" action.permission=* action.action=allow action.pattern=*
+timestamp=2026-08-12T23:50:10.535Z level=INFO run=3411d4cd message=evaluated permission=bash pattern="echo \"==== check ====\"" action.permission=* action.action=allow action.pattern=*
+timestamp=2026-08-12T23:50:10.535Z level=INFO run=3411d4cd message=evaluated permission=bash pattern="git diff --check" action.permission=* action.action=allow action.pattern=*
+timestamp=2026-08-12T23:50:10.535Z level=INFO run=3411d4cd message=evaluated permission=bash pattern="echo \"==== summary ====\"" action.permission=* action.action=allow action.pattern=*
+timestamp=2026-08-12T23:50:10.535Z level=INFO run=3411d4cd message=evaluated permission=bash pattern="git diff --summary" action.permission=* action.action=allow action.pattern=*
+timestamp=2026-08-12T23:50:10.636Z level=INFO run=3411d4cd message=tracking hash=8aa306a0bfdb2452ef8f32c96ecb3403e7919ce3 cwd=/root/lattice-qcd-at-imp.top git=/root/.local/share/opencode/snapshot/267d3710cd769bf8230158ab00d7926dfedc0f05/22e2cb5cdf0018bff055fb1953e713fee8354f76
+timestamp=2026-08-12T23:50:10.693Z level=INFO run=3411d4cd message=loop session.id=ses_0079e3857ffeNP3TSYYVKfdHBi step=3
+timestamp=2026-08-12T23:50:10.731Z level=INFO run=3411d4cd message=tracking hash=6f17fb5261c4db085c684b016541938fddac6ef2 cwd=/root/lattice-qcd-at-imp.top git=/root/.local/share/opencode/snapshot/267d3710cd769bf8230158ab00d7926dfedc0f05/22e2cb5cdf0018bff055fb1953e713fee8354f76
+timestamp=2026-08-12T23:50:10.742Z level=INFO run=3411d4cd message=process session.id=ses_0079e3857ffeNP3TSYYVKfdHBi messageID=msg_ff8622a07001GTOr7bu1qHxRuM
+timestamp=2026-08-12T23:50:10.743Z level=INFO run=3411d4cd message=stream providerID=opencode-go modelID=deepseek-v4-flash session.id=ses_0079e3857ffeNP3TSYYVKfdHBi small=false agent=build mode=primary
+timestamp=2026-08-12T23:50:10.744Z level=INFO run=3411d4cd message="llm runtime selected" llm.runtime=ai-sdk llm.provider=opencode-go llm.model=deepseek-v4-flash
+timestamp=2026-08-12T23:50:19.298Z level=INFO run=3411d4cd message=evaluated permission=bash pattern="ls custom/" action.permission=* action.action=allow action.pattern=*
+timestamp=2026-08-12T23:50:19.298Z level=INFO run=3411d4cd message=evaluated permission=bash pattern=sort action.permission=* action.action=allow action.pattern=*
+timestamp=2026-08-12T23:50:19.298Z level=INFO run=3411d4cd message=evaluated permission=bash pattern="echo \"==== 旧格式残留引用 ====\"" action.permission=* action.action=allow action.pattern=*
+timestamp=2026-08-12T23:50:19.298Z level=INFO run=3411d4cd message=evaluated permission=bash pattern="grep -n \"\\.png\\|\\.webp\\|\\.jpg\" index.html" action.permission=* action.action=allow action.pattern=*
+timestamp=2026-08-12T23:50:19.299Z level=INFO run=3411d4cd message=evaluated permission=bash pattern="grep -v \"^\\s*//\"" action.permission=* action.action=allow action.pattern=*
+timestamp=2026-08-12T23:50:19.299Z level=INFO run=3411d4cd message=evaluated permission=bash pattern="head -40" action.permission=* action.action=allow action.pattern=*
+timestamp=2026-08-12T23:50:19.736Z level=INFO run=3411d4cd message=evaluated permission=bash pattern="head -30 static/js/fontawesome-subset.js" action.permission=* action.action=allow action.pattern=*
+timestamp=2026-08-12T23:50:19.736Z level=INFO run=3411d4cd message=evaluated permission=bash pattern="echo \"==== 图标类统计 ====\"" action.permission=* action.action=allow action.pattern=*
+timestamp=2026-08-12T23:50:19.736Z level=INFO run=3411d4cd message=evaluated permission=bash pattern="grep -o 'fa-[a-z-]*' index.html static/js/*.js" action.permission=* action.action=allow action.pattern=*
+timestamp=2026-08-12T23:50:19.736Z level=INFO run=3411d4cd message=evaluated permission=bash pattern="sort -u" action.permission=* action.action=allow action.pattern=*
+timestamp=2026-08-12T23:50:20.127Z level=INFO run=3411d4cd message=evaluated permission=bash pattern="ls tools/ 2>/dev/null" action.permission=* action.action=allow action.pattern=*
+timestamp=2026-08-12T23:50:20.127Z level=INFO run=3411d4cd message=evaluated permission=bash pattern="echo \"==== 旧png是否仍存在 ====\"" action.permission=* action.action=allow action.pattern=*
+timestamp=2026-08-12T23:50:20.127Z level=INFO run=3411d4cd message=evaluated permission=bash pattern="ls custom/*.png 2>/dev/null" action.permission=* action.action=allow action.pattern=*
+timestamp=2026-08-12T23:50:20.127Z level=INFO run=3411d4cd message=evaluated permission=bash pattern="echo \"无残留 png\"" action.permission=* action.action=allow action.pattern=*
+timestamp=2026-08-12T23:50:20.213Z level=INFO run=3411d4cd message=tracking hash=eb2f0f04897e8e22f25a5e35df7923f26c4fb41b cwd=/root/lattice-qcd-at-imp.top git=/root/.local/share/opencode/snapshot/267d3710cd769bf8230158ab00d7926dfedc0f05/22e2cb5cdf0018bff055fb1953e713fee8354f76
+timestamp=2026-08-12T23:50:20.247Z level=INFO run=3411d4cd message=loop session.id=ses_0079e3857ffeNP3TSYYVKfdHBi step=4
+timestamp=2026-08-12T23:50:20.277Z level=INFO run=3411d4cd message=tracking hash=df13576104a5fb28b6cb259dc87da284ab66e71e cwd=/root/lattice-qcd-at-imp.top git=/root/.local/share/opencode/snapshot/267d3710cd769bf8230158ab00d7926dfedc0f05/22e2cb5cdf0018bff055fb1953e713fee8354f76
+timestamp=2026-08-12T23:50:20.295Z level=INFO run=3411d4cd message=process session.id=ses_0079e3857ffeNP3TSYYVKfdHBi messageID=msg_ff8624f59001E0w7ulZnktmNhO
+timestamp=2026-08-12T23:50:20.297Z level=INFO run=3411d4cd message=stream providerID=opencode-go modelID=deepseek-v4-flash session.id=ses_0079e3857ffeNP3TSYYVKfdHBi small=false agent=build mode=primary
+timestamp=2026-08-12T23:50:20.305Z level=INFO run=3411d4cd message="llm runtime selected" llm.runtime=ai-sdk llm.provider=opencode-go llm.model=deepseek-v4-flash
+timestamp=2026-08-12T23:50:31.755Z level=INFO run=3411d4cd message=evaluated permission=bash pattern="grep -o '\"[a-z-]*\":\\[' static/js/fontawesome-subset.js" action.permission=* action.action=allow action.pattern=*
+timestamp=2026-08-12T23:50:31.756Z level=INFO run=3411d4cd message=evaluated permission=bash pattern="tr -d '\":['" action.permission=* action.action=allow action.pattern=*
+timestamp=2026-08-12T23:50:31.756Z level=INFO run=3411d4cd message=evaluated permission=bash pattern="echo \"==== 渲染逻辑 ====\"" action.permission=* action.action=allow action.pattern=*
+timestamp=2026-08-12T23:50:31.756Z level=INFO run=3411d4cd message=evaluated permission=bash pattern="tail -60 static/js/fontawesome-subset.js" action.permission=* action.action=allow action.pattern=*
+timestamp=2026-08-12T23:50:32.225Z level=INFO run=3411d4cd message=evaluated permission=bash pattern="echo \"==== 旧png是否被git跟踪 ====\"" action.permission=* action.action=allow action.pattern=*
+timestamp=2026-08-12T23:50:32.225Z level=INFO run=3411d4cd message=evaluated permission=bash pattern="git ls-files custom/" action.permission=* action.action=allow action.pattern=*
+timestamp=2026-08-12T23:50:32.225Z level=INFO run=3411d4cd message=evaluated permission=bash pattern="grep -i png" action.permission=* action.action=allow action.pattern=*
+timestamp=2026-08-12T23:50:32.225Z level=INFO run=3411d4cd message=evaluated permission=bash pattern="echo \"==== 新增文件git状态 ====\"" action.permission=* action.action=allow action.pattern=*
+timestamp=2026-08-12T23:50:32.225Z level=INFO run=3411d4cd message=evaluated permission=bash pattern="git status --short custom/ static/js/fontawesome-subset.js" action.permission=* action.action=allow action.pattern=*
+timestamp=2026-08-12T23:50:32.225Z level=INFO run=3411d4cd message=evaluated permission=bash pattern="head -30" action.permission=* action.action=allow action.pattern=*
+timestamp=2026-08-12T23:50:32.331Z level=INFO run=3411d4cd message=tracking hash=4b282ca0e3ba3d07248a69bd03760b5a862f27ce cwd=/root/lattice-qcd-at-imp.top git=/root/.local/share/opencode/snapshot/267d3710cd769bf8230158ab00d7926dfedc0f05/22e2cb5cdf0018bff055fb1953e713fee8354f76
+timestamp=2026-08-12T23:50:32.370Z level=INFO run=3411d4cd message=loop session.id=ses_0079e3857ffeNP3TSYYVKfdHBi step=5
+timestamp=2026-08-12T23:50:32.406Z level=INFO run=3411d4cd message=tracking hash=19d65531372f2bc32b99d50f11cf258e4bf35735 cwd=/root/lattice-qcd-at-imp.top git=/root/.local/share/opencode/snapshot/267d3710cd769bf8230158ab00d7926dfedc0f05/22e2cb5cdf0018bff055fb1953e713fee8354f76
+timestamp=2026-08-12T23:50:32.419Z level=INFO run=3411d4cd message=process session.id=ses_0079e3857ffeNP3TSYYVKfdHBi messageID=msg_ff8627eb40010VzzvX3ih4vOo1
+timestamp=2026-08-12T23:50:32.420Z level=INFO run=3411d4cd message=stream providerID=opencode-go modelID=deepseek-v4-flash session.id=ses_0079e3857ffeNP3TSYYVKfdHBi small=false agent=build mode=primary
+timestamp=2026-08-12T23:50:32.421Z level=INFO run=3411d4cd message="llm runtime selected" llm.runtime=ai-sdk llm.provider=opencode-go llm.model=deepseek-v4-flash
+timestamp=2026-08-12T23:50:43.594Z level=INFO run=3411d4cd message=evaluated permission=bash pattern="grep -n \"circle-nodes\" index.html" action.permission=* action.action=allow action.pattern=*
+timestamp=2026-08-12T23:50:43.594Z level=INFO run=3411d4cd message=evaluated permission=bash pattern="head -5" action.permission=* action.action=allow action.pattern=*
+timestamp=2026-08-12T23:50:43.594Z level=INFO run=3411d4cd message=evaluated permission=bash pattern="echo \"==== fa-spin/svg-inline CSS 定义 ====\"" action.permission=* action.action=allow action.pattern=*
+timestamp=2026-08-12T23:50:43.595Z level=INFO run=3411d4cd message=evaluated permission=bash pattern="grep -n \"fa-spin\\|svg-inline--fa\\|\\.fas\" style.css static/css/style.css 2>/dev/null" action.permission=* action.action=allow action.pattern=*
+timestamp=2026-08-12T23:50:43.595Z level=INFO run=3411d4cd message=evaluated permission=bash pattern="head -10" action.permission=* action.action=allow action.pattern=*
+timestamp=2026-08-12T23:50:43.595Z level=INFO run=3411d4cd message=evaluated permission=bash pattern="echo \"==== CSS 文件清单 ====\"" action.permission=* action.action=allow action.pattern=*
+timestamp=2026-08-12T23:50:43.595Z level=INFO run=3411d4cd message=evaluated permission=bash pattern="ls static/css/ 2>/dev/null" action.permission=* action.action=allow action.pattern=*
+timestamp=2026-08-12T23:50:43.595Z level=INFO run=3411d4cd message=evaluated permission=bash pattern="grep -o 'href=\"[^\"]*css[^\"]*\"' index.html" action.permission=* action.action=allow action.pattern=*
+timestamp=2026-08-12T23:50:43.687Z level=INFO run=3411d4cd message=tracking hash=255e10e5303ad3774afa8fab4dda36945525188f cwd=/root/lattice-qcd-at-imp.top git=/root/.local/share/opencode/snapshot/267d3710cd769bf8230158ab00d7926dfedc0f05/22e2cb5cdf0018bff055fb1953e713fee8354f76
+timestamp=2026-08-12T23:50:43.717Z level=INFO run=3411d4cd message=loop session.id=ses_0079e3857ffeNP3TSYYVKfdHBi step=6
+timestamp=2026-08-12T23:50:43.755Z level=INFO run=3411d4cd message=tracking hash=67501849879cb51ec91d0cd894f7d1f506105920 cwd=/root/lattice-qcd-at-imp.top git=/root/.local/share/opencode/snapshot/267d3710cd769bf8230158ab00d7926dfedc0f05/22e2cb5cdf0018bff055fb1953e713fee8354f76
+timestamp=2026-08-12T23:50:43.767Z level=INFO run=3411d4cd message=process session.id=ses_0079e3857ffeNP3TSYYVKfdHBi messageID=msg_ff862ab07001tVHfhAQG4mloPv
+timestamp=2026-08-12T23:50:43.768Z level=INFO run=3411d4cd message=stream providerID=opencode-go modelID=deepseek-v4-flash session.id=ses_0079e3857ffeNP3TSYYVKfdHBi small=false agent=build mode=primary
+timestamp=2026-08-12T23:50:43.770Z level=INFO run=3411d4cd message="llm runtime selected" llm.runtime=ai-sdk llm.provider=opencode-go llm.model=deepseek-v4-flash
+timestamp=2026-08-12T23:50:45.221Z level=INFO run=3411d4cd message=cleanup prune=7.days
+timestamp=2026-08-12T23:50:51.174Z level=INFO run=3411d4cd message=evaluated permission=bash pattern="sed -n '/function replace/,$p' static/js/fontawesome-subset.js" action.permission=* action.action=allow action.pattern=*
+timestamp=2026-08-12T23:50:51.175Z level=INFO run=3411d4cd message=evaluated permission=bash pattern="head -20" action.permission=* action.action=allow action.pattern=*
+timestamp=2026-08-12T23:50:51.175Z level=INFO run=3411d4cd message=evaluated permission=bash pattern="echo \"==== webfont 文件与路径 ====\"" action.permission=* action.action=allow action.pattern=*
+timestamp=2026-08-12T23:50:51.175Z level=INFO run=3411d4cd message=evaluated permission=bash pattern="grep -o \"url([^)]*)\" static/css/fontawesome.all.min.css" action.permission=* action.action=allow action.pattern=*
+timestamp=2026-08-12T23:50:51.175Z level=INFO run=3411d4cd message=evaluated permission=bash pattern="sort -u" action.permission=* action.action=allow action.pattern=*
+timestamp=2026-08-12T23:50:51.175Z level=INFO run=3411d4cd message=evaluated permission=bash pattern=head action.permission=* action.action=allow action.pattern=*
+timestamp=2026-08-12T23:50:51.175Z level=INFO run=3411d4cd message=evaluated permission=bash pattern="echo \"==== 字体文件存在性 ====\"" action.permission=* action.action=allow action.pattern=*
+timestamp=2026-08-12T23:50:51.175Z level=INFO run=3411d4cd message=evaluated permission=bash pattern="ls -la static/css/webfonts/ 2>/dev/null" action.permission=* action.action=allow action.pattern=*
+timestamp=2026-08-12T23:50:51.175Z level=INFO run=3411d4cd message=evaluated permission=bash pattern="ls static/webfonts/" action.permission=* action.action=allow action.pattern=*
+timestamp=2026-08-12T23:50:51.175Z level=INFO run=3411d4cd message=evaluated permission=bash pattern="echo \"无 webfonts 目录\"" action.permission=* action.action=allow action.pattern=*
+timestamp=2026-08-12T23:50:51.292Z level=INFO run=3411d4cd message=tracking hash=c7f8e8f475cca45e300c5bef535fd52c55ff414b cwd=/root/lattice-qcd-at-imp.top git=/root/.local/share/opencode/snapshot/267d3710cd769bf8230158ab00d7926dfedc0f05/22e2cb5cdf0018bff055fb1953e713fee8354f76
+timestamp=2026-08-12T23:50:51.329Z level=INFO run=3411d4cd message=loop session.id=ses_0079e3857ffeNP3TSYYVKfdHBi step=7
+timestamp=2026-08-12T23:50:51.368Z level=INFO run=3411d4cd message=tracking hash=c2a6a82df3f0cf9b3c7e2322c555f4bf6e4b20a5 cwd=/root/lattice-qcd-at-imp.top git=/root/.local/share/opencode/snapshot/267d3710cd769bf8230158ab00d7926dfedc0f05/22e2cb5cdf0018bff055fb1953e713fee8354f76
+timestamp=2026-08-12T23:50:51.380Z level=INFO run=3411d4cd message=process session.id=ses_0079e3857ffeNP3TSYYVKfdHBi messageID=msg_ff862c8c4001OWV3UEexqWh29D
+timestamp=2026-08-12T23:50:51.381Z level=INFO run=3411d4cd message=stream providerID=opencode-go modelID=deepseek-v4-flash session.id=ses_0079e3857ffeNP3TSYYVKfdHBi small=false agent=build mode=primary
+timestamp=2026-08-12T23:50:51.383Z level=INFO run=3411d4cd message="llm runtime selected" llm.runtime=ai-sdk llm.provider=opencode-go llm.model=deepseek-v4-flash
+timestamp=2026-08-12T23:50:58.384Z level=INFO run=3411d4cd message=evaluated permission=bash pattern="ls -d static/*webfont* static/**/webfonts 2>/dev/null" action.permission=* action.action=allow action.pattern=*
+timestamp=2026-08-12T23:50:58.384Z level=INFO run=3411d4cd message=evaluated permission=bash pattern="echo \"==== fa-spin CSS 定义 ====\"" action.permission=* action.action=allow action.pattern=*
+timestamp=2026-08-12T23:50:58.384Z level=INFO run=3411d4cd message=evaluated permission=bash pattern="grep -c \"fa-spin\" static/css/fontawesome.all.min.css" action.permission=* action.action=allow action.pattern=*
+timestamp=2026-08-12T23:50:58.384Z level=INFO run=3411d4cd message=evaluated permission=bash pattern="grep -o \"@keyframes fa-spin[^}]*}[^}]*}\" static/css/fontawesome.all.min.css" action.permission=* action.action=allow action.pattern=*
+timestamp=2026-08-12T23:50:58.384Z level=INFO run=3411d4cd message=evaluated permission=bash pattern="head -1" action.permission=* action.action=allow action.pattern=*
+timestamp=2026-08-12T23:50:58.384Z level=INFO run=3411d4cd message=evaluated permission=bash pattern="echo \"==== woff2 全局搜索 ====\"" action.permission=* action.action=allow action.pattern=*
+timestamp=2026-08-12T23:50:58.385Z level=INFO run=3411d4cd message=evaluated permission=bash pattern="ls static/css/fonts 2>/dev/null" action.permission=* action.action=allow action.pattern=*
+timestamp=2026-08-12T23:50:58.385Z level=INFO run=3411d4cd message=evaluated permission=bash pattern="find static -name \"*.woff2\" -o -name \"*.ttf\" 2>/dev/null" action.permission=* action.action=allow action.pattern=*
+timestamp=2026-08-12T23:50:58.385Z level=INFO run=3411d4cd message=evaluated permission=bash pattern=head action.permission=* action.action=allow action.pattern=*
+timestamp=2026-08-12T23:50:58.498Z level=INFO run=3411d4cd message=tracking hash=4eae5302573fadb681e484e990e61624cc5f23dd cwd=/root/lattice-qcd-at-imp.top git=/root/.local/share/opencode/snapshot/267d3710cd769bf8230158ab00d7926dfedc0f05/22e2cb5cdf0018bff055fb1953e713fee8354f76
+timestamp=2026-08-12T23:50:58.531Z level=INFO run=3411d4cd message=loop session.id=ses_0079e3857ffeNP3TSYYVKfdHBi step=8
+timestamp=2026-08-12T23:50:58.568Z level=INFO run=3411d4cd message=tracking hash=6e46f8c53d10c00881682f91710c68da5e4a17ca cwd=/root/lattice-qcd-at-imp.top git=/root/.local/share/opencode/snapshot/267d3710cd769bf8230158ab00d7926dfedc0f05/22e2cb5cdf0018bff055fb1953e713fee8354f76
+timestamp=2026-08-12T23:50:58.573Z level=INFO run=3411d4cd message=process session.id=ses_0079e3857ffeNP3TSYYVKfdHBi messageID=msg_ff862e4e5001mS4d64loA9h6NQ
+timestamp=2026-08-12T23:50:58.575Z level=INFO run=3411d4cd message=stream providerID=opencode-go modelID=deepseek-v4-flash session.id=ses_0079e3857ffeNP3TSYYVKfdHBi small=false agent=build mode=primary
+timestamp=2026-08-12T23:50:58.586Z level=INFO run=3411d4cd message="llm runtime selected" llm.runtime=ai-sdk llm.provider=opencode-go llm.model=deepseek-v4-flash
+timestamp=2026-08-12T23:51:12.520Z level=INFO run=3411d4cd message="resolved path" arg="\"$LOG\"" resolved=undefined
+timestamp=2026-08-12T23:51:12.520Z level=INFO run=3411d4cd message=evaluated permission=bash pattern="date +%Y-%m-%d-%H-%M-%S" action.permission=* action.action=allow action.pattern=*
+timestamp=2026-08-12T23:51:12.520Z level=INFO run=3411d4cd message=evaluated permission=bash pattern="echo \"== diff 会话 $TS ==\"" action.permission=* action.action=allow action.pattern=*
+timestamp=2026-08-12T23:51:12.521Z level=INFO run=3411d4cd message=evaluated permission=bash pattern="echo \"[范围] 工作区改动 (git diff) + 未跟踪文件 (git status)\"" action.permission=* action.action=allow action.pattern=*
+timestamp=2026-08-12T23:51:12.521Z level=INFO run=3411d4cd message=evaluated permission=bash pattern="echo \"[命令] git status --short; git diff; git diff --stat; git diff --check; git diff --summary\"" action.permission=* action.action=allow action.pattern=*
+timestamp=2026-08-12T23:51:12.521Z level=INFO run=3411d4cd message=evaluated permission=bash pattern="echo \"[统计] 已跟踪修改 3 文件 +26/-26; 未跟踪: 16 图(custom/) + fontawesome-subset.js + tools/(5 工具) + 会话日志 3\"" action.permission=* action.action=allow action.pattern=*
+timestamp=2026-08-12T23:51:12.521Z level=INFO run=3411d4cd message=evaluated permission=bash pattern="echo \"[问题]\"" action.permission=* action.action=allow action.pattern=*
+timestamp=2026-08-12T23:51:12.521Z level=INFO run=3411d4cd message=evaluated permission=bash pattern="echo \"  1. fa-circle-nodes (index.html:313) 不在 fontawesome-subset.js 的 30 个 ICONS 中 -> 无法渲染\"" action.permission=* action.action=allow action.pattern=*
+timestamp=2026-08-12T23:51:12.521Z level=INFO run=3411d4cd message=evaluated permission=bash pattern="echo \"  2. static/css/fontawesome.all.min.css 引用 ../webfonts/* 字体文件, 仓库中全部缺失 -> webfont 回退路径不可用\"" action.permission=* action.action=allow action.pattern=*
+timestamp=2026-08-12T23:51:12.521Z level=INFO run=3411d4cd message=evaluated permission=bash pattern="echo \"  3. 21 个旧 .png 已被新格式替换且 index.html 不再引用, 但仍在 git 跟踪中(待用户决定清理)\"" action.permission=* action.action=allow action.pattern=*
+timestamp=2026-08-12T23:51:12.521Z level=INFO run=3411d4cd message=evaluated permission=bash pattern="echo \"  4. music.js/theme.js: svg 元素 className 直接赋值会静默失败, 改 setAttribute 正确; querySelector('svg, i') 匹配 subset 替换产物, 正确\"" action.permission=* action.action=allow action.pattern=*
+timestamp=2026-08-12T23:51:12.521Z level=INFO run=3411d4cd message=evaluated permission=bash pattern="echo \"[结论] 改动意图: 图片 webp/jpg 化 + FontAwesome 全量库换 30 图标内联 SVG 子集 (1.16MB -> ~50KB), 方向正确; 缺口 fa-circle-nodes 需补\"" action.permission=* action.action=allow action.pattern=*
+timestamp=2026-08-12T23:51:12.521Z level=INFO run=3411d4cd message=evaluated permission=bash pattern="cat \"$LOG\"" action.permission=* action.action=allow action.pattern=*
+timestamp=2026-08-12T23:51:12.617Z level=INFO run=3411d4cd message=tracking hash=d3426278c4787a1af6740e0a0a77e299b7786e3a cwd=/root/lattice-qcd-at-imp.top git=/root/.local/share/opencode/snapshot/267d3710cd769bf8230158ab00d7926dfedc0f05/22e2cb5cdf0018bff055fb1953e713fee8354f76
+timestamp=2026-08-12T23:51:12.652Z level=INFO run=3411d4cd message=loop session.id=ses_0079e3857ffeNP3TSYYVKfdHBi step=9
+timestamp=2026-08-12T23:51:12.700Z level=INFO run=3411d4cd message=tracking hash=945df79e97bd2e5b2f1853fab41b8a9267ff8b7e cwd=/root/lattice-qcd-at-imp.top git=/root/.local/share/opencode/snapshot/267d3710cd769bf8230158ab00d7926dfedc0f05/22e2cb5cdf0018bff055fb1953e713fee8354f76
+timestamp=2026-08-12T23:51:12.706Z level=INFO run=3411d4cd message=process session.id=ses_0079e3857ffeNP3TSYYVKfdHBi messageID=msg_ff8631c0f001r7vo0Ow4KNDsBb
+timestamp=2026-08-12T23:51:12.707Z level=INFO run=3411d4cd message=stream providerID=opencode-go modelID=deepseek-v4-flash session.id=ses_0079e3857ffeNP3TSYYVKfdHBi small=false agent=build mode=primary
+timestamp=2026-08-12T23:51:12.709Z level=INFO run=3411d4cd message="llm runtime selected" llm.runtime=ai-sdk llm.provider=opencode-go llm.model=deepseek-v4-flash
+timestamp=2026-08-12T23:51:18.806Z level=INFO run=3411d4cd message=tracking hash=64a11ee028483c1aa13cfc3d45088bf99786f1ef cwd=/root/lattice-qcd-at-imp.top git=/root/.local/share/opencode/snapshot/267d3710cd769bf8230158ab00d7926dfedc0f05/22e2cb5cdf0018bff055fb1953e713fee8354f76
+timestamp=2026-08-12T23:51:18.844Z level=INFO run=3411d4cd message=loop session.id=ses_0079e3857ffeNP3TSYYVKfdHBi step=10
+timestamp=2026-08-12T23:51:18.847Z level=INFO run=3411d4cd message="exiting loop" session.id=ses_0079e3857ffeNP3TSYYVKfdHBi
+timestamp=2026-08-12T23:51:35.365Z level=INFO run=3411d4cd message="disposing all instances"
+timestamp=2026-08-12T23:51:35.366Z level=INFO run=3411d4cd message="disposing instance" directory=/root/lattice-qcd-at-imp.top
