@@ -1,0 +1,10 @@
+=== tag session 2026-08-13-07-56-53 ===
+action: create stab0 (first tag)
+message: stab0 init, 1. 构建格点QCD课题组SPA网站(index.html+6个JS模块+Bulma CSS); 2. 建立数据三层结构(数据.csv→data_summary.json→papers/conferences/summer-schools/translations); 3. 集成INSPIRE-HEP论文API与离线回退页面; 4. 添加导师/学生/会议/讲习班/图库/媒体资源; 5. 配置CNAME域名与GitHub Pages部署; [opencode].
+baseline: first commit cac4732
+user-confirm: Y
+>> corrected analysis: existing tags found (stab0/stab1/dev0/dev1/dev2), new tag = stab2, baseline = dev2
+>> proposed: follow dev2, 1. 新增导师头像/讲习班图/工作汇报/图库照片等媒体资源并webp优化; 2. 新增FontAwesome子集化工具链(fa_subset/fa_coverage/fa_test/fa_verify)与optimize_images图片优化脚本; 3. 更新index.html与music/theme模块逻辑; 4. 归档CLAUDE.md为.bak并新建AGENTS.md, 新增opencode配置与skill文档归档; [opencode].
+user-confirm: yes
+>> tag stab2 created and pushed to origin (retries 0)
+>> summary: stab2 @ a9d4e33
