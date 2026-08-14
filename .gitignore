@@ -43,6 +43,8 @@ lib/_package/linux/2048
 *.bak
 *.cache
 *.err
+# agent 用户输入记录（不入库）
+.agent.*.list
 
 # ==== LaTeX ====
 *.aux

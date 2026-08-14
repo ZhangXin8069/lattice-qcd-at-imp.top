@@ -40,3 +40,14 @@ python3 -m http.server 8000    # 纯静态，无需构建
 ```
 
 离线论文回退：`custom/inspirehep.net/authors/{1659207,1259106}/INSPIRE-CiteAll.html`。
+
+## 版本标签（tag 技能约定）
+
+四类独立编号注释标签，文法 `^(stab|dev|bug|test)[0-9]+(_[0-9]+)?$`：
+
+- `stab<N>` 稳定里程碑 / `dev<N>` 开发快照 / `bug<N>` 修复标记 / `test<N>` 测试标记（计数器从 0 独立递增，子版本如 `stab15_1` 仅显式请求）
+- 消息格式：`follow <前一标签>, 1. 变更项; 2. ...; [opencode].`
+
+## 会话产物（不入库）
+
+`.agent.*.log`、`.tag.*.log`、`.init.*.log`、`.agent.*.list`（用户输入记录）为 agent 会话产物，不入库；`.gitignore` 已忽略 `*.log` 与 `.agent.*.list`。
