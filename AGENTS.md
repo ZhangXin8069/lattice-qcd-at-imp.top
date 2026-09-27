@@ -65,4 +65,4 @@ python3 -m http.server 8000    # 纯静态，无需构建
 - 功能复现：先执行 `node --check` 与 `python3 -m py_compile`，再运行上述测试及 `FORM_SKILL_DIR=skills/form skills/form/scripts/form-audit.sh --root "$PWD" --strict --quiet`；本地预览使用 `python3 -m http.server 8000`，并验证 `index.html` 与 `data/`、`custom/` 资源均可访问。
 - 文档/日志/数据：`docs/` 保存任务 Markdown、TeX、PDF 和图片；`logs/` 只保存 `log/json/tsv/csv/txt`；`data/` 保存网站运行时 JSON，`数据.csv` 与 `data_summary.json` 是根目录数据工作流入口。
 - Git 交付：常规整改按逻辑批次提交并推送当前分支；禁止 `git add -A`、force push、改写已推送标签。最终使用 `devN` 注释标签指向验收提交。
-- 本地例外：`custom/` 是运行时内容树；`data/*.json` 必须跟踪；`static/**` 中 vendored/minified 文件与 `custom/inspirehep.net/**` 保留上游名称；中文内容文件名允许保留中文，但空格必须替换为 `_`；`CNAME`、`LICENSE` 使用平台/标准固定名称。
+- 本地例外：`custom/` 是运行时内容树；`data/*.json` 必须跟踪；`logs/AGENTS.md` 是目录规则元数据，不受日志内容扩展名限制；`static/**` 中 vendored/minified 文件与 `custom/inspirehep.net/**` 保留上游名称；中文内容文件名允许保留中文，但空格必须替换为 `_`；`CNAME`、`LICENSE` 使用平台/标准固定名称。

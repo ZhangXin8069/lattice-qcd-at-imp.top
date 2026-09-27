@@ -34,6 +34,7 @@ HTML/CSS/JavaScript，维护工具为 Python 与 Node.js。全局决策参考
   `tools/` 维护工具，`docs/` 任务文档，`logs/` 历史与任务日志，`skills/` 本地技能。
 - 根目录 `数据.csv` 与 `data_summary.json` 是数据工作流入口，不得挪动。
 - `static/**` 的 vendored/minified 文件及标准平台文件不得为了统一风格重命名。
+- `logs/AGENTS.md` 是目录规则元数据，不计入日志内容扩展名限制。
 
 ## 工作流程
 

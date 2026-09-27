@@ -5,6 +5,7 @@ set -euo pipefail
 GLOBAL_FORM_ROOT=${FORM_GLOBAL_SKILL_ROOT:-/root/configure/skills/form}
 GLOBAL_AUDIT="$GLOBAL_FORM_ROOT/scripts/form-audit.sh"
 ALLOWED_DATA=$'^ERROR\tTRACKED_DATA_CONTENT\tdata/(conferences|papers|summer-schools|translations)\\.json\t'
+ALLOWED_LOGS=$'^WARNING\tLOG_EXTENSION\tlogs/AGENTS\\.md\t'
 
 output=$(mktemp)
 filtered=$(mktemp)
@@ -17,7 +18,7 @@ audit_rc=$?
 set -e
 
 if [[ -s "$output" ]]; then
-  grep -Ev "$ALLOWED_DATA" "$output" >"$filtered" || true
+  grep -Ev "$ALLOWED_DATA|$ALLOWED_LOGS" "$output" >"$filtered" || true
 else
   : >"$filtered"
 fi
