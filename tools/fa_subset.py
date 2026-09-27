@@ -12,6 +12,7 @@ ICON_NAMES = [
     "chevron-up", "code-branch", "database", "envelope",
     "external-link-alt", "file-alt", "file-pdf", "globe", "info-circle",
     "magnet", "map-marker-alt", "microchip", "moon", "music", "pause",
+    "project-diagram",
     "play", "search", "spinner", "step-backward", "step-forward", "sun",
     "user", "users", "wave-square", "link",
 ]

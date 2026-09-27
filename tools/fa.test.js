@@ -62,7 +62,7 @@ const re = /^  "([a-z0-9-]+)":\[(\d+),(\d+),"((?:[^"\\]|\\.)*)"/gm;
 let m;
 while ((m = re.exec(src))) icons[m[1]] = [m[2], m[3], m[4]];
 console.log("测试1: ICONS 数据");
-check("数量 == 30", Object.keys(icons).length === 30, `got ${Object.keys(icons).length}`);
+check("数量 == 31", Object.keys(icons).length === 31, `got ${Object.keys(icons).length}`);
 let dataOk = true;
 for (const [n, v] of Object.entries(icons)) {
   if (!(+v[0] > 0) || !(+v[1] > 0) || v[2].length < 50) { dataOk = false; console.log(`  bad: ${n} ${v[2].length}`); }
@@ -92,9 +92,9 @@ console.log("测试2: 替换器行为");
 // ========== 测试 3: 未知图标与工具类 ==========
 console.log("测试3: 未知图标/工具类处理");
 {
-  const els = [makeEl("i", { class: "fas fa-circle-nodes" }), makeEl("i", { class: "fas fa-spin" }), makeEl("i", { class: "fas fa-fw" })];
+  const els = [makeEl("i", { class: "fas fa-not-covered" }), makeEl("i", { class: "fas fa-spin" }), makeEl("i", { class: "fas fa-fw" })];
   const { doc, replaced } = run(src, { els, withObserver: false });
-  check("未知图标(fa-circle-nodes)保持原样不替换", replaced.length === 0, `got ${replaced.length}`);
+  check("未知图标(fa-not-covered)保持原样不替换", replaced.length === 0, `got ${replaced.length}`);
 }
 
 console.log(`\n结果: ${pass} 通过, ${fail} 失败`);

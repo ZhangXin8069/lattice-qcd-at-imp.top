@@ -73,6 +73,7 @@ lib/_package/linux/2048
 
 # ==== 例外 ====
 !examples/zhangxin/iog_reader/iog.so
+
 # ---- 追加自 lib/_gitignore 模板 (gadd-ignore.sh)：逐行精确匹配去重补加，分节含义见该模板 ----
 # ============================================================================
 # configure 仓库通用 .gitignore
@@ -429,3 +430,13 @@ _minted*/
 # opencode 系列日志/清单即使位于上述参考资料树内也不入库：
 # 置于树级护栏之后，按末条优先重新生效，与 [14] 全局规则构成"规则→放行→例外"闭环
 .opencode
+
+# ==== 网站运行数据与内容最终例外 ====
+# 置于通用模板之后，确保 data/、static/images/ 与 logs/**/build/ 不被后续规则重新忽略。
+!data/*.json
+!data_summary.json
+!数据.csv
+!custom/**/*.jpg
+!custom/**/*.jpeg
+!static/**/*.jpg
+!logs/**

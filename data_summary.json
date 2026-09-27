@@ -61,24 +61,24 @@
     {"name": "Zhicheng Yan", "name_zh": "Yan, Zhicheng"}
   ],
   "conferences": "data/conferences.json — 仅限中国境内、中国科学院研究所主办的会议",
-  "lectures": "data/summer-schools.json — 来源于 custom/讲习班.html，按日期排列",
+  "lectures": "data/summer-schools.json — 按日期排列",
   "software_work": {
     "pyqcu": {
       "name": "PyQCU",
       "url": "https://gitee.com/zhangxin8069/PyQCU",
-      "test_report_pdf": "custom/张鑫 508应用测试报告-PyQCU.pdf",
-      "gitee_contributions": "custom/张鑫 20260706gitee贡献度.png"
+      "test_report_pdf": "custom/张鑫_508应用测试报告-PyQCU.pdf",
+      "gitee_contributions": "custom/张鑫_20260706gitee贡献度.png"
     },
     "work_reports": [
-      "custom/张鑫 20251227工作汇报_01.png",
-      "custom/张鑫 20251227工作汇报_02.png",
-      "custom/张鑫 20251227工作汇报_03.png",
-      "custom/张鑫 20251227工作汇报_04.png",
-      "custom/张鑫 20251227工作汇报_05.png",
-      "custom/张鑫 20251227工作汇报_06.png",
-      "custom/张鑫 20251227工作汇报_07.png",
-      "custom/张鑫 20251227工作汇报_08.png",
-      "custom/张鑫 20260531工作汇报_01.png"
+      "custom/张鑫_20251227工作汇报_01.png",
+      "custom/张鑫_20251227工作汇报_02.png",
+      "custom/张鑫_20251227工作汇报_03.png",
+      "custom/张鑫_20251227工作汇报_04.png",
+      "custom/张鑫_20251227工作汇报_05.png",
+      "custom/张鑫_20251227工作汇报_06.png",
+      "custom/张鑫_20251227工作汇报_07.png",
+      "custom/张鑫_20251227工作汇报_08.png",
+      "custom/张鑫_20260531工作汇报_01.png"
     ]
   },
   "help": {

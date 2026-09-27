@@ -31,7 +31,7 @@ data_summary.json ← 机器可读摘要
 
 修改流程：编辑 `数据.csv` → `/update-website summary` → JSON 同步 → 推送部署。
 
-**注意**：`custom/讲习班.html` 已废弃（运行时只加载 `summer-schools.json`）；代码引用的 `要求.json` 不存在于仓库（需求规范在 build-website 技能内）。
+**注意**：代码引用的 `要求.json` 不存在于仓库（需求规范在 build-website 技能内）。
 
 ## 本地开发
 
@@ -51,3 +51,18 @@ python3 -m http.server 8000    # 纯静态，无需构建
 ## 会话产物（不入库）
 
 `.agent.*.log`、`.tag.*.log`、`.init.*.log`、`.agent.*.list`（用户输入记录）为 agent 会话产物，不入库；`.gitignore` 已忽略 `*.log` 与 `.agent.*.list`。
+
+## form 格式约定
+
+- 库类型：simple；运行时主导语言为 HTML/CSS/JavaScript，维护工具为 Python 与 Node.js。
+- 顶层目录白名单：`custom/`、`data/`、`docs/`、`logs/`、`skills/`、`static/`、`tools/`。
+- 根目录允许文件：平台入口与标准文件（`index.html`、`CNAME`、`LICENSE`、`README.md`、`AGENTS.md`、`.gitignore`、`.nojekyll`）、手动数据入口 `数据.csv`、生成摘要 `data_summary.json`。
+- 文件命名：本地 JS/CSS 使用全小写点划分或 `-`；Python 使用全小写 `_`；运行时 JSON 使用全小写 `-`；新增内容文件禁止空格。
+- 函数命名：JS 使用 `camelCase`；Python 使用 `snake_case`。
+- 变量命名：JS 普通变量使用 `camelCase`，固定集合可使用 `UPPER_SNAKE_CASE`；Python 模块常量使用 `UPPER_SNAKE_CASE`。
+- 对象命名：JS IIFE 模块/单例使用 `PascalCase`，专有缩写保持原形，如 `I18N`、`MusicPlayer`。
+- 测试入口：`node tools/fa.test.js`、`python3 tools/fa_coverage.py`、`python3 tools/fa_verify.py`、`skills/form/scripts/form-scripts.test.sh`。
+- 功能复现：先执行 `node --check` 与 `python3 -m py_compile`，再运行上述测试及 `FORM_SKILL_DIR=skills/form skills/form/scripts/form-audit.sh --root "$PWD" --strict --quiet`；本地预览使用 `python3 -m http.server 8000`，并验证 `index.html` 与 `data/`、`custom/` 资源均可访问。
+- 文档/日志/数据：`docs/` 保存任务 Markdown、TeX、PDF 和图片；`logs/` 只保存 `log/json/tsv/csv/txt`；`data/` 保存网站运行时 JSON，`数据.csv` 与 `data_summary.json` 是根目录数据工作流入口。
+- Git 交付：常规整改按逻辑批次提交并推送当前分支；禁止 `git add -A`、force push、改写已推送标签。最终使用 `devN` 注释标签指向验收提交。
+- 本地例外：`custom/` 是运行时内容树；`data/*.json` 必须跟踪；`static/**` 中 vendored/minified 文件与 `custom/inspirehep.net/**` 保留上游名称；中文内容文件名允许保留中文，但空格必须替换为 `_`；`CNAME`、`LICENSE` 使用平台/标准固定名称。
