@@ -25,7 +25,7 @@ const I18N = (function() {
 
   async function loadTranslations() {
     try {
-      const resp = await fetch('data/translations.json');
+      const resp = await fetch('custom/data/translations.json');
       const data = await resp.json();
       translations = data;
     } catch (e) {

@@ -60,12 +60,12 @@
     {"name": "Hongxin Dong", "name_zh": "Dong, Hongxin"},
     {"name": "Zhicheng Yan", "name_zh": "Yan, Zhicheng"}
   ],
-  "conferences": "data/conferences.json — 仅限中国境内、中国科学院研究所主办的会议",
-  "lectures": "data/summer-schools.json — 按日期排列",
+  "conferences": "custom/data/conferences.json — 仅限中国境内、中国科学院研究所主办的会议",
+  "lectures": "custom/data/summer-schools.json — 按日期排列",
   "software_work": {
     "pyqcu": {
       "name": "PyQCU",
-      "url": "https://gitee.com/zhangxin8069/PyQCU",
+      "url": "https://gitlab.itp.ac.cn/zhangxin8069/PyQCU",
       "test_report_pdf": "custom/张鑫_508应用测试报告-PyQCU.pdf",
       "gitee_contributions": "custom/张鑫_20260706gitee贡献度.png"
     },

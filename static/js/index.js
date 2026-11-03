@@ -81,7 +81,7 @@
     if (!container) return;
 
     try {
-      const resp = await fetch('data/conferences.json');
+      const resp = await fetch('custom/data/conferences.json');
       const conferences = await resp.json();
 
       // Filter: only Chinese academic institutions (CAS institutes + universities in China)
@@ -141,7 +141,7 @@
     }
   }
 
-  // Load lectures section (data/summer-schools.json only)
+  // Load lectures section (custom/data/summer-schools.json only)
   async function loadSummerSchools() {
     const container = document.getElementById('summer-schools-grid');
     if (!container) return;
@@ -150,7 +150,7 @@
     let allSchools = [];
 
     try {
-      const resp = await fetch('data/summer-schools.json');
+      const resp = await fetch('custom/data/summer-schools.json');
       allSchools = await resp.json();
     } catch (e) {
       console.error('Failed to load summer schools:', e);

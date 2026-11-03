@@ -30,7 +30,7 @@ HTML/CSS/JavaScript，维护工具为 Python 与 Node.js。全局决策参考
   视为兼容接口，除非全库引用同步修改。
 - Python 符号：函数与变量 `snake_case`，模块常量 `UPPER_SNAKE_CASE`。
 - 内容资源：中文含义优先，多词用 `_`；禁止空格。`custom/inspirehep.net/**` 保留上游路径。
-- 顶层职责：`custom/` 运行时内容，`data/` 运行时 JSON，`static/` 前端资源，
+- 顶层职责：`custom/` 运行时内容（含 `custom/data/` JSON），`data/` 仅目录约束元数据，`static/` 前端资源，
   `tools/` 维护工具，`docs/` 任务文档，`logs/` 历史与任务日志，`skills/` 本地技能。
 - 根目录 `数据.csv` 与 `data_summary.json` 是数据工作流入口，不得挪动。
 - `static/**` 的 vendored/minified 文件及标准平台文件不得为了统一风格重命名。
@@ -68,7 +68,7 @@ FORM_SKILL_DIR=skills/form
 git diff --check
 ```
 
-6. 使用本地 HTTP 服务检查 `index.html`、`data/*.json` 和 `custom/**` 的引用完整性。
+6. 使用本地 HTTP 服务检查 `index.html`、`custom/data/*.json` 和 `custom/**` 的引用完整性。
 7. 只暂存本任务文件；提交消息说明原因、改动和验证，禁止 `git add -A`。
 8. 推送后核验本地分支、远端分支和最终标签指向同一验收提交。
 

@@ -1,6 +1,6 @@
 /**
  * papers.js — Publications module
- * Data source: data/papers.json
+ * Data source: custom/data/papers.json
  */
 const Papers = (function() {
   let allPapers = [];
@@ -17,7 +17,7 @@ const Papers = (function() {
   function loadPapers() {
     var c = document.getElementById('publications-list');
     if (c) c.innerHTML = '<p style="text-align:center;padding:2rem;"><i class="fas fa-spinner fa-spin"></i> Loading...</p>';
-    fetch('data/papers.json')
+    fetch('custom/data/papers.json')
       .then(function(r) { return r.json(); })
       .then(function(d) {
         allPapers = (d.papers||[]).sort(function(a,b){ return (b.year||0)-(a.year||0); });

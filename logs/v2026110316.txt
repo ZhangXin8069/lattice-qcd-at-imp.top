@@ -1,0 +1,83 @@
+[日志元数据]
+日志类型: final
+生成时间: 2026-11-03 16:44:53 +0800
+批次: 2026-11-03 数据路径迁移
+主任务: 迁移网站运行时 JSON 到 custom/data
+触发原因: 任务完成
+摘要: 迁移四个 JSON，同步运行时、规则、文档和审计引用；相关测试与 HTTP 冒烟通过
+Git 根目录: /root/lattice-qcd-at-imp.top
+
+## 关键日志
+### S1 — 盘点与迁移
+- 目标: 将 `data/{conferences,papers,summer-schools,translations}.json` 迁移到 `custom/data/`，并消除 `gpush` 的 `TRACKED_DATA_CONTENT` 阻塞。
+- 命令/操作: `git mv` 四个 JSON；保留工作区已有 `index.html`、`data_summary.json`、`数据.csv` 修改。
+- 退出码: 0
+- 证据与判断: `git ls-files data custom/data` 现仅列出 `data/AGENTS.md` 与四个 `custom/data/*.json`。
+
+### S2 — 引用与规则同步
+- 目标: 更新全部当前运行时路径、规则、摘要和格式审计白名单。
+- 命令/操作: 修改 `static/js/{i18n,papers,index}.js`、根 `AGENTS.md`、`data/AGENTS.md`、`static/js/AGENTS.md`、`data_summary.json`、`.gitignore`、`data/.gitignore`、`skills/form/SKILL.md`、`skills/form/scripts/form-audit.sh`。
+- 关键输出: 标准正则扫描在排除历史 `docs/`、`logs/` 后无旧运行时路径残留。
+- 退出码: 0
+- 证据与判断: `custom/data/*.json` 已从通用 `*.json` 忽略规则中放行，`data/` 不再放行 JSON。
+
+### S3 — 验证
+- 命令/操作: JSON 解析、JS/Python/Shell 语法检查、`node tools/fa.test.js`、`python3 tools/fa_coverage.py`、`python3 tools/fa_verify.py`、格式审计、数据跟踪护栏、HTTP 冒烟。
+- 关键输出: FA 测试 11/11；图标覆盖 31/31；path 校验 31/31；`form-audit` findings=0；数据护栏 violations=0；HTTP 资源全部 200。
+- 退出码: 相关检查均为 0。
+- 证据与判断: 全局只读参考快照 `configure-main` 的 `form-snapshot-verify` 有 8 个既有文件哈希不匹配；本任务未修改 `/root/configure`，不影响仓库格式审计和本次迁移验收。
+
+## 验证与证据
+- 测试/检查: `node --check` 全部规定 JS；`python3 -m py_compile` 全部规定 Python；四个运行时 JSON 与 `data_summary.json` 可解析。
+- 结果: 通过。
+- 测试/检查: `FORM_SKILL_DIR=skills/form skills/form/scripts/form-audit.sh --root "$PWD" --strict --quiet`
+- 结果: 通过，0 findings、0 errors、0 warnings。
+- 测试/检查: `/root/configure/skills/form/scripts/form-data-tracking-check.sh --root "$PWD"`
+- 结果: 通过，`violations=0`。
+- 测试/检查: `python3 -m http.server 8000` + curl `index.html`、四个 `custom/data/*.json`、离线论文页。
+- 结果: 全部 HTTP 200；JSON 为 `application/json`。
+- 未验证项: `form-snapshot-verify` 因全局 `configure-main` 快照 8 个既有哈希不匹配而失败；未修改全局文件。
+
+## 变更与产物
+- 文件: `custom/data/conferences.json`、`custom/data/papers.json`、`custom/data/summer-schools.json`、`custom/data/translations.json`（由 `data/` 重命名）。
+- 文件: `static/js/i18n.js`、`static/js/papers.js`、`static/js/index.js`、`static/js/AGENTS.md`。
+- 文件: `AGENTS.md`、`data/AGENTS.md`、`data_summary.json`、`.gitignore`、`data/.gitignore`、`skills/form/SKILL.md`、`skills/form/scripts/form-audit.sh`。
+- 产物: `data/` 仅保留目录规则元数据；运行时 JSON 统一位于 `custom/data/`。
+- 未改动范围: 历史 `docs/`、`logs/`；用户已有的 `index.html`、`data_summary.json` 软件链接改动和 `数据.csv` 改动均保留；未提交、未推送、未打标签。
+
+## 风险、限制与下一步
+- 风险: 全局 `configure-main` 参考快照与当前全局配置不一致，`form-snapshot-verify` 仍会失败；该问题不属于本仓库改动范围。
+- 阻塞: 无仓库内阻塞。
+- 下一步: 如需按用户当前 `gpush` 流程发布，可重新运行 `gpush.sh -t gitee.com`；本次不自动执行提交或推送。
+
+## 用户输入指令
+用户要求：将根目录 `data/` 下的 `conferences.json`、`papers.json`、`summer-schools.json`、`translations.json` 迁移到 `custom/data`，并同步修改相关文件。用户同时提供了 `gpush.sh` 的 `TRACKED_DATA_CONTENT` 错误输出，要求解决该迁移问题。
+
+## Agent 全文报告
+--- report begin ---
+状态：finished
+
+改动内容：
+- 用 `git mv` 将四个运行时 JSON 迁移至 `custom/data/`，保留 Git rename 记录。
+- 更新 `i18n.js`、`papers.js`、`index.js` 的 fetch 路径及对应日志/注释。
+- 同步根 `AGENTS.md`、`data/AGENTS.md`、`static/js/AGENTS.md`、`data_summary.json`、`.gitignore`、`data/.gitignore` 和 `skills/form` 规则/审计脚本。
+- `data/` 现在只保留目录约束元数据；`custom/data/*.json` 可被 Git 跟踪，`data/` 不再放行 JSON。
+
+推理依据：
+- `gpush` 的数据护栏检查的是 `git ls-files data`；`git mv` 更新索引后不再追踪四个旧路径。
+- 根忽略规则原先只放行 `data/*.json`，迁移后必须放行 `custom/data/*.json`，否则运行数据会被通用 `*.json` 规则忽略。
+- 格式审计器原先显式豁免 `data/` 下的四个 JSON；迁移后移除该豁免，使 `data/` 护栏恢复严格语义。
+
+验证结果：
+- JS/Python/Shell 语法检查通过；运行时 JSON 均可解析。
+- `node tools/fa.test.js`：11 通过，0 失败。
+- `python3 tools/fa_coverage.py`：31/31，无未覆盖。
+- `python3 tools/fa_verify.py`：31/31 path 一致。
+- `form-audit --strict --quiet`：findings=0、errors=0、warnings=0。
+- `form-data-tracking-check.sh`：violations=0。
+- HTTP 冒烟：`index.html`、四个迁移后的 JSON、离线论文页均返回 200；JSON 为 `application/json`。
+- `form-snapshot-verify` 未通过，原因是全局 `/root/configure/skills/form/references/source-snapshots/configure-main` 中 8 个既有文件哈希不匹配；本任务没有修改该全局目录。
+
+后续步骤：
+- 如需发布，可重新运行 `gpush.sh -t gitee.com`。本次未提交、未推送、未打标签。
+--- report end ---

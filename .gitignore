@@ -432,8 +432,8 @@ _minted*/
 .opencode
 
 # ==== 网站运行数据与内容最终例外 ====
-# 置于通用模板之后，确保 data/、static/images/ 与 logs/**/build/ 不被后续规则重新忽略。
-!data/*.json
+# 置于通用模板之后，确保 custom/data/、static/images/ 与 logs/**/build/ 不被后续规则重新忽略。
+!custom/data/*.json
 !data_summary.json
 !数据.csv
 !custom/**/*.jpg
